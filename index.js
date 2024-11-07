@@ -4,7 +4,7 @@ const app = express();
 const port = 1300;
 
 // Define song library
-const songs = require('./data/ddr4mp.json');
+const songs = require('./data/ddrextreme.json');
 
 function findSong(query) {
     const sanitizedQuery = query.toLowerCase();
