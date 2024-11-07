@@ -4,15 +4,29 @@ const app = express();
 const port = 1300;
 
 // Define song library
-const songs = require('./data/ddrextreme.json');
+const songs = require('./data/ddr3mk.json');
 
 function findSong(query) {
-    const sanitizedQuery = query.toLowerCase();
-    console.log('Searching for ' + sanitizedQuery);
-    return songs.find(song => 
-        song.title.toLowerCase().includes(sanitizedQuery) ||
-        song?.romanizedTitle?.toLowerCase().includes(sanitizedQuery)
-    );
+    console.log('Searching for "' + query.trim() + '"');
+    const words = query.toLowerCase().split(" ");
+    
+    return songs.find(song => {
+        const title = song.title.toLowerCase();
+        const artist = song.artist.toLowerCase();
+        const romanizedTitle = song?.romanizedTitle?.toLowerCase() || "";
+        const romanizedArtist = song?.romanizedArtist?.toLowerCase() || "";
+
+        console.log("Searching: " + song.title)
+        
+        return words.every(word =>
+            title.includes(word) ||
+            romanizedTitle.includes(word) ||
+            artist.includes(word) ||
+            romanizedArtist.includes(word)
+        );
+
+    });
+
 }
 
 app.use(express.json());
