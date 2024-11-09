@@ -561,6 +561,7 @@
     },
     {
         "title": "La Señorita",
+        "romanizedTitle": "La Senorita",
         "artist": "CAPTAIN.T",
         "game": "DanceDanceRevolution 3rd Mix"
     },
@@ -616,6 +617,7 @@
     },
     {
         "title": "La Señorita Virtual",
+        "romanizedTitle": "La Senorita Virtual",
         "artist": "2MB",
         "game": "DanceDanceRevolution 3rd Mix"
     },
@@ -635,22 +637,28 @@
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
-        "title": "WA",
-        "artist": "Lee Jung-hyun",
+        "title": "와",
+        "romanizedTitle": "WA",
+        "artist": "이정현",
+        "romanizedArtist": "Lee Jung Hyun",
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
         "title": "TELL ME TELL ME",
         "artist": "S#ARP",
+        "romanizedArtist": "Sharp",
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
-        "title": "BU DAM",
-        "artist": "Baek Ji-young",
+        "title": "부담",
+        "romanizedTitle": "BU DAM",
+        "artist": "백지영",
+        "romanizedArtist": "Baek Ji Young Back Ji Young",
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
-        "title": "BYUL",
+        "title": "별",
+        "romanizedTitle": "BYUL",
         "artist": "Team",
         "game": "DanceDanceRevolution 3rd Mix"
     },
@@ -660,18 +668,23 @@
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
-        "title": "SUNG SUK",
+        "title": "성숙",
+        "romanizedTitle": "SUNG SUK",
         "artist": "SPACE A",
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
-        "title": "BA KKWO",
-        "artist": "Lee Jung-hyun",
+        "title": "바꿔",
+        "romanizedTitle": "BA KKWO",
+        "artist": "이정현",
+        "romanizedArtist": "Lee Jung Hyun",
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
-        "title": "GAGAAI",
+        "title": "가까이",
+        "romanizedTitle": "GAGAAI GAGGAI",
         "artist": "S#ARP",
+        "romanizedArtist": "Sharp",
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
@@ -680,8 +693,10 @@
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
-        "title": "HOGISIM",
-        "artist": "Han's Band",
+        "title": "호기심",
+        "romanizedTitle": "HOGISIM",
+        "artist": "한스 밴드",
+        "romanizedArtist": "Hans Band",
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
@@ -695,22 +710,28 @@
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
-        "title": "CAUTION",
-        "artist": "Tashannie",
+        "title": "경고",
+        "romanizedTitle": "CAUTION",
+        "artist": "타샤니",
+        "romanizedArtist": "Tashannie",
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
-        "title": "BEAUTIFUL 21C",
-        "artist": "2000 Daehan Minguk",
+        "title": "아름다운 21C",
+        "romanizedTitle": "BEAUTIFUL AROMDAON 21C",
+        "artist": "2000 대한민국",
+        "romanizedArtist": "2000 Daehan Minguk Korea",
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
         "title": "GIMME GIMME",
-        "artist": "Country Kko Kko",
+        "artist": "컨츄리꼬꼬",
+        "romanizedArtist": "Country Gunchuri Kko Kko",
         "game": "DanceDanceRevolution 3rd Mix"
     },
     {
-        "title": "TIME OF MASK",
+        "title": "가면의 시간",
+        "romanizedTitle": "TIME OF MASK GAMYEONUI SIGAN",
         "artist": "FIN.K.L",
         "game": "DanceDanceRevolution 3rd Mix"
     },
@@ -1191,6 +1212,7 @@
     },
     {
         "title": "祭 JAPAN",
+        "romanizedTitle": "Matsuri Japan",
         "artist": "RE-VENGE",
         "game": "DanceDanceRevolution 5th Mix"
     },
@@ -1220,7 +1242,8 @@
         "game": "DanceDanceRevolution 5th Mix"
     },
     {
-        "title": "サナモレツテネエンテ",
+        "title": "サナ・モレッテ・ネ・エンテ",
+        "romanizedTitle": "Sana mollete ne ente",
         "artist": "Togo Project feat. Sana",
         "game": "DanceDanceRevolution 5th Mix"
     },
@@ -1462,6 +1485,7 @@
     },
     {
         "title": "そばかす FRECKLES (KCP Re-Edit)",
+        "romanizedTitle": "Sobakasu Freckles KCP",
         "artist": "TIGGY",
         "game": "DDRMAX -DanceDanceRevolution 6thMIX-"
     },
@@ -1477,6 +1501,7 @@
     },
     {
         "title": "夜空ノムコウ",
+        "romanizedTitle": "Yozora no mukou",
         "artist": "EUROBEAT LOVERS",
         "game": "DDRMAX -DanceDanceRevolution 6thMIX-"
     },
@@ -1487,6 +1512,7 @@
     },
     {
         "title": "CANDY☆",
+        "romanizedTitle": "Candy star",
         "artist": "Luv UNLIMITED",
         "game": "DDRMAX -DanceDanceRevolution 6thMIX-"
     },
@@ -1543,6 +1569,7 @@
     },
     {
         "title": "Sweet Sweet ♥ Magic",
+        "romanizedTitle": "Sweet Sweet Love Magic",
         "artist": "jun",
         "game": "DDRMAX2 -DanceDanceRevolution 7thMIX-"
     },
@@ -1609,6 +1636,7 @@
     },
     {
         "title": "BRE∀K DOWN！",
+        "romanizedTitle": "Break Down!",
         "artist": "BeForU",
         "game": "DDRMAX2 -DanceDanceRevolution 7thMIX-"
     },
@@ -1634,6 +1662,7 @@
     },
     {
         "title": "CANDY♡",
+        "romanizedTitle": "Candy Heart",
         "artist": "小坂りゆ",
         "romanizedArtist": "Riyu Kosaka",
         "game": "DDRMAX2 -DanceDanceRevolution 7thMIX-"
@@ -1665,6 +1694,7 @@
     },
     {
         "title": "革命",
+        "romanizedTitle": "Kakumei",
         "artist": "dj TAKA with NAOKI",
         "game": "DDRMAX2 -DanceDanceRevolution 7thMIX-"
     },
@@ -1705,6 +1735,7 @@
     },
     {
         "title": "祭 JAPAN (FROM NONSTOP MEGAMIX)",
+        "romanizedTitle": "Matsuri Japan from Nonstop Megamix",
         "artist": "RE-VENGE",
         "game": "DDRMAX2 -DanceDanceRevolution 7thMIX-"
     },
@@ -1797,11 +1828,6 @@
         "title": "AARON'S PARTY (COME GET IT)",
         "artist": "AARON CARTER",
         "game": "DDRMAX2 -DanceDanceRevolution 7thMIX-"
-    },
-    {
-        "title": "5",
-        "artist": " 6",
-        "game": " 7"
     },
     {
         "title": "LOVE YOU LIKE A FOOL",
@@ -1931,11 +1957,14 @@
     },
     {
         "title": "♥Love²シュガ→♥",
+        "romanizedTitle": "Love Love Sugar",
         "artist": "dj TAKA feat.のりあ",
+        "romanizedArtist": "dj TAKA feat. Noria",
         "game": "DanceDanceRevolution EXTREME"
     },
     {
         "title": "L'amour et la liberté (DDR Ver.)",
+        "romanizedTitle": "L'amour et la liberte (DDR Ver.)",
         "artist": "NAOKI underground",
         "game": "DanceDanceRevolution EXTREME"
     },
@@ -1947,6 +1976,7 @@
     {
         "title": "Destiny lovers",
         "artist": "くにたけ みゆき",
+        "romanizedArtist": "Kunitake Miyuki",
         "game": "DanceDanceRevolution EXTREME"
     },
     {
@@ -1966,6 +1996,7 @@
     },
     {
         "title": "MOBO★MOGA",
+        "romanizedTitle": "Mobo Moga",
         "artist": "Orange Lounge",
         "game": "DanceDanceRevolution EXTREME"
     },
@@ -1981,6 +2012,7 @@
     },
     {
         "title": "GRADUATION ～それぞれの明日～",
+        "romanizedTitle": "Graduation sore zore no ashita",
         "artist": "BeForU",
         "game": "DanceDanceRevolution EXTREME"
     },
@@ -2556,6 +2588,7 @@
     },
     {
         "title": "祭 (J-SUMMER MIX)",
+        "romanizedTitle": "Matsuri J-Summer Mix",
         "artist": "RE-VENGE",
         "game": "DanceDanceRevolution SuperNOVA"
     },
@@ -5143,6 +5176,7 @@
     },
     {
         "title": "FUJIMORI -祭- FESTIVAL",
+        "romanizedTitle": "Fujimori Matsuri Festival",
         "artist": "VENUS",
         "game": "DanceDanceRevolution (2014)"
     },
@@ -12083,6 +12117,7 @@
     },
     {
         "title": "夏祭り",
+        "romanizedTitle": "Natsu Matsuri",
         "artist": "♪♪♪♪♪",
         "game": "DanceDanceRevolution A3"
     },
