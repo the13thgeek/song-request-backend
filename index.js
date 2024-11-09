@@ -4,7 +4,7 @@ const app = express();
 const port = 1300;
 
 // Define song library
-const songs = require('./data/ddr3mk.json');
+const songs = require('./data/stepmania.json');
 let queue = [];
 
 function findSong(query) {
@@ -47,15 +47,53 @@ function broadcast(data) {
 // Set up endpoints
 app.post('/request-song', (req, res) => {
     let requestedSong = findSong(req.query.songtitle);
+    
+    // If the song is found
     if(requestedSong) {
-        broadcast({ type: "ADD_SONG", song: { title: requestedSong.title, artist: requestedSong.artist, user: req.query.user } });
-        queue.push( { title: requestedSong.title, artist: requestedSong.artist, user: req.query.user } );
-        res.status(200).send(`✔️ Request has been added: [${requestedSong.title} / ${requestedSong.artist}]`);
-        console.log(`Request has been added: [${requestedSong.title} / ${requestedSong.artist}]`);
-    } else {
+
+        const isDuplicate = queue.some(song => 
+            song.title === requestedSong.title &&
+            song.artist === requestedSong.artist
+        )
+        const userSongCount = queue.filter(song => song.user === req.query.user).length;
+        console.log(`userSongCount:`, userSongCount);
+
+        // Check if the song is already in queue
+        if(isDuplicate) {
+            res.status(200).send(`⚠️ This song is already in queue: [${requestedSong.title} / ${requestedSong.artist}]`);
+            console.log(`This song is already in queue: [${requestedSong.title} / ${requestedSong.artist}]`);
+        }
+
+        // Check if user already has 3 songs in queue
+        else if(userSongCount >= 3) {
+            res.status(200).send(`⚠️ Only three (3) requests per user are allowed at a time, please wait and try again.`);
+            console.log(`Only three (3) requests per user are allowed at a time, please wait and try again.`);
+        }
+
+        // Otherwise, proceed
+        else {
+            broadcast({ type: "ADD_SONG", song: { title: requestedSong.title, artist: requestedSong.artist, user: req.query.user } });
+            queue.push( { title: requestedSong.title, artist: requestedSong.artist, user: req.query.user } );
+            res.status(200).send(`✔️ Request has been added: [${requestedSong.title} / ${requestedSong.artist}]`);
+            console.log(`Request has been added: [${requestedSong.title} / ${requestedSong.artist}]`);        
+        }        
+    } 
+    // If the song is not found
+    else {
         res.status(200).send(`❌ Sorry, no songs matched "${req.query.songtitle}." The song you requested may not be in the current game.`);
         console.log("No songs matched \"" + req.query.songtitle + ".\"");
     }
+});
+
+app.post('/check-song', (req, res) => {
+    let requestedSong = findSong(req.query.songtitle);
+
+    if(requestedSong) {
+        res.status(200).send(`ℹ️ I found the song [${requestedSong.title} / ${requestedSong.artist}]. If this is correct, type "!req ${req.query.songtitle}" (without the quotes) to proceed.`);
+    } else {
+        res.status(200).send(`❌ Sorry, no songs matched "${req.query.songtitle}." This song may not be in the current game.`);
+    }
+
 });
 
 app.post('/remove-song', (req, res) => {

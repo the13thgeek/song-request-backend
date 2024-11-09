@@ -2153,6 +2153,7 @@
     },
     {
         "title": "桜",
+        "romanizedTitle": "Sakura",
         "artist": "Reven-G",
         "game": "DanceDanceRevolution EXTREME"
     },
@@ -2299,6 +2300,7 @@
     {
         "title": "STARS☆☆☆ (2nd NAOKI's style)",
         "artist": "ＴЁЯＲＡ",
+        "romanizedArtist": "Terra",
         "game": "DanceDanceRevolution SuperNOVA"
     },
     {
@@ -2399,6 +2401,7 @@
     {
         "title": "DoLL",
         "artist": "ＴЁЯＲＡ",
+        "romanizedArtist": "Terra",
         "game": "DanceDanceRevolution SuperNOVA"
     },
     {
@@ -2444,6 +2447,7 @@
     {
         "title": "夢幻ノ光",
         "artist": "ＴЁЯＲＡ",
+        "romanizedArtist": "Terra",
         "game": "DanceDanceRevolution SuperNOVA"
     },
     {
@@ -2791,6 +2795,7 @@
     {
         "title": "華爛漫 -Flowers-",
         "artist": "ＴЁЯＲＡ",
+        "romanizedArtist": "Terra",
         "game": "DanceDanceRevolution SuperNOVA"
     },
     {
@@ -2906,6 +2911,7 @@
     {
         "title": "STARS☆☆☆（Re-tuned by HΛL） - DDR EDITION -",
         "artist": "ＴЁЯＲＡ",
+        "romanizedArtist": "Terra",
         "game": "DanceDanceRevolution SuperNOVA2"
     },
     {
@@ -3332,6 +3338,7 @@
     {
         "title": "零 - ZERO -",
         "artist": "ＴЁЯＲＡ",
+        "romanizedArtist": "Terra",
         "game": "DanceDanceRevolution X"
     },
     {
@@ -3622,6 +3629,7 @@
     {
         "title": "Sacred Oath",
         "artist": "ＴЁЯＲＡ",
+        "romanizedArtist": "Terra",
         "game": "DanceDanceRevolution X2"
     },
     {
@@ -4127,6 +4135,7 @@
     {
         "title": "ever snow",
         "artist": "ＴЁЯＲＡ",
+        "romanizedArtist": "Terra",
         "game": "DanceDanceRevolution X3 vs 2nd MIX"
     },
     {
