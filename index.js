@@ -3,9 +3,15 @@ const wSocket = require("ws");
 const app = express();
 const port = 1300;
 
-// Define song library
-const songs = require('./data/stepmania.json');
-let queue = [];
+// Variables
+let queue = [];             // queue line for songs
+let requestsOpen = false;   // not accepting requests by default
+let gameLibraryId = null;   // id of DDR version/library
+let songs = [];             // song JSON DB based on gameLibraryID
+
+setTimeout(function() {
+    console.log("Rhythm Game Request Bot v1.0 [the13thgeek].");
+}, 5000);
 
 function findSong(query) {
     console.log('Searching for "' + query.trim() + '"');
@@ -16,8 +22,6 @@ function findSong(query) {
         const artist = song.artist.toLowerCase();
         const romanizedTitle = song?.romanizedTitle?.toLowerCase() || "";
         const romanizedArtist = song?.romanizedArtist?.toLowerCase() || "";
-
-        //console.log("Searching: " + song.title)
         
         return words.every(word =>
             title.includes(word) ||
@@ -45,8 +49,24 @@ function broadcast(data) {
 }
 
 // Set up endpoints
+
+// Endpoint for song requests
 app.post('/request-song', (req, res) => {
     let requestedSong = findSong(req.query.songtitle);
+
+    // Check first if requests are open
+    if(!requestsOpen) {
+        console.log("Requests are not currently open.");
+        res.status(200).send("Requests are not currently open.");
+        return;
+    }
+
+    // Check if song library is defined
+    if(!gameLibraryId) {
+        console.log("Please set Game ID to take requests.");
+        res.status(200).send("Please set Game ID to take requests.");
+        return;
+    }
     
     // If the song is found
     if(requestedSong) {
@@ -85,6 +105,42 @@ app.post('/request-song', (req, res) => {
     }
 });
 
+// Endpoint for initializing game song library
+app.post('/init-game', (req, res) => {
+    let gameId = req.query.gameId;
+
+    try {
+        songs = require(`./data/${gameId}.json`);
+        console.log("Game ID: " + gameId);
+        gameLibraryId = gameId;
+        console.log(`Game [${gameId} (${songs.length})] initialized. Requests are currently ${requestsOpen ? "ON" : "OFF"}.`);
+        res.status(200).send(`Game [${gameId} (${songs.length})] initialized. Requests are currently ${requestsOpen ? "ON" : "OFF"}.`);
+    } catch(error) {
+        console.log("Error: " + error);
+        res.status(200).send(`Unable to initialize game [${gameId}].`);
+    }
+});
+
+// Endpoint for enabling/disabling requests
+app.post('/request-status', (req, res) => {
+    if(parseInt(req.query.open) === 1) {        
+        if(!gameLibraryId) {
+            console.log("Please set Game ID before opening requests.");
+            res.status(200).send("Please set Game ID before opening requests.");
+            return;
+        }
+        
+        requestsOpen = true;
+        console.log("Requests are now open.");
+        res.status(200).send("Requests are now open.");
+    } else {
+        requestsOpen = false;
+        console.log("Requests are now closed.");
+        res.status(200).send("Requests are now closed.");
+    }
+});
+
+// Endpoint for checking song availability
 app.post('/check-song', (req, res) => {
     let requestedSong = findSong(req.query.songtitle);
 
@@ -93,11 +149,10 @@ app.post('/check-song', (req, res) => {
     } else {
         res.status(200).send(`❌ Sorry, no songs matched "${req.query.songtitle}." This song may not be in the current game.`);
     }
-
 });
 
-app.post('/remove-song', (req, res) => {
-    
+// Endpoint for removing played song in front of the queue
+app.post('/remove-song', (req, res) => {    
     if(queue.length === 0) { console.log('No songs in queue to remove.'); return; }
     
     broadcast({ type: 'REMOVE_SONG' });
