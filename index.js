@@ -131,13 +131,16 @@ app.post('/request-status', (req, res) => {
         }
         
         requestsOpen = true;
+        broadcast({ type: 'REQUEST_MODE_ON' });
         console.log("Requests are now open.");
         res.status(200).send("Requests are now open.");
     } else {
         requestsOpen = false;
+        broadcast({ type: 'REQUEST_MODE_OFF' });
         console.log("Requests are now closed.");
         res.status(200).send("Requests are now closed.");
     }
+    //broadcast({ type: "REQUEST_MODE", requestStatus: requestsOpen });
 });
 
 // Endpoint for checking song availability
