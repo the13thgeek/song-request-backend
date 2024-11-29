@@ -34,8 +34,8 @@ function findSong(query) {
 
 // Endpoint for status
 router.post('/status', (req, res) => {
-    console.log(`Status -> Game ID: ${gameLibraryId} Queue: ${queue.length}`);
-    res.status(200).send(`Status -> Game ID: ${gameLibraryId} Queue: ${queue.length}`);
+    console.log(`Status -> Game ID: [${gameLibraryId}] Requests: [${requestsOpen}] Queue: [${queue.length}]`);
+    res.status(200).json({ gameLibraryId: gameLibraryId, requestsOpen: requestsOpen, queueLength: queue.length, queue: queue });
 });
 
 // Endpoint for song requests
