@@ -2,7 +2,7 @@ const express = require("express");
 const wSocket = require("ws");
 const { setWss } = require('./utils');
 const app = express();
-const port = 1300;
+const port = 8080;
 require('dotenv').config();
 
 setTimeout(function() {
@@ -15,7 +15,7 @@ app.use(express.json());
 const wss = new wSocket.Server({ noServer: true});
 setWss(wss);
 
-const server = app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+const server = app.listen(port, () => console.log(`Server is running and listening on port: ${port}`));
 
 // Routing
 const moduleSrs = require('./routes/srs');
