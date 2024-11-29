@@ -11,6 +11,18 @@ setTimeout(function() {
 
 app.use(express.json());
 
+// Adding API KEY authentication + middleware
+const API_KEY = process.env.GEEK_API_KEY || "XX13XX";
+
+app.use((req, res, next) => {
+    const clientApiKey = req.headers['x-api-key'];
+    if(clientApiKey !== API_KEY) {
+        return res.status(403).send("Unauthorized access.");
+    }
+    next();
+})
+
+
 // HTTP->Websocket
 const wss = new wSocket.Server({ noServer: true});
 setWss(wss);
