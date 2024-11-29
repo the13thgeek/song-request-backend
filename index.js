@@ -1,182 +1,31 @@
 const express = require("express");
 const wSocket = require("ws");
+const { setWss } = require('./utils');
 const app = express();
 const port = 1300;
 
-// Variables
-let queue = [];             // queue line for songs
-let requestsOpen = false;   // not accepting requests by default
-let gameLibraryId = null;   // id of DDR version/library
-let songs = [];             // song JSON DB based on gameLibraryID
-
 setTimeout(function() {
-    console.log("Rhythm Game Request Bot v1.0 [the13thgeek].");
+    console.log("[the13thgeek] NodeJS Backend System");
 }, 5000);
-
-function findSong(query) {
-    console.log('Searching for "' + query.trim() + '"');
-    const words = query.toLowerCase().split(" ");
-    
-    return songs.find(song => {
-        const title = song.title.toLowerCase();
-        const artist = song.artist.toLowerCase();
-        const romanizedTitle = song?.romanizedTitle?.toLowerCase() || "";
-        const romanizedArtist = song?.romanizedArtist?.toLowerCase() || "";
-        
-        return words.every(word =>
-            title.includes(word) ||
-            romanizedTitle.includes(word) ||
-            artist.includes(word) ||
-            romanizedArtist.includes(word)
-        );
-
-    });
-
-}
 
 app.use(express.json());
 
-// Initialize websocket
-const wss = new wSocket.Server({ noServer: true});
-
-// Broadcast
-function broadcast(data) {
-    wss.clients.forEach(client => {
-        if(client.readyState === wSocket.OPEN) {
-            client.send(JSON.stringify(data));
-        }
-    });
-}
-
-// Set up endpoints
-
-// Endpoint for song requests
-app.post('/request-song', (req, res) => {
-    let requestedSong = findSong(req.query.songtitle);
-
-    // Check first if requests are open
-    if(!requestsOpen) {
-        console.log("Requests are not currently open.");
-        res.status(200).send("Requests are not currently open.");
-        return;
-    }
-
-    // Check if song library is defined
-    if(!gameLibraryId) {
-        console.log("Please set Game ID to take requests.");
-        res.status(200).send("Please set Game ID to take requests.");
-        return;
-    }
-    
-    // If the song is found
-    if(requestedSong) {
-
-        const isDuplicate = queue.some(song => 
-            song.title === requestedSong.title &&
-            song.artist === requestedSong.artist
-        )
-        const userSongCount = queue.filter(song => song.user === req.query.user).length;
-        console.log(`userSongCount:`, userSongCount);
-
-        // Check if the song is already in queue
-        if(isDuplicate) {
-            res.status(200).send(`⚠️ This song is already in queue: [${requestedSong.title} / ${requestedSong.artist}]`);
-            console.log(`This song is already in queue: [${requestedSong.title} / ${requestedSong.artist}]`);
-        }
-
-        // Check if user already has 3 songs in queue
-        else if(userSongCount >= 3) {
-            res.status(200).send(`⚠️ Only three (3) requests per user are allowed at a time, please wait and try again.`);
-            console.log(`Only three (3) requests per user are allowed at a time, please wait and try again.`);
-        }
-
-        // Otherwise, proceed
-        else {
-            broadcast({ type: "ADD_SONG", song: { title: requestedSong.title, artist: requestedSong.artist, user: req.query.user } });
-            queue.push( { title: requestedSong.title, artist: requestedSong.artist, user: req.query.user } );
-            res.status(200).send(`✔️ Request has been added: [${requestedSong.title} / ${requestedSong.artist}]`);
-            console.log(`Request has been added: [${requestedSong.title} / ${requestedSong.artist}]`);        
-        }        
-    } 
-    // If the song is not found
-    else {
-        res.status(200).send(`❌ Sorry, no songs matched "${req.query.songtitle}." The song you requested may not be in the current game.`);
-        console.log("No songs matched \"" + req.query.songtitle + ".\"");
-    }
-});
-
-// Endpoint for initializing game song library
-app.post('/init-game', (req, res) => {
-    let gameId = req.query.gameId;
-
-    try {
-        songs = require(`./data/${gameId}.json`);
-        console.log("Game ID: " + gameId);
-        gameLibraryId = gameId;
-        console.log(`Game [${gameId} (${songs.length})] initialized. Requests are currently ${requestsOpen ? "ON" : "OFF"}.`);
-        res.status(200).send(`Game [${gameId} (${songs.length})] initialized. Requests are currently ${requestsOpen ? "ON" : "OFF"}.`);
-    } catch(error) {
-        console.log("Error: " + error);
-        res.status(200).send(`Unable to initialize game [${gameId}].`);
-    }
-});
-
-// Endpoint for enabling/disabling requests
-app.post('/request-status', (req, res) => {
-    if(parseInt(req.query.open) === 1) {        
-        if(!gameLibraryId) {
-            console.log("Please set Game ID before opening requests.");
-            res.status(200).send("Please set Game ID before opening requests.");
-            return;
-        }
-        
-        requestsOpen = true;
-        broadcast({ type: 'REQUEST_MODE_ON' });
-        console.log("Requests are now open.");
-        res.status(200).send("Requests are now open.");
-    } else {
-        requestsOpen = false;
-        broadcast({ type: 'REQUEST_MODE_OFF' });
-        console.log("Requests are now closed.");
-        res.status(200).send("Requests are now closed.");
-    }
-    //broadcast({ type: "REQUEST_MODE", requestStatus: requestsOpen });
-});
-
-// Endpoint for checking song availability
-app.post('/check-song', (req, res) => {
-    let requestedSong = findSong(req.query.songtitle);
-
-    if(requestedSong) {
-        res.status(200).send(`ℹ️ I found the song [${requestedSong.title} / ${requestedSong.artist}]. If this is correct, type "!req ${req.query.songtitle}" (without the quotes) to proceed.`);
-    } else {
-        res.status(200).send(`❌ Sorry, no songs matched "${req.query.songtitle}." This song may not be in the current game.`);
-    }
-});
-
-// Endpoint for removing played song in front of the queue
-app.post('/remove-song', (req, res) => {    
-    if(queue.length === 0) { console.log('No songs in queue to remove.'); return; }
-    
-    broadcast({ type: 'REMOVE_SONG' });
-    let currSong = queue[0];
-    queue = queue.slice(1);
-    if(queue.length > 0) {
-        res.status(200).send(`▶️ Request [${currSong.title}] has been played! Next song ⏩ [${queue[0].title}]`);
-        console.log(`Request [${currSong.title}] has been played! Next song ⏩ [${queue[0].title}]`);
-    } else {
-        res.status(200).send(`▶️ Request [${currSong.title}] has been played. There are no songs in queue.`);
-        console.log(`Request [${currSong.title}] has been played. There are no songs in queue.`)
-    }
-    
-    
-});
-
 // HTTP->Websocket
+const wss = new wSocket.Server({ noServer: true});
+setWss(wss);
+
 const server = app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+
+// Routing
+const moduleSrs = require('./routes/srs');
+const moduleTwitch = require('./routes/twitch');
+app.use('/srs', moduleSrs);
+app.use('/twitch', moduleTwitch);
 
 server.on('upgrade', (request, socket, head) => {
     wss.handleUpgrade(request, socket, head, ws => {
         wss.emit('connection', ws, request)
     });
 });
+
+module.exports = app;
