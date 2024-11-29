@@ -32,6 +32,12 @@ function findSong(query) {
     });
 }
 
+// Endpoint for status
+router.post('/status', (req, res) => {
+    console.log(`Status -> Game ID: ${gameLibraryId} Queue: ${queue.length}`);
+    res.status(200).send(`Status -> Game ID: ${gameLibraryId} Queue: ${queue.length}`);
+});
+
 // Endpoint for song requests
 router.post('/request-song', (req, res) => {
     let requestedSong = findSong(req.query.songtitle);
