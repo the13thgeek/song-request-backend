@@ -6,7 +6,7 @@ const port = 1300;
 require('dotenv').config();
 
 setTimeout(function() {
-    console.log(`[the13thgeek] NodeJS Backend System ver ${process.env.GEEK_NODE_VER}`);
+    console.log(`[the13thgeek] NodeJS Backend System v${process.env.GEEK_NODE_VER}`);
 }, 5000);
 
 app.use(express.json());
