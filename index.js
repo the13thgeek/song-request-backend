@@ -1,5 +1,6 @@
 const express = require("express");
 const wSocket = require("ws");
+const http = require("http");
 const { setWss } = require('./utils');
 const app = express();
 const port = 8080;
@@ -7,8 +8,11 @@ require('dotenv').config();
 
 setTimeout(function() {
     console.log(`[the13thgeek] NodeJS Backend System v${process.env.GEEK_NODE_VER}`);
-    console.log(`[the13thgeek] U : ${process.env.GEEKHUB_DB_USER}`);
-    console.log(`[the13thgeek] P : ${process.env.GEEKHUB_DB_PASS}`);
+    http.get({'host': 'api.ipify.org', 'port': 80, 'path': '/'}, function(resp) {
+        resp.on('data', function(ip) {
+            console.log("Server IP: " + ip);
+        });
+    });
 }, 5000);
 
 app.use(express.json());
