@@ -32,8 +32,10 @@ const server = app.listen(port, () => console.log(`Server is running and listeni
 // Routing
 const moduleSrs = require('./routes/srs');
 const moduleTwitch = require('./routes/twitch');
+const moduleGeekHub = require('./routes/geekhub');
 app.use('/srs', moduleSrs);
 app.use('/twitch', moduleTwitch);
+app.use('/geekhub', moduleGeekHub);
 
 server.on('upgrade', (request, socket, head) => {
     wss.handleUpgrade(request, socket, head, ws => {
