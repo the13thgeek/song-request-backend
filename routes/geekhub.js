@@ -7,6 +7,7 @@ require('dotenv').config();
 
 // Internal functions
 async function test() {
+    console.log('TEST activated.');
     let rows = null;
     try {
         const conn = await mysql.createConnection({
