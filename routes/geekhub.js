@@ -354,6 +354,7 @@ router.post('/gacha', async (req, res) => {
     let output = {
         status: "ok",
         message: `You have pulled a ${newCard.is_premium ? "Premium" : "Standard"} [${newCard.name}]!`,
+        output_card_name: newCard.sysname,
         card_name: user.card_default.sysname
     }
 
