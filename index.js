@@ -2,6 +2,7 @@ const express = require("express");
 const wSocket = require("ws");
 const http = require("http");
 const { setWss } = require('./utils');
+const cors = require('cors');
 const app = express();
 const port = 8080;
 require('dotenv').config();
@@ -15,6 +16,11 @@ setTimeout(function() {
     });
 }, 5000);
 
+// Adding CORS
+app.use(cors({
+    origin: 'http://localhost:5173'
+}));
+
 app.use(express.json());
 
 // Adding API KEY authentication + middleware
@@ -27,7 +33,6 @@ app.use((req, res, next) => {
     }
     next();
 })
-
 
 // HTTP->Websocket
 const wss = new wSocket.Server({ noServer: true});
