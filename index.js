@@ -8,7 +8,7 @@ const port = 8080;
 require('dotenv').config();
 
 setTimeout(function() {
-    console.log(`[the13thgeek] NodeJS Backend System v${process.env.GEEK_NODE_VER}`);
+    console.log(`[the13thgeek] theCloud System v${process.env.GEEK_NODE_VER}`);
     http.get({'host': 'api.ipify.org', 'port': 80, 'path': '/'}, function(resp) {
         resp.on('data', function(ip) {
             console.log("Server IP: " + ip);
@@ -29,7 +29,10 @@ const API_KEY = process.env.GEEK_API_KEY || "XX13XX";
 app.use((req, res, next) => {
     const clientApiKey = req.headers['x-api-key'];
     if(clientApiKey !== API_KEY) {
-        return res.status(403).send("Unauthorized access.");
+        return res.status(403).json({
+            status: false,
+            message: "Unauthorized access."
+        });
     }
     next();
 })
@@ -43,10 +46,10 @@ const server = app.listen(port, () => console.log(`Server is running and listeni
 // Routing
 const moduleSrs = require('./routes/srs');
 const moduleTwitch = require('./routes/twitch');
-const moduleGeekHub = require('./routes/geekhub');
+const moduleMainframe = require('./routes/mainframe');
 app.use('/srs', moduleSrs);
 app.use('/twitch', moduleTwitch);
-app.use('/geekhub', moduleGeekHub);
+app.use('/mainframe', moduleMainframe);
 
 server.on('upgrade', (request, socket, head) => {
     wss.handleUpgrade(request, socket, head, ws => {
