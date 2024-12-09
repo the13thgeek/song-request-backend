@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Fetch Live Data
 async function getLiveData() {
-    let requestUrl = `https://api.twitch.tv/helix/streams?user_login=the13thgeek`;
+    let requestUrl = `https://api.twitch.tv/helix/streams?user_login=xerenite`;
     let output = null;
 
     try {

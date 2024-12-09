@@ -64,22 +64,22 @@ async function test() {
 
 // Load user data using Twitch ID
 // Register locally if user doesn't exist yet
-async function getUserData(twitch_id, twitch_displayname, is_premium = false) {
+async function getUserData(twitch_id, twitch_display_name, is_premium = false) {
     let user = null;
+    const conn = await dbPool.getConnection();
 
     try {
-        const conn = await dbPool.getConnection();
         const [usrData] = await conn.execute("SELECT * FROM tbl_users WHERE twitch_id = ?", [twitch_id]);
 
         if(usrData.length > 0) {
             // User exists, update login
             console.log(`getUserData(): User ${twitch_id} exists.`)
             user = usrData[0];
-            const [updateUser] = await conn.execute("UPDATE tbl_users SET twitch_displayname = ?, last_login = CURRENT_TIMESTAMP WHERE id = ?",[user.twitch_displayname,user.id]);
+            const [updateUser] = await conn.execute("UPDATE tbl_users SET twitch_display_name = ?, last_login = CURRENT_TIMESTAMP WHERE id = ?",[user.twitch_display_name,user.id]);
         } else {
             // User does not exist on local DB, create
-            console.log(`getUserData(): User [${twitch_id},${twitch_displayname}] not locally registered.`)
-            user = await registerUser(twitch_id,twitch_displayname);
+            console.log(`getUserData(): User [${twitch_id},${twitch_display_name}] not locally registered.`)
+            user = await registerUser(twitch_id,twitch_display_name);
         }
         await conn.release();
         
@@ -99,9 +99,13 @@ async function getUserData(twitch_id, twitch_displayname, is_premium = false) {
         //console.log(user);
 
     } catch(e) {
+        user = null;    
         console.error(`getUserData(): ERROR: ${e.message}`);
+        throw e;
+    } finally {
+        conn.release();
+        return user;
     }
-    return user;
 }
 
 // Register user to local DB
@@ -223,7 +227,7 @@ async function expRanking() {
 
     try {
         const conn = await dbPool.getConnection();
-        const [rankData] = await conn.execute("SELECT * FROM tbl_users WHERE is_active = 1 ORDER BY exp DESC, last_login DESC LIMIT 5");
+        const [rankData] = await conn.execute("SELECT * FROM tbl_users WHERE id NOT IN (1,5) AND is_active = 1 ORDER BY exp DESC, reg_date LIMIT 10");
         output = rankData;
         
         // Append level data
@@ -300,7 +304,7 @@ async function addCardToUser(user_id,card_id) {
         // Check if user already owns card
         const [existingCard] = await conn.execute("SELECT COUNT(*) as count FROM tbl_user_cards WHERE user_id = ? AND card_id = ?",[user_id,card_id]);
         const count = existingCard[0].count;
-        if(count === 0)  {
+        if(count === 0 && card_id > 0)  { // Do not issue Card #0 (Try Again)
             // untoggle is_default to current user's cards
             const [untoggle] = await conn.execute("UPDATE tbl_user_cards SET is_default = 0 WHERE user_id = ?",[user_id,])
             // add card to user
@@ -327,11 +331,24 @@ router.post('/test', async (req, res) => {
 
 // Login/Registration
 router.post('/usrlogin', async (req, res) => {    
-    console.log('ENDPOINT: /usrlogin ');
+    console.log('ENDPOINT: /usrlogin');
     let twitch_id = req.query.twitch_id;
     let twitch_displayname = req.query.twitch_displayname;
     const user = await getUserData(twitch_id,twitch_displayname);
     res.status(200).json(user);
+});
+
+// Login/Registration via Hub Widget
+router.post('/login-widget', async (req,res)=> {
+    console.log('ENDPOINT: /login-widget');
+    const { twitch_id, twitch_display_name } = req.body;
+    const user = await getUserData(twitch_id,twitch_display_name);
+    res.status(200).json({
+        exp: user.exp,
+        level: user.level,
+        title: user.title,
+        level_progress: user.levelProgress
+    });
 });
 
 // Ranking-EXP
@@ -353,7 +370,7 @@ router.post('/gacha', async (req, res) => {
     let cardIssued = await addCardToUser(user.id, newCard.id);
     let output = {
         status: "ok",
-        message: `You have pulled a ${newCard.is_premium ? "Premium" : "Standard"} [${newCard.name}]!`,
+        message: `You have pulled a ${newCard.is_premium ? "Premium" : ""} [${newCard.name}] Card!`,
         output_card_name: newCard.sysname,
         card_name: user.card_default.sysname
     }
@@ -362,8 +379,13 @@ router.post('/gacha', async (req, res) => {
         output.message += ` Congrats! Your new card will now show on your next sign-in!`;
         output.card_name = newCard.sysname;
     } else {
-        output.status = "ng",
-        output.message += ` You already have this card. Try again!`;
+        output.status = "ng";
+        if(newCard.sysname === 'try-again') {
+            output.message = `Sorry! Try again!`;
+        } else {
+            output.message += ` You already have this card.`;
+        }
+        
     }
     
     console.log(output);
@@ -375,17 +397,94 @@ router.post('/gacha', async (req, res) => {
 // Check-in
 router.post('/check-in', async (req, res) => {
     console.log('ENDPOINT: /check-in');
-    let twitch_id = req.query.twitch_id;
-    let twitch_displayname = req.query.twitch_displayname;
-    let roles = parseList(req.query.roles);    
+    const { twitch_id, twitch_display_name, twitch_roles } = req.body;
+    
+    const is_premium = isUserPremium(twitch_roles);
+    let user = await getUserData(twitch_id,twitch_display_name,is_premium);
 
-    let user = await getUserData(twitch_id,twitch_displayname,isUserPremium(roles));
-    //console.log(user);
     res.status(200).json({
         twitch_id: user.twitch_id,
         local_id: user.id,
-        card_name: user.card_default.sysname
+        is_premium: is_premium,
+        default_card_name: user.card_default.sysname
     });
+});
+
+// Change active card
+router.post('/change-card', async (req, res) => {
+    console.log('ENDPOINT: /change-card');
+    let twitch_id = req.query.twitch_id;
+    let twitch_displayname = req.query.twitch_displayname;
+    let card_name = req.query.card_name;
+    let user = await getUserData(twitch_id,twitch_displayname);
+    let output = {
+        success: false,
+        message: "",
+        data: {}
+    }
+
+    // find card in user's data
+    let is_card_present = false;
+    let new_active_card = null;
+    for(let card of user.cards) {
+        if (card_name === card.sysname) {
+            is_card_present = true;
+            new_active_card = card;
+            break;
+        }
+    }
+
+    // check if card is already active
+    if(user.card_default.sysname === card_name) {
+        output.success = false;
+        output.message = "You're already using this card.";
+    } else if(is_card_present) {
+        // do DB stuff here
+        // ----
+        output.success = true;
+        output.message = `You're now using your ${new_active_card.is_premium ? 'Premium' : ''} ${new_active_card.name} Card as your active card!`;
+        output.data = new_active_card;
+    } else {
+        output.success = false;
+        output.message = `I couldn't find this card in your Frequent Flyer membership. Please double-check and try again.`;
+    }
+
+    
+
+    res.status(200).json(output);
+
+
+});
+
+// Get cards keyword list
+router.post('/get-cards', async (req, res) => {
+    console.log('ENDPOINT: /get-cards');
+    let message = "";
+
+    try {
+        let twitch_id = req.query.twitch_id;
+        let twitch_displayname = req.query.twitch_displayname;
+        let user = await getUserData(twitch_id,twitch_displayname);
+        if (user) {
+            if(user.cards.length > 1) {
+                let cards_list = [];
+                for(let card of user.cards) {
+                    cards_list.push(card.sysname);
+                }
+                message += `You have (${user.cards.length}) cards: [${cards_list.toString()}]. To change your active card, type !changecard <keyword> in chat!`;
+            } else if(user.cards.length === 1) {
+                message += `You have the [${user.cards[0].sysname}] Card. To collect more cards, try your luck at the Mystery Card Pull redeem!`;
+            } else {
+                message += `It looks like you're not registered to our Frequent Flyer Program yet.`;
+            }
+        }
+
+    } catch(e) {
+        console.error(`/get-cards: ERROR: ${e.message}`);
+        message = `Sorry, I encountered a problem. Please inform the streamer right away.`;
+    } finally {
+        res.status(200).send(message);
+    }
 });
 
 module.exports = router;
