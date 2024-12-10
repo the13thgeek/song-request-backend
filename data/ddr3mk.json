@@ -1,345 +1,431 @@
-[
-    {
-        "title": "20, NOVEMBER (D.D.R. VERSION)",
-        "artist": "N.M.R. feat. DJ nagureo"
-    },
-    {
-        "title": "AFRONOVA",
-        "artist": "RE-VENGE"
-    },
-    {
-        "title": "BOOM BOOM DOLLAR (K.O.G. G3 MIX)",
-        "artist": "King Kong & D.Jungle Girls"
-    },
-    {
-        "title": "butterfly (UPSWING MIX)",
-        "artist": "SMiLE.dk"
-    },
-    {
-        "title": "CAPTAIN JACK (GRANDALE REMIX)",
-        "artist": "CAPTAIN JACK"
-    },
-    {
-        "title": "DAM DARIRAM",
-        "artist": "JOGA"
-    },
-    {
-        "title": "DO IT ALL NIGHT",
-        "artist": "E-ROTIC"
-    },
-    {
-        "title": "DEAD END",
-        "artist": "N&S"
-    },
-    {
-        "title": "DYNAMITE RAVE",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "END OF THE CENTURY",
-        "artist": "NO. 9"
-    },
-    {
-        "title": "FLASHDANCE (WHAT A FEELING)",
-        "artist": "MAGIKA"
-    },
-    {
-        "title": "FOLLOW THE SUN",
-        "artist": "TRIPLE J"
-    },
-    {
-        "title": "gentle stress (AMD SEXUAL MIX)",
-        "artist": "MR.DOG feat. DJ SWAN"
-    },
-    {
-        "title": "GRADIUSIC CYBER (AMD G5 MIX)",
-        "artist": "BIG-O feat. TAKA"
-    },
-    {
-        "title": "HOLIDAY",
-        "artist": "WHO'S THAT GIRL!"
-    },
-    {
-        "title": "IN THE NAVY '99 (XXL Disaster Remix)",
-        "artist": "CAPTAIN JACK"
-    },
-    {
-        "title": "IT ONLY TAKES A MINUTE",
-        "artist": "TAVARES"
-    },
-    {
-        "title": "Jam Jam Reggae (AMD SWING MIX)",
-        "artist": "RICE.C feat. jam master '73"
-    },
-    {
-        "title": "KEEP ON' MOVIN'",
-        "artist": "N.M.R."
-    },
-    {
-        "title": "La Senorita",
-        "artist": "CAPTAIN.T"
-    },
-    {
-        "title": "LET THEM MOVE",
-        "artist": "N.M.R."
-    },
-    {
-        "title": "LUV TO ME (AMD MIX)",
-        "artist": "DJ KAZU feat. tiger YAMATO"
-    },
-    {
-        "title": "MR. WONDERFUL",
-        "artist": "SMiLE.dk"
-    },
-    {
-        "title": "OH NICK PLEASE NOT SO QUICK",
-        "artist": "E-ROTIC"
-    },
-    {
-        "title": "OPERATOR",
-        "artist": "PAPAYA"
-    },
-    {
-        "title": "PARANOiA Rebirth",
-        "artist": "190'"
-    },
-    {
-        "title": "ROCK BEAT",
-        "artist": "LOUD FORCE"
-    },
-    {
-        "title": "Silent Hill",
-        "artist": "THOMAS HOWARD"
-    },
-    {
-        "title": "SO MANY MEN",
-        "artist": "ME & MY"
-    },
-    {
-        "title": "THE RACE",
-        "artist": "CAPTAIN JACK"
-    },
-    {
-        "title": "TURN ME ON",
-        "artist": "E-ROTIC"
-    },
-    {
-        "title": "UPSIDE DOWN",
-        "artist": "COO COO"
-    },
-    {
-        "title": "VOL. 4",
-        "artist": "RAVERS CHOICE"
-    },
-    {
-        "title": "WONDERLAND (UKS MIX)",
-        "artist": "X-TREME"
-    },
-    {
-        "title": "아름다운 21C",
-        "romanizedTitle" : "AROMDAON 21C",
-        "artist": "2000 대한민국",
-        "romanizedArtist": "2000 Korea"
-    },
-    {
-        "title": "바꿔",
-        "romanizedTitle" : "Ba Kkwo",
-        "artist": "이정현",
-        "romanizedArtist": "Lee Jung Hyun"
-    },
-    {
-        "title": "부담",
-        "romanizedTitle" : "Bu Dam",
-        "artist": "백지영",
-        "romanizedArtist": "Baek Ji Young"
-    },
-    {
-        "title": "별",
-        "romanizedTitle" : "Byul",
-        "artist": "TEAM"
-    },
-    {
-        "title": "FACE",
-        "artist" : "N.R.G."
-    },
-    {
-        "title": "가까이",
-        "romanizedTitle" : "GAGGAI",
-        "artist": "S#ARP",
-        "romanizedArtist": "Sharp"
-    },
-    {
-        "title": "가면의 시간",
-        "romanizedTitle" : "GAMYEONUI SIGAN",
-        "artist": "FIN.K.L"
-    },
-    {
-        "title": "GIMME GIMME",
-        "artist": "컨츄리꼬꼬",
-        "romanizedArtist": "Gunchuri Kko Kko"
-    },
-    {
-        "title": "경고",
-        "romanizedTitle" : "GYOUNG GO",
-        "artist": "타샤니",
-        "romanizedArtist": "Tashannie"
-    },
-    {
-        "title": "호기심",
-        "romanizedTitle" : "HOGISIM",
-        "artist": "한스 밴드",
-        "romanizedArtist": "Hans Band"
-    },
-    {
-        "title": "ROSE",
-        "artist": "FIN.K.L"
-    },
-    {
-        "title": "SHOCK",
-        "artist": "GOOFY"
-    },
-    {
-        "title": "Starian",
-        "artist": "DUKE"
-    },
-    {
-        "title": "성숙",
-        "romanizedTitle" : "Sung Suk",
-        "artist": "SPACE A"
-    },
-    {
-        "title": "TELL ME TELL ME",
-        "artist": "S#ARP",
-        "romanizedArtist": "Sharp"
-    },
-    {
-        "title": "와",
-        "romanizedTitle" : "Wa",
-        "artist": "이정현",
-        "romanizedArtist": "Lee Jung Hyun"
-    },
-    {
-        "title": "AM-3P",
-        "artist": "kTz"
-    },
-    {
-        "title": "BAD GIRLS",
-        "artist": "Juliet Roberts"
-    },
-    {
-        "title": "Boom Boom Dollar",
-        "artist": "King Kong & D.Jungle Girls"
-    },
-    {
-        "title": "Boys",
-        "artist": "SMILE.dk"
-    },
-    {
-        "title": "BRILLIANT 2U",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "BRILLIANT 2U (Orchestra Groove)",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "butterfly",
-        "artist": "SMILE.dk"
-    },
-    {
-        "title": "DUB-I-DUB",
-        "artist": "ME & MY"
-    },
-    {
-        "title": "EL RITMO TROPICAL",
-        "artist": "DIXIE'S GANG"
-    },
-    {
-        "title": "GET UP'N MOVE",
-        "artist": "S&K"
-    },
-    {
-        "title": "Have You Never Been Mellow",
-        "artist": "The Olivia Project"
-    },
-    {
-        "title": "HERO",
-        "artist": "PAPAYA"
-    },
-    {
-        "title": "I Believe In Miracles",
-        "artist": "Hi-Rise"
-    },
-    {
-        "title": "IF YOU WERE HERE",
-        "artist": "JENNIFER"
-    },
-    {
-        "title": "KUNG FU FIGHTING",
-        "artist": "BUS STOP ft. CARL DOUGLAS"
-    },
-    {
-        "title": "LET'S GET DOWN",
-        "artist": "JT PLAYAZ"
-    },
-    {
-        "title": "Little Bitch",
-        "artist": "The Specials"
-    },
-    {
-        "title": "Make A Jam!",
-        "artist": "U1"
-    },
-    {
-        "title": "MAKE IT BETTER",
-        "artist": "mitsu-o!"
-    },
-    {
-        "title": "MAKE IT BETTER (So-REAL Mix)",
-        "artist": "mitsu-O!SUMMER"
-    },
-    {
-        "title": "My Fire",
-        "artist": "X-Treme"
-    },
-    {
-        "title": "PARANOiA",
-        "artist": "180"
-    },
-    {
-        "title": "PARANOiA KCET ~clean mix~",
-        "artist": "2MB"
-    },
-    {
-        "title": "PARANOiA MAX ~DIRTY MIX~",
-        "artist": "190"
-    },
-    {
-        "title": "PUT YOUR FAITH IN ME",
-        "artist": "UZI-LAY"
-    },
-    {
-        "title": "PUT YOUR FAITH IN ME (Jazzy Groove)",
-        "artist": "UZI-LAY"
-    },
-    {
-        "title": "Smoke",
-        "artist": "Mr.Ed Jumps The Gun"
-    },
-    {
-        "title": "SP-TRIP MACHINE ~JUNGLE MIX~",
-        "artist": "DE-SIRE"
-    },
-    {
-        "title": "STRICTLY BUSINESS",
-        "artist": "MANTRONIK VS EPMD"
-    },
-    {
-        "title": "That's The Way (I Like It)",
-        "artist": "KC & The Sunshine Band"
-    },
-    {
-        "title": "TRIP MACHINE",
-        "artist": "DE-SIRE"
-    }
-]
+{
+    "game_id": "ddr3mk",
+    "game_title": "Dance Dance Revolution 3rdMIX ver. KOREA2",
+    "game_year": 2000,
+    "songs": [
+        {
+            "title": "20, NOVEMBER (D.D.R. VERSION)",
+            "artist": "N.M.R. feat. DJ nagureo",
+            "id": "DDR3MK-20NO9615"
+        },
+        {
+            "title": "AFRONOVA",
+            "artist": "RE-VENGE",
+            "id": "DDR3MK-AFRO6718"
+        },
+        {
+            "title": "BOOM BOOM DOLLAR (K.O.G. G3 MIX)",
+            "artist": "King Kong & D.Jungle Girls",
+            "id": "DDR3MK-BOOM4653"
+        },
+        {
+            "title": "butterfly (UPSWING MIX)",
+            "artist": "SMiLE.dk",
+            "id": "DDR3MK-BUTT4276"
+        },
+        {
+            "title": "CAPTAIN JACK (GRANDALE REMIX)",
+            "artist": "CAPTAIN JACK",
+            "id": "DDR3MK-CAPT5394"
+        },
+        {
+            "title": "DAM DARIRAM",
+            "artist": "JOGA",
+            "id": "DDR3MK-DAMD6361"
+        },
+        {
+            "title": "DO IT ALL NIGHT",
+            "artist": "E-ROTIC",
+            "id": "DDR3MK-DOIT9489"
+        },
+        {
+            "title": "DEAD END",
+            "artist": "N&S",
+            "id": "DDR3MK-DEAD1888"
+        },
+        {
+            "title": "DYNAMITE RAVE",
+            "artist": "NAOKI",
+            "id": "DDR3MK-DYNA8334"
+        },
+        {
+            "title": "END OF THE CENTURY",
+            "artist": "NO. 9",
+            "id": "DDR3MK-ENDO6913"
+        },
+        {
+            "title": "FLASHDANCE (WHAT A FEELING)",
+            "artist": "MAGIKA",
+            "id": "DDR3MK-FLAS6273"
+        },
+        {
+            "title": "FOLLOW THE SUN",
+            "artist": "TRIPLE J",
+            "id": "DDR3MK-FOLL9901"
+        },
+        {
+            "title": "gentle stress (AMD SEXUAL MIX)",
+            "artist": "MR.DOG feat. DJ SWAN",
+            "id": "DDR3MK-GENT5118"
+        },
+        {
+            "title": "GRADIUSIC CYBER (AMD G5 MIX)",
+            "artist": "BIG-O feat. TAKA",
+            "id": "DDR3MK-GRAD1650"
+        },
+        {
+            "title": "HOLIDAY",
+            "artist": "WHO'S THAT GIRL!",
+            "id": "DDR3MK-HOLI9800"
+        },
+        {
+            "title": "IN THE NAVY '99 (XXL Disaster Remix)",
+            "artist": "CAPTAIN JACK",
+            "id": "DDR3MK-INTH7260"
+        },
+        {
+            "title": "IT ONLY TAKES A MINUTE",
+            "artist": "TAVARES",
+            "id": "DDR3MK-ITON1850"
+        },
+        {
+            "title": "Jam Jam Reggae (AMD SWING MIX)",
+            "artist": "RICE.C feat. jam master '73",
+            "id": "DDR3MK-JAMJ8440"
+        },
+        {
+            "title": "KEEP ON' MOVIN'",
+            "artist": "N.M.R.",
+            "id": "DDR3MK-KEEP1383"
+        },
+        {
+            "title": "La Senorita",
+            "artist": "CAPTAIN.T",
+            "id": "DDR3MK-LASE1897"
+        },
+        {
+            "title": "LET THEM MOVE",
+            "artist": "N.M.R.",
+            "id": "DDR3MK-LETT4420"
+        },
+        {
+            "title": "LUV TO ME (AMD MIX)",
+            "artist": "DJ KAZU feat. tiger YAMATO",
+            "id": "DDR3MK-LUVT7074"
+        },
+        {
+            "title": "MR. WONDERFUL",
+            "artist": "SMiLE.dk",
+            "id": "DDR3MK-MRWO9771"
+        },
+        {
+            "title": "OH NICK PLEASE NOT SO QUICK",
+            "artist": "E-ROTIC",
+            "id": "DDR3MK-OHNI7748"
+        },
+        {
+            "title": "OPERATOR",
+            "artist": "PAPAYA",
+            "id": "DDR3MK-OPER4151"
+        },
+        {
+            "title": "PARANOiA Rebirth",
+            "artist": "190'",
+            "id": "DDR3MK-PARA8136"
+        },
+        {
+            "title": "ROCK BEAT",
+            "artist": "LOUD FORCE",
+            "id": "DDR3MK-ROCK6515"
+        },
+        {
+            "title": "Silent Hill",
+            "artist": "THOMAS HOWARD",
+            "id": "DDR3MK-SILE3771"
+        },
+        {
+            "title": "SO MANY MEN",
+            "artist": "ME & MY",
+            "id": "DDR3MK-SOMA8468"
+        },
+        {
+            "title": "THE RACE",
+            "artist": "CAPTAIN JACK",
+            "id": "DDR3MK-THER6011"
+        },
+        {
+            "title": "TURN ME ON",
+            "artist": "E-ROTIC",
+            "id": "DDR3MK-TURN3573"
+        },
+        {
+            "title": "UPSIDE DOWN",
+            "artist": "COO COO",
+            "id": "DDR3MK-UPSI6402"
+        },
+        {
+            "title": "VOL. 4",
+            "artist": "RAVERS CHOICE",
+            "id": "DDR3MK-VOL48866"
+        },
+        {
+            "title": "WONDERLAND (UKS MIX)",
+            "artist": "X-TREME",
+            "id": "DDR3MK-WOND5272"
+        },
+        {
+            "title": "아름다운 21C",
+            "romanizedTitle": "AROMDAON 21C",
+            "artist": "2000 대한민국",
+            "romanizedArtist": "2000 Korea",
+            "id": "DDR3MK-AROM7249"
+        },
+        {
+            "title": "바꿔",
+            "romanizedTitle": "Ba Kkwo",
+            "artist": "이정현",
+            "romanizedArtist": "Lee Jung Hyun",
+            "id": "DDR3MK-BAKK8056"
+        },
+        {
+            "title": "부담",
+            "romanizedTitle": "Bu Dam",
+            "artist": "백지영",
+            "romanizedArtist": "Baek Ji Young",
+            "id": "DDR3MK-BUDA9173"
+        },
+        {
+            "title": "별",
+            "romanizedTitle": "Byul",
+            "artist": "TEAM",
+            "id": "DDR3MK-BYUL7120"
+        },
+        {
+            "title": "FACE",
+            "artist": "N.R.G.",
+            "id": "DDR3MK-FACE7388"
+        },
+        {
+            "title": "가까이",
+            "romanizedTitle": "GAGGAI",
+            "artist": "S#ARP",
+            "romanizedArtist": "Sharp",
+            "id": "DDR3MK-GAGG8838"
+        },
+        {
+            "title": "가면의 시간",
+            "romanizedTitle": "GAMYEONUI SIGAN",
+            "artist": "FIN.K.L",
+            "id": "DDR3MK-GAMY1403"
+        },
+        {
+            "title": "GIMME GIMME",
+            "artist": "컨츄리꼬꼬",
+            "romanizedArtist": "Gunchuri Kko Kko",
+            "id": "DDR3MK-GIMM8579"
+        },
+        {
+            "title": "경고",
+            "romanizedTitle": "GYOUNG GO",
+            "artist": "타샤니",
+            "romanizedArtist": "Tashannie",
+            "id": "DDR3MK-GYOU8939"
+        },
+        {
+            "title": "호기심",
+            "romanizedTitle": "HOGISIM",
+            "artist": "한스 밴드",
+            "romanizedArtist": "Hans Band",
+            "id": "DDR3MK-HOGI2191"
+        },
+        {
+            "title": "ROSE",
+            "artist": "FIN.K.L",
+            "id": "DDR3MK-ROSE4169"
+        },
+        {
+            "title": "SHOCK",
+            "artist": "GOOFY",
+            "id": "DDR3MK-SHOC4108"
+        },
+        {
+            "title": "Starian",
+            "artist": "DUKE",
+            "id": "DDR3MK-STAR4973"
+        },
+        {
+            "title": "성숙",
+            "romanizedTitle": "Sung Suk",
+            "artist": "SPACE A",
+            "id": "DDR3MK-SUNG3644"
+        },
+        {
+            "title": "TELL ME TELL ME",
+            "artist": "S#ARP",
+            "romanizedArtist": "Sharp",
+            "id": "DDR3MK-TELL9879"
+        },
+        {
+            "title": "와",
+            "romanizedTitle": "Wa",
+            "artist": "이정현",
+            "romanizedArtist": "Lee Jung Hyun",
+            "id": "DDR3MK-WAXX2998"
+        },
+        {
+            "title": "AM-3P",
+            "artist": "kTz",
+            "id": "DDR3MK-AM3P7270"
+        },
+        {
+            "title": "BAD GIRLS",
+            "artist": "Juliet Roberts",
+            "id": "DDR3MK-BADG3132"
+        },
+        {
+            "title": "Boom Boom Dollar",
+            "artist": "King Kong & D.Jungle Girls",
+            "id": "DDR3MK-BOOM6758"
+        },
+        {
+            "title": "Boys",
+            "artist": "SMILE.dk",
+            "id": "DDR3MK-BOYS4218"
+        },
+        {
+            "title": "BRILLIANT 2U",
+            "artist": "NAOKI",
+            "id": "DDR3MK-BRIL3041"
+        },
+        {
+            "title": "BRILLIANT 2U (Orchestra Groove)",
+            "artist": "NAOKI",
+            "id": "DDR3MK-BRIL5406"
+        },
+        {
+            "title": "butterfly",
+            "artist": "SMILE.dk",
+            "id": "DDR3MK-BUTT9367"
+        },
+        {
+            "title": "DUB-I-DUB",
+            "artist": "ME & MY",
+            "id": "DDR3MK-DUBI8937"
+        },
+        {
+            "title": "EL RITMO TROPICAL",
+            "artist": "DIXIE'S GANG",
+            "id": "DDR3MK-ELRI4492"
+        },
+        {
+            "title": "GET UP'N MOVE",
+            "artist": "S&K",
+            "id": "DDR3MK-GETU1510"
+        },
+        {
+            "title": "Have You Never Been Mellow",
+            "artist": "The Olivia Project",
+            "id": "DDR3MK-HAVE1856"
+        },
+        {
+            "title": "HERO",
+            "artist": "PAPAYA",
+            "id": "DDR3MK-HERO4297"
+        },
+        {
+            "title": "I Believe In Miracles",
+            "artist": "Hi-Rise",
+            "id": "DDR3MK-IBEL4163"
+        },
+        {
+            "title": "IF YOU WERE HERE",
+            "artist": "JENNIFER",
+            "id": "DDR3MK-IFYO7384"
+        },
+        {
+            "title": "KUNG FU FIGHTING",
+            "artist": "BUS STOP ft. CARL DOUGLAS",
+            "id": "DDR3MK-KUNG8594"
+        },
+        {
+            "title": "LET'S GET DOWN",
+            "artist": "JT PLAYAZ",
+            "id": "DDR3MK-LETS8001"
+        },
+        {
+            "title": "Little Bitch",
+            "artist": "The Specials",
+            "id": "DDR3MK-LITT1486"
+        },
+        {
+            "title": "Make A Jam!",
+            "artist": "U1",
+            "id": "DDR3MK-MAKE1896"
+        },
+        {
+            "title": "MAKE IT BETTER",
+            "artist": "mitsu-o!",
+            "id": "DDR3MK-MAKE1328"
+        },
+        {
+            "title": "MAKE IT BETTER (So-REAL Mix)",
+            "artist": "mitsu-O!SUMMER",
+            "id": "DDR3MK-MAKE5496"
+        },
+        {
+            "title": "My Fire",
+            "artist": "X-Treme",
+            "id": "DDR3MK-MYFI7596"
+        },
+        {
+            "title": "PARANOiA",
+            "artist": "180",
+            "id": "DDR3MK-PARA4752"
+        },
+        {
+            "title": "PARANOiA KCET ~clean mix~",
+            "artist": "2MB",
+            "id": "DDR3MK-PARA2147"
+        },
+        {
+            "title": "PARANOiA MAX ~DIRTY MIX~",
+            "artist": "190",
+            "id": "DDR3MK-PARA2294"
+        },
+        {
+            "title": "PUT YOUR FAITH IN ME",
+            "artist": "UZI-LAY",
+            "id": "DDR3MK-PUTY5857"
+        },
+        {
+            "title": "PUT YOUR FAITH IN ME (Jazzy Groove)",
+            "artist": "UZI-LAY",
+            "id": "DDR3MK-PUTY4729"
+        },
+        {
+            "title": "Smoke",
+            "artist": "Mr.Ed Jumps The Gun",
+            "id": "DDR3MK-SMOK9902"
+        },
+        {
+            "title": "SP-TRIP MACHINE ~JUNGLE MIX~",
+            "artist": "DE-SIRE",
+            "id": "DDR3MK-SPTR1176"
+        },
+        {
+            "title": "STRICTLY BUSINESS",
+            "artist": "MANTRONIK VS EPMD",
+            "id": "DDR3MK-STRI6313"
+        },
+        {
+            "title": "That's The Way (I Like It)",
+            "artist": "KC & The Sunshine Band",
+            "id": "DDR3MK-THAT8939"
+        },
+        {
+            "title": "TRIP MACHINE",
+            "artist": "DE-SIRE",
+            "id": "DDR3MK-TRIP8635"
+        }
+    ]
+}

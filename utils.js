@@ -16,7 +16,7 @@ function broadcast(data) {
     if(!wss) {
         console.error("WebSocket server is not initialized.");
         return;
-    }
+    } 
     wss.clients.forEach(client => {
         if(client.readyState === wSocket.OPEN) {
             client.send(JSON.stringify(data));

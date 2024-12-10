@@ -16,6 +16,11 @@ const dbPool = mysql.createPool({
     queueLimit: 0
 });
 
+// MAINFRAME GLOBALS
+let exp_standard = 1.0;
+let exp_premium = 1.25;
+let exp_global = 1.0;
+
 // FUNCTIONS
 
 // Get Player Level, Title and Progression

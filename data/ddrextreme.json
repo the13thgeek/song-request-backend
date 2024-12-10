@@ -1,994 +1,1239 @@
-[
-    {
-        "title": "1998",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "20,November",
-        "artist": "DJ nagureo"
-    },
-    {
-        "title": "321 STARS",
-        "artist": "DJ SIMON"
-    },
-    {
-        "title": "5.1.1.",
-        "artist": "DJ nagureo"
-    },
-    {
-        "title": ".59",
-        "artist": "dj TAKA"
-    },
-    {
-        "title": "A",
-        "artist": "D.J. Amuro"
-    },
-    {
-        "title": "ABSOLUTE",
-        "artist": "dj TAKA"
-    },
-    {
-        "title": "Abyss",
-        "artist": "dj TAKA"
-    },
-    {
-        "title": "Across the nightmare",
-        "artist": "Jimmy Weckl"
-    },
-    {
-        "title": "AFRONOVA",
-        "artist": "RE-VENGE"
-    },
-    {
-        "title": "AFRONOVA (from NONSTOP MEGAMIX)",
-        "artist": "RE-VENGE"
-    },
-    {
-        "title": "AFRONOVA PRIMEVAL",
-        "artist": "8 bit"
-    },
-    {
-        "title": "AFTER THE GAME OF LOVE",
-        "artist": "NPD3"
-    },
-    {
-        "title": "air",
-        "artist": "DJ SIMON"
-    },
-    {
-        "title": "AM-3P",
-        "artist": "KTz"
-    },
-    {
-        "title": "AM-3P (303 BASSMIX)",
-        "artist": "KTz (remixed by U1)"
-    },
-    {
-        "title": "AM-3P (AM EAST mix)",
-        "artist": "KTz"
-    },
-    {
-        "title": "蒼い衝動",
-        "romanizedTitle": "Aoi Shoudou",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "B4U",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "B4U (B4 ZA BEAT MIX)",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "BABY BABY GIMME YOUR LOVE",
-        "artist": "DIVAS"
-    },
-    {
-        "title": "bag",
-        "artist": "RevenG"
-    },
-    {
-        "title": "Be in my paradise",
-        "artist": "JJ COMPANY"
-    },
-    {
-        "title": "BE LOVIN",
-        "artist": "D-Crew"
-    },
-    {
-        "title": "BRE∀K DOWN!",
-        "romanizedTitle": "BREAK DOWN!",
-        "artist": "BeForU"
-    },
-    {
-        "title": "BRILLIANT 2U",
-        "artist": "NAOKI"
-      },
-    {
-        "title": "BRILLIANT 2U (K.O.G. G3 MIX)",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "BRILLIANT 2U (Orchestra Groove)",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "BROKEN MY HEART",
-        "artist": "NAOKI feat. PAULA TERRY"
-    },
-    {
-        "title": "BURNIN' THE FLOOR",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "BURNIN' THE FLOOR (BLUE FIRE mix)",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "BURNIN' THE FLOOR (MOMO MIX)",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "BURNING HEAT! (3 Option MIX)",
-        "artist": "Mr.T with Motoaki. F"
-    },
-    {
-        "title": "Butterfly",
-        "artist": "SMILE.dk"
-    },
-    {
-        "title": "CAN'T STOP FALLIN' IN LOVE",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "CAN'T STOP FALLIN' IN LOVE ~SPEED MIX~",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "CANDY♥",
-        "romanizedTitle": "CANDY (Riyu Kosaka) | CANDY HEART",
-        "artist": "小坂りゆ",
-        "romanizedArtist": "RIYU KOSAKA"
-    },
-    {
-        "title": "CANDY☆",
-        "romanizedTitle": "CANDY (Luv UNLIMITED) | CANDY STAR",
-        "artist": "Luv UNLIMITED"
-    },
-    {
-        "title": "CAPTAIN JACK (GRANDALE REMIX)",
-        "artist": "CAPTAIN JACK"
-    },
-    {
-        "title": "CARTOON HEROES (Speedy Mix)",
-        "artist": "BARBIE YOUNG"
-    },
-    {
-        "title": "celebrate",
-        "artist": "JJ COMPANY"
-    },
-    {
-        "title": "CELEBRATE NITE",
-        "artist": "N.M.R"
-    },
-    {
-        "title": "CELEBRATE NITE (Euro Trance Style)",
-        "artist": "N.M.R"
-    },
-    {
-        "title": "Colors (for EXTREME)",
-        "artist": "dj TAKA"
-    },
-    {
-        "title": "COW GIRL",
-        "artist": "BAMBEE"
-    },
-    {
-        "title": "CRASH!",
-        "artist": "mr.BRIAN & THE FINAL BAND"
-    },
-    {
-        "title": "CUTIE CHASER",
-        "artist": "CLUB SPICE"
-    },
-    {
-        "title": "CUTIE CHASER (MORNING MIX)",
-        "artist": "CLUB SPICE"
-    },
-    {
-        "title": "D2R",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "大見解",
-        "romanizedTitle": "DAIKENKAI",
-        "artist": "Des-ROW・組",
-        "romanizedArtist": "Des-ROW feat. TSUBOI for ALPHA"
-    },
-    {
-        "title": "DAM DARIRAM",
-        "artist": "JOGA"
-    },
-    {
-        "title": "Dance Dance Revolution",
-        "artist": "DDR ALL STARS"
-    },
-    {
-        "title": "DEAD END",
-        "artist": "N & S"
-    },
-    {
-        "title": "DESTINY",
-        "artist": "NAOKI feat. PAULA TERRY"
-    },
-    {
-        "title": "Destiny lovers",
-        "artist": "くにたけみゆき",
-        "romanizedArtist": "MIYUKI KUNITAKE"
-    },
-    {
-        "title": "DIVE (more deep & deeper style)",
-        "artist": "BeForU"
-    },
-    {
-        "title": "DIVE TO THE NIGHT",
-        "artist": "小坂りゆ",
-        "romanizedArtist": "RIYU KOSAKA"
-    },
-    {
-        "title": "Do It Right",
-        "artist": "SOTA feat. Ebony Fay"
-    },
-    {
-        "title": "Do It Right (Harmonized 2Step Mix)",
-        "artist": "SOTA feat. Ebony Fay"
-    },
-    {
-        "title": "DO YOU REMEMBER ME",
-        "artist": "JENNY"
-    },
-    {
-        "title": "Don't Stop! (AMD 2nd MIX)",
-        "artist": "Dr.VIBE feat. JP Miles"
-    },
-    {
-        "title": "Dr. Love",
-        "artist": "baby weapon feat. Asuka.M"
-    },
-    {
-        "title": "DROP OUT",
-        "artist": "NW260"
-    },
-    {
-        "title": "DROP OUT (from NONSTOP MEGAMIX)",
-        "artist": "NW260"
-    },
-    {
-        "title": "DROP THE BOMB",
-        "artist": "Scotty D."
-    },
-    {
-        "title": "DROP THE BOMB(System S.F. Mix)",
-        "artist": "Scotty D."
-    },
-    {
-        "title": "DXY!",
-        "artist": "TaQ"
-    },
-    {
-        "title": "DYNAMITE RAVE",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "DYNAMITE RAVE (B4 ZA BEAT MIX)",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "DYNAMITE RAVE (Down Bird SOTA Mix)",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "e-motion",
-        "artist": "e.o.s"
-    },
-    {
-        "title": "ECSTASY",
-        "artist": "d-complex"
-    },
-    {
-        "title": "ECSTASY (midnight blue mix)",
-        "artist": "d-complex"
-    },
-    {
-        "title": "EL RITMO TROPICAL",
-        "artist": "DIXIE'S GANG"
-    },
-    {
-        "title": "Electro Tuned (the SubS mix)",
-        "artist": "TaQ"
-    },
-    {
-        "title": "END OF THE CENTURY",
-        "artist": "NO.9"
-    },
-    {
-        "title": "era (nostalmix)",
-        "artist": "TaQ"
-    },
-    {
-        "title": "ever snow",
-        "artist": "YOMA KOMATSU"
-    },
-    {
-        "title": "exotic ethnic",
-        "artist": "RevenG"
-    },
-    {
-        "title": "FANTASY",
-        "artist": "MELISSA"
-    },
-    {
-        "title": "FANTASY",
-        "artist": "LOCKOUT"
-    },
-    {
-        "title": "feeling of love",
-        "artist": "youhei shimizu"
-    },
-    {
-        "title": "Firefly",
-        "artist": "BeForU"
-    },
-    {
-        "title": "そばかす FRECKLES (KCP Re-Edit)",
-        "romanizedTitle": "Sobakasu FRECKLES (KCP Re-Edit)",
-        "artist": "TIGGY"
-    },
-    {
-        "title": "Frozen Ray (for EXTREME)",
-        "artist": "dj TAKA"
-    },
-    {
-        "title": "Gamelan de Couple",
-        "artist": "TOMOSUKE"
-    },
-    {
-        "title": "GENOM SCREAMS",
-        "artist": "L.E.D.LIGHT"
-    },
-    {
-        "title": "gentle stress (AMD SEXUAL MIX)",
-        "artist": "MR.DOG feat. DJ SWAN"
-    },
-    {
-        "title": "GET UP'N MOVE",
-        "artist": "S&K"
-    },
-    {
-        "title": "GRADIUSIC CYBER (AMD G5 MIX)",
-        "artist": "BIG-O feat. TAKA"
-    },
-    {
-        "title": "GRADUATION ～それぞれの明日～",
-        "romanizedTitle": "GRADUATION ~sorezore no ashita~",
-        "artist": "BeForU"
-    },
-    {
-        "title": "Groove",
-        "artist": "Sho-T feat. Brenda"
-    },
-    {
-        "title": "Groove 2001",
-        "artist": "Sho-T feat.Brenda"
-    },
-    {
-        "title": "Happy Wedding",
-        "artist": "ASKA"
-    },
-    {
-        "title": "Healing Vision",
-        "artist": "DE-SIRE"
-    },
-    {
-        "title": "Healing Vision (Angelic mix)",
-        "artist": "2MB"
-    },
-    {
-        "title": "Heaven is a '57 metallic gray ~gimmix~",
-        "artist": "Hiro feat. Sweet little 30's"
-    },
-    {
-        "title": "HIGHER",
-        "artist": "NM feat. SUNNY"
-    },
-    {
-        "title": "HIGHER (next morning mix)",
-        "artist": "NM feat. SUNNY"
-    },
-    {
-        "title": "HIGHS OFF U (Scorccio XY Mix)",
-        "artist": "4 REEEL"
-    },
-    {
-        "title": "HOLD ON ME",
-        "artist": "tiger yamato"
-    },
-    {
-        "title": "Holic",
-        "artist": "TaQ"
-    },
-    {
-        "title": "HYPER EUROBEAT",
-        "artist": "NAOKI fear. DDR ALL STARS"
-    },
-    {
-        "title": "HYSTERIA",
-        "artist": "NAOKI 190"
-    },
-    {
-        "title": "HYSTERIA 2001",
-        "artist": "NM"
-    },
-    {
-        "title": "I Believe In Miracles",
-        "artist": "Hi-Rise"
-    },
-    {
-        "title": "I DO I DO I DO",
-        "artist": "CREAMY"
-    },
-    {
-        "title": "i feel...",
-        "artist": "AKIRA YAMAOKA"
-    },
-    {
-        "title": "I Was The One",
-        "artist": "good-cool"
-    },
-    {
-        "title": "I'm gonna get you!",
-        "artist": "Kelly Cosmo"
-    },
-    {
-        "title": "I'M IN THE MOOD FOR DANCING",
-        "artist": "SHARON"
-    },
-    {
-        "title": "IF YOU WERE HERE",
-        "artist": "JENNIFER"
-    },
-    {
-        "title": "INSERTiON",
-        "artist": "NAOKI underground"
-    },
-    {
-        "title": "IRRESISTIBLEMENT",
-        "artist": "WILDSIDE"
-    },
-    {
-        "title": "IT'S RAINING MEN (Almighty Mix)",
-        "artist": "GERI HALLIWELL"
-    },
-    {
-        "title": "Jam Jam Reggae",
-        "artist": "Jam Master '73"
-    },
-    {
-        "title": "Jam Jam Reggae",
-        "artist": "RICE.C feat. Jam Master '73"
-    },
-    {
-        "title": "jane jana",
-        "artist": "T.E.M.P.O. feat.Mohammed & Emi"
-    },
-    {
-        "title": "JET WORLD",
-        "artist": "Mutsuhiko Izumi"
-    },
-    {
-        "title": "革命",
-        "romanizedTitle": "KAKUMEI",
-        "artist": "dj TAKA with NAOKI"
-    },
-    {
-        "title": "KEEP ON MOVIN'",
-        "artist": "N.M.R"
-    },
-    {
-        "title": "Kind Lady",
-        "artist": "OKUYATOS"
-    },
-    {
-        "title": "KISS KISS KISS",
-        "artist": "NAOKI feat. SHANTI"
-    },
-    {
-        "title": "Kiss me all night long",
-        "artist": "NAOKI J-STYLE feat.MIU"
-    },
-    {
-        "title": "L'amour et la liberté (DDR Ver.)",
-        "romanizedTitle": "L'amour et la liberte (DDR Ver.)",
-        "artist": "NAOKI underground"
-    },
-    {
-        "title": "LA BAMBA",
-        "artist": "Mexican folk song"
-    },
-    {
-        "title": "LA COPA DE LA VIDA",
-        "artist": "PATRICK VICTORIO"
-    },
-    {
-        "title": "La Señorita",
-        "romanizedTitle": "La Senorita",
-        "artist": "CAPTAIN.T"
-    },
-    {
-        "title": "La Señorita Virtual",
-        "romanizedTitle": "La Senorita Virtual",
-        "artist": "CAPTAIN.T"
-    },
-    {
-        "title": "Last Message",
-        "artist": "good-cool feat. Meg"
-    },
-    {
-        "title": "LEADING CYBER",
-        "artist": "dj TAKA"
-    },
-    {
-        "title": "Let the beat hit em!(CLASSIC R&B STYLE)",
-        "artist": "Stone Bros."
-    },
-    {
-        "title": "LET'S GET DOWN",
-        "artist": "JT PLAYAZ"
-    },
-    {
-        "title": "LET'S GROOVE",
-        "artist": "TIPS & TRICKS VS WISDOME"
-    },
-    {
-        "title": "Little Bitch",
-        "artist": "The Specials"
-    },
-    {
-        "title": "LITTLE BOY (BOY OH BOY MIX)",
-        "artist": "CAPTAIN JACK"
-    },
-    {
-        "title": "LIVING IN AMERICA",
-        "artist": "ROSE & JOHN"
-    },
-    {
-        "title": "LONG TRAIN RUNNIN'",
-        "artist": "BUS STOP"
-    },
-    {
-        "title": "Look To The Sky",
-        "artist": "SySF. feat.ANNA"
-    },
-    {
-        "title": "Look To The Sky (True Color Mix)",
-        "artist": "System SF feat. Anna"
-    },
-    {
-        "title": "LOVE AGAIN TONIGHT (For Melissa Mix)",
-        "artist": "NAOKI feat. PAULA TERRY"
-    },
-    {
-        "title": "LOVE♥SHINE",
-        "romanizedTitle": "LOVE SHINE | LOVE LOVE SHINE",
-        "artist": "小坂りゆ",
-        "romanizedArtist": "RIYU KOSAKA"
-    },
-    {
-        "title": "♥LOVE² シュガ→♥",
-        "romanizedTitle": "LOVE2 Sugar | LOVE LOVE SUGAR",
-        "artist": "dj TAKA feat.のりあ",
-        "romanizedArtist": "dj TAKA feat. Noria"
-    },
-    {
-        "title": "LOVE THIS FEELIN'",
-        "artist": "Chang ma"
-    },
-    {
-        "title": "LOVIN' YOU (ROB SEARLE CLUB MIX)",
-        "artist": "VINYL BABY"
-    },
-    {
-        "title": "LUV TO ME (AMD MIX)",
-        "artist": "DJ KAZU feat. tiger YAMATO"
-    },
-    {
-        "title": "LUV TO ME (disco mix)",
-        "artist": "tiger YAMATO"
-    },
-    {
-        "title": "魔法の扉(スペース🪐マコのテーマ)",
-        "romanizedTitle": "Mahou no tobira (SPACE MACO no theme) | MAGIC DOOR (Theme of SPACE MACO)",
-        "artist": "a.s.a."
-    },
-    {
-        "title": "MAKE IT BETTER",
-        "artist": "mitsu-o!"
-    },
-    {
-        "title": "祭 JAPAN",
-        "romanizedTitle": "MATSURI JAPAN",
-        "artist": "RE-VENGE"
-    },
-    {
-        "title": "祭 JAPAN (from NONSTOP MEGAMIX)",
-        "romanizedTitle": "MATSURI JAPAN (from NONSTOP MEGAMIX)",
-        "artist": "RE-VENGE"
-    },
-    {
-        "title": "MAX 300",
-        "artist": "Ω"
-    },
-    {
-        "title": "MAXIMUM OVERDRIVE (KC Club Mix)",
-        "artist": "2 UNLIMITED"
-    },
-    {
-        "title": "MAXX UNLIMITED",
-        "artist": "Z"
-    },
-    {
-        "title": "MEMORIES",
-        "artist": "NAOKI feat. PAULA TERRY"
-    },
-    {
-        "title": "Midnite Blaze",
-        "artist": "U1 Jewel Style"
-    },
-    {
-        "title": "三毛猫ロック",
-        "romanizedTitle": "Mikeneko rock | CALICO CAT ROCK",
-        "artist": "亜熱帯マジ-SKA爆弾",
-        "romanizedArtist": "ANETTAI MAJI-SKA BAKUDAN"
-    },
-    {
-        "title": "MIRACLE",
-        "artist": "ST.JENNARO"
-    },
-    {
-        "title": "Miracle Moon ~L.E.D.LIGHT STYLE MIX~",
-        "artist": "Togo Project feat.Sana"
-    },
-    {
-        "title": "Mobo★Moga",
-        "romanizedTitle": "MOBO MOGA",
-        "artist": "Orange Lounge"
-    },
-    {
-        "title": "Mr.T. (take me higher)",
-        "artist": "Risky Men feat. Asuka M"
-    },
-    {
-        "title": "MY SUMMER LOVE",
-        "artist": "MITSU-O! with GEILA"
-    },
-    {
-        "title": "MY SUMMER LOVE (TOMMY'S SMILE MIX)",
-        "artist": "MITSU-O! with GEILA"
-    },
-    {
-        "title": "MY SWEET DARLIN'",
-        "artist": "WILDSIDE"
-    },
-    {
-        "title": "NORI NORI NORI",
-        "artist": "JUDY CRYSTAL"
-    },
-    {
-        "title": "ON THE JAZZ",
-        "artist": "Jonny Dynamite!"
-    },
-    {
-        "title": "ORDINARY WORLD",
-        "artist": "AURORA featuring NAIMEE COLEMAN"
-    },
-    {
-        "title": "ORION.78 (AMeuro-MIX)",
-        "artist": "RE-VENGE"
-    },
-    {
-        "title": "ORION.78 (civilization mix)",
-        "artist": "2MB"
-    },
-    {
-        "title": "PARANOIA",
-        "artist": "180"
-    },
-    {
-        "title": "PARANOIA ETERNAL",
-        "artist": "STM 200"
-    },
-    {
-        "title": "PARANOIA EVOLUTION",
-        "artist": "190"
-    },
-    {
-        "title": "PARANOIA KCET (clean mix)",
-        "artist": "2MB"
-    },
-    {
-        "title": "PARANOIA MAX (DIRTY MIX)",
-        "artist": "190"
-    },
-    {
-        "title": "PARANOIA Rebirth",
-        "artist": "190"
-    },
-    {
-        "title": "PARANOIA survivor",
-        "artist": "270"
-    },
-    {
-        "title": "PARANOIA survivor MAX",
-        "artist": "290"
-    },
-    {
-        "title": "Pink Rose",
-        "artist": "Kiyommy + Seiya"
-    },
-    {
-        "title": "PUT YOUR FAITH IN ME",
-        "artist": "UZI-LAY"
-    },
-    {
-        "title": "R3",
-        "artist": "tiger YAMATO"
-    },
-    {
-        "title": "rain of sorrow",
-        "artist": "NM feat. EBONY FAY"
-    },
-    {
-        "title": "Remember You",
-        "artist": "NM feat Julie"
-    },
-    {
-        "title": "RHYTHM AND POLICE (K.O.G G3 Mix)",
-        "artist": "CJ CREW feat. CHRISTIAN D"
-    },
-    {
-        "title": "SAINT GOES MARCHING (REMIX)",
-        "artist": "THE SAINT"
-    },
-    {
-        "title": "桜",
-        "romanizedTitle": "SAKURA",
-        "artist": "RevenG"
-    },
-    {
-        "title": "サナ・モレッテ・ネ・エンテ",
-        "romanizedTitle": "SANA MOLLETE NE ENTE",
-        "artist": "Togo Project feat. Sana"
-    },
-    {
-        "title": "SENORITA (Speedy Mix)",
-        "artist": "JENNY ROM"
-    },
-    {
-        "title": "Secret Rendez-vous",
-        "artist": "DIVAS"
-    },
-    {
-        "title": "SEXY PLANET",
-        "artist": "Crystal Aliens"
-    },
-    {
-        "title": "SEXY PLANET (from NONSTOP MEGAMIX)",
-        "artist": "Crystal Aliens"
-    },
-    {
-        "title": "Share My Love",
-        "artist": "Julie Frost"
-    },
-    {
-        "title": "Silent Hill",
-        "artist": "THOMAS HOWARD"
-    },
-    {
-        "title": "Silent Hill (3rd christmas mix)",
-        "artist": "THOMAS HOWARD"
-    },
-    {
-        "title": "ska a go go",
-        "artist": "THE BALD HEADS"
-    },
-    {
-        "title": "SKY HIGH",
-        "artist": "DJ MIKO"
-    },
-    {
-        "title": "SO DEEP (PERFECT SPHERE REMIX)",
-        "artist": "SILVERTEAR"
-    },
-    {
-        "title": "SO IN LOVE",
-        "artist": "Caramel.S"
-    },
-    {
-        "title": "SOMEWHERE OVER THE RAINBOW",
-        "artist": "COSMIC GATE"
-    },
-    {
-        "title": "SP-TRIP MACHINE (JUNGLE MIX)",
-        "artist": "DE-SIRE"
-    },
-    {
-        "title": "SPEED OVER BEETHOVEN",
-        "artist": "ROSE"
-    },
-    {
-        "title": "Spin the disc",
-        "artist": "good-cool"
-    },
-    {
-        "title": "STAY (Organic house Version)",
-        "artist": "emi"
-    },
-    {
-        "title": "STILL IN MY HEART",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "STILL IN MY HEART (MOMO MIX)",
-        "artist": "NAOKI"
-    },
-    {
-        "title": "stoic (EXTREME version)",
-        "artist": "TaQ"
-    },
-    {
-        "title": "SUPER STAR",
-        "artist": "D.J.RICH feat. TAILBROS."
-    },
-    {
-        "title": "SUPER STAR (from NONSTOP MEGAMIX)",
-        "artist": "D.J.RICH feat. TAILBROS."
-    },
-    {
-        "title": "Sweet Sweet ♥ Magic",
-        "romanizedTitle": "Sweet Sweet Love Magic",
-        "artist": "jun"
-    },
-    {
-        "title": "sync (EXTREME version)",
-        "artist": "OutPhase"
-    },
-    {
-        "title": "SYNCHRONIZED LOVE (Red Monster Hyper Mix)",
-        "artist": "JOE RINOIE"
-    },
-    {
-        "title": "TEARS",
-        "artist": "NAOKI underground feat.EK"
-    },
-    {
-        "title": "TELEPHONE OPERATOR (Club MIX)",
-        "artist": "SHELLEY PETER"
-    },
-    {
-        "title": "The Centre Of The Heart (STONEBRIDGE CLUBMIX)",
-        "artist": "Roxette"
-    },
-    {
-        "title": "The Least 100sec",
-        "artist": "Hirofumi Sasaki"
-    },
-    {
-        "title": "The legend of MAX",
-        "artist": "ZZ"
-    },
-    {
-        "title": "THE REFLEX",
-        "artist": "DURAN DURAN"
-    },
-    {
-        "title": "THERE YOU'LL BE",
-        "artist": "DJ SPEEDO feat.ANGELICA"
-    },
-    {
-        "title": "think ya better D",
-        "artist": "sAmi"
-    },
-    {
-        "title": "TRIP MACHINE",
-        "artist": "DE-SIRE"
-    },
-    {
-        "title": "TRIP MACHINE (luv mix)",
-        "artist": "2MB"
-    },
-    {
-        "title": "TRIP MACHINE CLIMAX",
-        "artist": "DE-SIRE"
-    },
-    {
-        "title": "TRIP MACHINE survivor",
-        "artist": "DE-SIRE"
-    },
-    {
-        "title": "true... (radio edit)",
-        "artist": "小坂りゆ",
-        "romanizedArtist": "RIYU KOSAKA"
-    },
-    {
-        "title": "true... (Trance Sunrise Mix)",
-        "artist": "小坂りゆ",
-        "romanizedArtist": "RIYU KOSAKA"
-    },
-    {
-        "title": "TSUGARU",
-        "artist": "RevenG vs DE-SIRE"
-    },
-    {
-        "title": "TSUGARU (APPLE MIX)",
-        "artist": "RevenG vs DE-SIRE"
-    },
-    {
-        "title": "TWILIGHT ZONE (R-C Extended Club Mix)",
-        "artist": "2 UNLIMITED"
-    },
-    {
-        "title": "Twin Bee -Generation X-",
-        "artist": "FinalOffset"
-    },
-    {
-        "title": "V (for EXTREME)",
-        "artist": "TAKA"
-    },
-    {
-        "title": "VANITY ANGEL",
-        "artist": "FIXX"
-    },
-    {
-        "title": "WAKA LAKA",
-        "artist": "JENNY ROM vs ZIPPERS"
-    },
-    {
-        "title": "WE ARE THE CHAMPIONS (Factory Team Remix)",
-        "artist": "LIVE 2 LOVE"
-    },
-    {
-        "title": "WE WILL ROCK YOU",
-        "artist": "HOUSEBOYZ"
-    },
-    {
-        "title": "White Lovers",
-        "artist": "新谷さなえ",
-        "romanizedArtist": "Sana Shintani"
-    },
-    {
-        "title": "WILD RUSH",
-        "artist": "FACTOR-X"
-    },
-    {
-        "title": "WILD RUSH (from NONSTOP MEGAMIX)",
-        "artist": "FACTOR-X"
-    },
-    {
-        "title": "WITCH DOCTOR (GIANTS TOONS VERSION)",
-        "artist": "CARTOONS"
-    },
-    {
-        "title": "WWW.BLONDE GIRL (MOMO MIX)",
-        "artist": "JENNY ROM"
-    },
-    {
-        "title": "xenon",
-        "artist": "Mr.T"
-    },
-    {
-        "title": "夜空ノムコウ",
-        "romanizedTitle": "Yozora no mukou",
-        "artist": "EUROBEAT LOVERS"
-    }
-]
+{
+    "game_id": "ddrextreme",
+    "game_title": "Dance Dance Revolution EXTREME",
+    "game_year": 2002,
+    "songs": [
+        {
+            "title": "1998",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-19984101"
+        },
+        {
+            "title": "20,November",
+            "artist": "DJ nagureo",
+            "id": "DDRXTRM-20NO6370"
+        },
+        {
+            "title": "321 STARS",
+            "artist": "DJ SIMON",
+            "id": "DDRXTRM-321S6877"
+        },
+        {
+            "title": "5.1.1.",
+            "artist": "DJ nagureo",
+            "id": "DDRXTRM-511X1657"
+        },
+        {
+            "title": ".59",
+            "artist": "dj TAKA",
+            "id": "DDRXTRM-59XX0843"
+        },
+        {
+            "title": "A",
+            "artist": "D.J. Amuro",
+            "id": "DDRXTRM-AXXX9470"
+        },
+        {
+            "title": "ABSOLUTE",
+            "artist": "dj TAKA",
+            "id": "DDRXTRM-ABSO1284"
+        },
+        {
+            "title": "Abyss",
+            "artist": "dj TAKA",
+            "id": "DDRXTRM-ABYS7452"
+        },
+        {
+            "title": "Across the nightmare",
+            "artist": "Jimmy Weckl",
+            "id": "DDRXTRM-ACRO6064"
+        },
+        {
+            "title": "AFRONOVA",
+            "artist": "RE-VENGE",
+            "id": "DDRXTRM-AFRO4013"
+        },
+        {
+            "title": "AFRONOVA (from NONSTOP MEGAMIX)",
+            "artist": "RE-VENGE",
+            "id": "DDRXTRM-AFRO2482"
+        },
+        {
+            "title": "AFRONOVA PRIMEVAL",
+            "artist": "8 bit",
+            "id": "DDRXTRM-AFRO2539"
+        },
+        {
+            "title": "AFTER THE GAME OF LOVE",
+            "artist": "NPD3",
+            "id": "DDRXTRM-AFTE3679"
+        },
+        {
+            "title": "air",
+            "artist": "DJ SIMON",
+            "id": "DDRXTRM-AIRX3248"
+        },
+        {
+            "title": "AM-3P",
+            "artist": "KTz",
+            "id": "DDRXTRM-AM3P8948"
+        },
+        {
+            "title": "AM-3P (303 BASSMIX)",
+            "artist": "KTz (remixed by U1)",
+            "id": "DDRXTRM-AM3P0879"
+        },
+        {
+            "title": "AM-3P (AM EAST mix)",
+            "artist": "KTz",
+            "id": "DDRXTRM-AM3P3329"
+        },
+        {
+            "title": "蒼い衝動",
+            "romanizedTitle": "Aoi Shoudou",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-AOIS2826"
+        },
+        {
+            "title": "B4U",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-B4UX3369"
+        },
+        {
+            "title": "B4U (B4 ZA BEAT MIX)",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-B4UB4115"
+        },
+        {
+            "title": "BABY BABY GIMME YOUR LOVE",
+            "artist": "DIVAS",
+            "id": "DDRXTRM-BABY4099"
+        },
+        {
+            "title": "bag",
+            "artist": "RevenG",
+            "id": "DDRXTRM-BAGX9133"
+        },
+        {
+            "title": "Be in my paradise",
+            "artist": "JJ COMPANY",
+            "id": "DDRXTRM-BEIN7345"
+        },
+        {
+            "title": "BE LOVIN",
+            "artist": "D-Crew",
+            "id": "DDRXTRM-BELO5398"
+        },
+        {
+            "title": "BRE∀K DOWN!",
+            "romanizedTitle": "BREAK DOWN!",
+            "artist": "BeForU",
+            "id": "DDRXTRM-BREA6465"
+        },
+        {
+            "title": "BRILLIANT 2U",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-BRIL4800"
+        },
+        {
+            "title": "BRILLIANT 2U (K.O.G. G3 MIX)",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-BRIL2669"
+        },
+        {
+            "title": "BRILLIANT 2U (Orchestra Groove)",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-BRIL2647"
+        },
+        {
+            "title": "BROKEN MY HEART",
+            "artist": "NAOKI feat. PAULA TERRY",
+            "id": "DDRXTRM-BROK7433"
+        },
+        {
+            "title": "BURNIN' THE FLOOR",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-BURN6558"
+        },
+        {
+            "title": "BURNIN' THE FLOOR (BLUE FIRE mix)",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-BURN9855"
+        },
+        {
+            "title": "BURNIN' THE FLOOR (MOMO MIX)",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-BURN6984"
+        },
+        {
+            "title": "BURNING HEAT! (3 Option MIX)",
+            "artist": "Mr.T with Motoaki. F",
+            "id": "DDRXTRM-BURN3608"
+        },
+        {
+            "title": "Butterfly",
+            "artist": "SMILE.dk",
+            "id": "DDRXTRM-BUTT8433"
+        },
+        {
+            "title": "CAN'T STOP FALLIN' IN LOVE",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-CANT5626"
+        },
+        {
+            "title": "CAN'T STOP FALLIN' IN LOVE ~SPEED MIX~",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-CANT0541"
+        },
+        {
+            "title": "CANDY♥",
+            "romanizedTitle": "CANDY (Riyu Kosaka) | CANDY HEART",
+            "artist": "小坂りゆ",
+            "romanizedArtist": "RIYU KOSAKA",
+            "id": "DDRXTRM-CAND8670"
+        },
+        {
+            "title": "CANDY☆",
+            "romanizedTitle": "CANDY (Luv UNLIMITED) | CANDY STAR",
+            "artist": "Luv UNLIMITED",
+            "id": "DDRXTRM-CAND7990"
+        },
+        {
+            "title": "CAPTAIN JACK (GRANDALE REMIX)",
+            "artist": "CAPTAIN JACK",
+            "id": "DDRXTRM-CAPT6779"
+        },
+        {
+            "title": "CARTOON HEROES (Speedy Mix)",
+            "artist": "BARBIE YOUNG",
+            "id": "DDRXTRM-CART8834"
+        },
+        {
+            "title": "celebrate",
+            "artist": "JJ COMPANY",
+            "id": "DDRXTRM-CELE4464"
+        },
+        {
+            "title": "CELEBRATE NITE",
+            "artist": "N.M.R",
+            "id": "DDRXTRM-CELE4449"
+        },
+        {
+            "title": "CELEBRATE NITE (Euro Trance Style)",
+            "artist": "N.M.R",
+            "id": "DDRXTRM-CELE7345"
+        },
+        {
+            "title": "Colors (for EXTREME)",
+            "artist": "dj TAKA",
+            "id": "DDRXTRM-COLO3762"
+        },
+        {
+            "title": "COW GIRL",
+            "artist": "BAMBEE",
+            "id": "DDRXTRM-COWG0170"
+        },
+        {
+            "title": "CRASH!",
+            "artist": "mr.BRIAN & THE FINAL BAND",
+            "id": "DDRXTRM-CRAS8220"
+        },
+        {
+            "title": "CUTIE CHASER",
+            "artist": "CLUB SPICE",
+            "id": "DDRXTRM-CUTI1543"
+        },
+        {
+            "title": "CUTIE CHASER (MORNING MIX)",
+            "artist": "CLUB SPICE",
+            "id": "DDRXTRM-CUTI8263"
+        },
+        {
+            "title": "D2R",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-D2RX6165"
+        },
+        {
+            "title": "大見解",
+            "romanizedTitle": "DAIKENKAI",
+            "artist": "Des-ROW・組",
+            "romanizedArtist": "Des-ROW feat. TSUBOI for ALPHA",
+            "id": "DDRXTRM-DAIK3328"
+        },
+        {
+            "title": "DAM DARIRAM",
+            "artist": "JOGA",
+            "id": "DDRXTRM-DAMD3789"
+        },
+        {
+            "title": "Dance Dance Revolution",
+            "artist": "DDR ALL STARS",
+            "id": "DDRXTRM-DANC6980"
+        },
+        {
+            "title": "DEAD END",
+            "artist": "N & S",
+            "id": "DDRXTRM-DEAD7076"
+        },
+        {
+            "title": "DESTINY",
+            "artist": "NAOKI feat. PAULA TERRY",
+            "id": "DDRXTRM-DEST3440"
+        },
+        {
+            "title": "Destiny lovers",
+            "artist": "くにたけみゆき",
+            "romanizedArtist": "MIYUKI KUNITAKE",
+            "id": "DDRXTRM-DEST6146"
+        },
+        {
+            "title": "DIVE (more deep & deeper style)",
+            "artist": "BeForU",
+            "id": "DDRXTRM-DIVE6963"
+        },
+        {
+            "title": "DIVE TO THE NIGHT",
+            "artist": "小坂りゆ",
+            "romanizedArtist": "RIYU KOSAKA",
+            "id": "DDRXTRM-DIVE0887"
+        },
+        {
+            "title": "Do It Right",
+            "artist": "SOTA feat. Ebony Fay",
+            "id": "DDRXTRM-DOIT8843"
+        },
+        {
+            "title": "Do It Right (Harmonized 2Step Mix)",
+            "artist": "SOTA feat. Ebony Fay",
+            "id": "DDRXTRM-DOIT3693"
+        },
+        {
+            "title": "DO YOU REMEMBER ME",
+            "artist": "JENNY",
+            "id": "DDRXTRM-DOYO1907"
+        },
+        {
+            "title": "Don't Stop! (AMD 2nd MIX)",
+            "artist": "Dr.VIBE feat. JP Miles",
+            "id": "DDRXTRM-DONT3977"
+        },
+        {
+            "title": "Dr. Love",
+            "artist": "baby weapon feat. Asuka.M",
+            "id": "DDRXTRM-DRLO8390"
+        },
+        {
+            "title": "DROP OUT",
+            "artist": "NW260",
+            "id": "DDRXTRM-DROP0222"
+        },
+        {
+            "title": "DROP OUT (from NONSTOP MEGAMIX)",
+            "artist": "NW260",
+            "id": "DDRXTRM-DROP6132"
+        },
+        {
+            "title": "DROP THE BOMB",
+            "artist": "Scotty D.",
+            "id": "DDRXTRM-DROP3701"
+        },
+        {
+            "title": "DROP THE BOMB(System S.F. Mix)",
+            "artist": "Scotty D.",
+            "id": "DDRXTRM-DROP7176"
+        },
+        {
+            "title": "DXY!",
+            "artist": "TaQ",
+            "id": "DDRXTRM-DXYX5529"
+        },
+        {
+            "title": "DYNAMITE RAVE",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-DYNA6399"
+        },
+        {
+            "title": "DYNAMITE RAVE (B4 ZA BEAT MIX)",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-DYNA1878"
+        },
+        {
+            "title": "DYNAMITE RAVE (Down Bird SOTA Mix)",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-DYNA6912"
+        },
+        {
+            "title": "e-motion",
+            "artist": "e.o.s",
+            "id": "DDRXTRM-EMOT7703"
+        },
+        {
+            "title": "ECSTASY",
+            "artist": "d-complex",
+            "id": "DDRXTRM-ECST4601"
+        },
+        {
+            "title": "ECSTASY (midnight blue mix)",
+            "artist": "d-complex",
+            "id": "DDRXTRM-ECST9715"
+        },
+        {
+            "title": "EL RITMO TROPICAL",
+            "artist": "DIXIE'S GANG",
+            "id": "DDRXTRM-ELRI9175"
+        },
+        {
+            "title": "Electro Tuned (the SubS mix)",
+            "artist": "TaQ",
+            "id": "DDRXTRM-ELEC1163"
+        },
+        {
+            "title": "END OF THE CENTURY",
+            "artist": "NO.9",
+            "id": "DDRXTRM-ENDO5186"
+        },
+        {
+            "title": "era (nostalmix)",
+            "artist": "TaQ",
+            "id": "DDRXTRM-ERAN4776"
+        },
+        {
+            "title": "ever snow",
+            "artist": "YOMA KOMATSU",
+            "id": "DDRXTRM-EVER8054"
+        },
+        {
+            "title": "exotic ethnic",
+            "artist": "RevenG",
+            "id": "DDRXTRM-EXOT9256"
+        },
+        {
+            "title": "FANTASY",
+            "artist": "MELISSA",
+            "id": "DDRXTRM-FANT2386"
+        },
+        {
+            "title": "FANTASY",
+            "artist": "LOCKOUT",
+            "id": "DDRXTRM-FANT5171"
+        },
+        {
+            "title": "feeling of love",
+            "artist": "youhei shimizu",
+            "id": "DDRXTRM-FEEL2566"
+        },
+        {
+            "title": "Firefly",
+            "artist": "BeForU",
+            "id": "DDRXTRM-FIRE0046"
+        },
+        {
+            "title": "そばかす FRECKLES (KCP Re-Edit)",
+            "romanizedTitle": "Sobakasu FRECKLES (KCP Re-Edit)",
+            "artist": "TIGGY",
+            "id": "DDRXTRM-SOBA6757"
+        },
+        {
+            "title": "Frozen Ray (for EXTREME)",
+            "artist": "dj TAKA",
+            "id": "DDRXTRM-FROZ5950"
+        },
+        {
+            "title": "Gamelan de Couple",
+            "artist": "TOMOSUKE",
+            "id": "DDRXTRM-GAME9016"
+        },
+        {
+            "title": "GENOM SCREAMS",
+            "artist": "L.E.D.LIGHT",
+            "id": "DDRXTRM-GENO0914"
+        },
+        {
+            "title": "gentle stress (AMD SEXUAL MIX)",
+            "artist": "MR.DOG feat. DJ SWAN",
+            "id": "DDRXTRM-GENT1959"
+        },
+        {
+            "title": "GET UP'N MOVE",
+            "artist": "S&K",
+            "id": "DDRXTRM-GETU5550"
+        },
+        {
+            "title": "GRADIUSIC CYBER (AMD G5 MIX)",
+            "artist": "BIG-O feat. TAKA",
+            "id": "DDRXTRM-GRAD2385"
+        },
+        {
+            "title": "GRADUATION ～それぞれの明日～",
+            "romanizedTitle": "GRADUATION ~sorezore no ashita~",
+            "artist": "BeForU",
+            "id": "DDRXTRM-GRAD1037"
+        },
+        {
+            "title": "Groove",
+            "artist": "Sho-T feat. Brenda",
+            "id": "DDRXTRM-GROO7615"
+        },
+        {
+            "title": "Groove 2001",
+            "artist": "Sho-T feat.Brenda",
+            "id": "DDRXTRM-GROO4547"
+        },
+        {
+            "title": "Happy Wedding",
+            "artist": "ASKA",
+            "id": "DDRXTRM-HAPP1099"
+        },
+        {
+            "title": "Healing Vision",
+            "artist": "DE-SIRE",
+            "id": "DDRXTRM-HEAL3408"
+        },
+        {
+            "title": "Healing Vision (Angelic mix)",
+            "artist": "2MB",
+            "id": "DDRXTRM-HEAL9552"
+        },
+        {
+            "title": "Heaven is a '57 metallic gray ~gimmix~",
+            "artist": "Hiro feat. Sweet little 30's",
+            "id": "DDRXTRM-HEAV2372"
+        },
+        {
+            "title": "HIGHER",
+            "artist": "NM feat. SUNNY",
+            "id": "DDRXTRM-HIGH8463"
+        },
+        {
+            "title": "HIGHER (next morning mix)",
+            "artist": "NM feat. SUNNY",
+            "id": "DDRXTRM-HIGH0997"
+        },
+        {
+            "title": "HIGHS OFF U (Scorccio XY Mix)",
+            "artist": "4 REEEL",
+            "id": "DDRXTRM-HIGH8764"
+        },
+        {
+            "title": "HOLD ON ME",
+            "artist": "tiger yamato",
+            "id": "DDRXTRM-HOLD5740"
+        },
+        {
+            "title": "Holic",
+            "artist": "TaQ",
+            "id": "DDRXTRM-HOLI3810"
+        },
+        {
+            "title": "HYPER EUROBEAT",
+            "artist": "NAOKI fear. DDR ALL STARS",
+            "id": "DDRXTRM-HYPE1857"
+        },
+        {
+            "title": "HYSTERIA",
+            "artist": "NAOKI 190",
+            "id": "DDRXTRM-HYST6647"
+        },
+        {
+            "title": "HYSTERIA 2001",
+            "artist": "NM",
+            "id": "DDRXTRM-HYST4644"
+        },
+        {
+            "title": "I Believe In Miracles",
+            "artist": "Hi-Rise",
+            "id": "DDRXTRM-IBEL3514"
+        },
+        {
+            "title": "I DO I DO I DO",
+            "artist": "CREAMY",
+            "id": "DDRXTRM-IDOI3675"
+        },
+        {
+            "title": "i feel...",
+            "artist": "AKIRA YAMAOKA",
+            "id": "DDRXTRM-IFEE9747"
+        },
+        {
+            "title": "I Was The One",
+            "artist": "good-cool",
+            "id": "DDRXTRM-IWAS3696"
+        },
+        {
+            "title": "I'm gonna get you!",
+            "artist": "Kelly Cosmo",
+            "id": "DDRXTRM-IMGO8585"
+        },
+        {
+            "title": "I'M IN THE MOOD FOR DANCING",
+            "artist": "SHARON",
+            "id": "DDRXTRM-IMIN0735"
+        },
+        {
+            "title": "IF YOU WERE HERE",
+            "artist": "JENNIFER",
+            "id": "DDRXTRM-IFYO6407"
+        },
+        {
+            "title": "INSERTiON",
+            "artist": "NAOKI underground",
+            "id": "DDRXTRM-INSE4783"
+        },
+        {
+            "title": "IRRESISTIBLEMENT",
+            "artist": "WILDSIDE",
+            "id": "DDRXTRM-IRRE2619"
+        },
+        {
+            "title": "IT'S RAINING MEN (Almighty Mix)",
+            "artist": "GERI HALLIWELL",
+            "id": "DDRXTRM-ITSR0158"
+        },
+        {
+            "title": "Jam Jam Reggae",
+            "artist": "Jam Master '73",
+            "id": "DDRXTRM-JAMJ2009"
+        },
+        {
+            "title": "Jam Jam Reggae",
+            "artist": "RICE.C feat. Jam Master '73",
+            "id": "DDRXTRM-JAMJ8232"
+        },
+        {
+            "title": "jane jana",
+            "artist": "T.E.M.P.O. feat.Mohammed & Emi",
+            "id": "DDRXTRM-JANE9871"
+        },
+        {
+            "title": "JET WORLD",
+            "artist": "Mutsuhiko Izumi",
+            "id": "DDRXTRM-JETW5819"
+        },
+        {
+            "title": "革命",
+            "romanizedTitle": "KAKUMEI",
+            "artist": "dj TAKA with NAOKI",
+            "id": "DDRXTRM-KAKU8587"
+        },
+        {
+            "title": "KEEP ON MOVIN'",
+            "artist": "N.M.R",
+            "id": "DDRXTRM-KEEP3037"
+        },
+        {
+            "title": "Kind Lady",
+            "artist": "OKUYATOS",
+            "id": "DDRXTRM-KIND9433"
+        },
+        {
+            "title": "KISS KISS KISS",
+            "artist": "NAOKI feat. SHANTI",
+            "id": "DDRXTRM-KISS9744"
+        },
+        {
+            "title": "Kiss me all night long",
+            "artist": "NAOKI J-STYLE feat.MIU",
+            "id": "DDRXTRM-KISS3332"
+        },
+        {
+            "title": "L'amour et la liberté (DDR Ver.)",
+            "romanizedTitle": "L'amour et la liberte (DDR Ver.)",
+            "artist": "NAOKI underground",
+            "id": "DDRXTRM-LAMO5249"
+        },
+        {
+            "title": "LA BAMBA",
+            "artist": "Mexican folk song",
+            "id": "DDRXTRM-LABA9005"
+        },
+        {
+            "title": "LA COPA DE LA VIDA",
+            "artist": "PATRICK VICTORIO",
+            "id": "DDRXTRM-LACO2093"
+        },
+        {
+            "title": "La Señorita",
+            "romanizedTitle": "La Senorita",
+            "artist": "CAPTAIN.T",
+            "id": "DDRXTRM-LASE2164"
+        },
+        {
+            "title": "La Señorita Virtual",
+            "romanizedTitle": "La Senorita Virtual",
+            "artist": "CAPTAIN.T",
+            "id": "DDRXTRM-LASE4516"
+        },
+        {
+            "title": "Last Message",
+            "artist": "good-cool feat. Meg",
+            "id": "DDRXTRM-LAST6943"
+        },
+        {
+            "title": "LEADING CYBER",
+            "artist": "dj TAKA",
+            "id": "DDRXTRM-LEAD4135"
+        },
+        {
+            "title": "Let the beat hit em!(CLASSIC R&B STYLE)",
+            "artist": "Stone Bros.",
+            "id": "DDRXTRM-LETT0575"
+        },
+        {
+            "title": "LET'S GET DOWN",
+            "artist": "JT PLAYAZ",
+            "id": "DDRXTRM-LETS5858"
+        },
+        {
+            "title": "LET'S GROOVE",
+            "artist": "TIPS & TRICKS VS WISDOME",
+            "id": "DDRXTRM-LETS6964"
+        },
+        {
+            "title": "Little Bitch",
+            "artist": "The Specials",
+            "id": "DDRXTRM-LITT5455"
+        },
+        {
+            "title": "LITTLE BOY (BOY OH BOY MIX)",
+            "artist": "CAPTAIN JACK",
+            "id": "DDRXTRM-LITT5238"
+        },
+        {
+            "title": "LIVING IN AMERICA",
+            "artist": "ROSE & JOHN",
+            "id": "DDRXTRM-LIVI1104"
+        },
+        {
+            "title": "LONG TRAIN RUNNIN'",
+            "artist": "BUS STOP",
+            "id": "DDRXTRM-LONG2742"
+        },
+        {
+            "title": "Look To The Sky",
+            "artist": "SySF. feat.ANNA",
+            "id": "DDRXTRM-LOOK9140"
+        },
+        {
+            "title": "Look To The Sky (True Color Mix)",
+            "artist": "System SF feat. Anna",
+            "id": "DDRXTRM-LOOK9049"
+        },
+        {
+            "title": "LOVE AGAIN TONIGHT (For Melissa Mix)",
+            "artist": "NAOKI feat. PAULA TERRY",
+            "id": "DDRXTRM-LOVE4660"
+        },
+        {
+            "title": "LOVE♥SHINE",
+            "romanizedTitle": "LOVE SHINE | LOVE LOVE SHINE",
+            "artist": "小坂りゆ",
+            "romanizedArtist": "RIYU KOSAKA",
+            "id": "DDRXTRM-LOVE9710"
+        },
+        {
+            "title": "♥LOVE² シュガ→♥",
+            "romanizedTitle": "LOVE2 Sugar | LOVE LOVE SUGAR",
+            "artist": "dj TAKA feat.のりあ",
+            "romanizedArtist": "dj TAKA feat. Noria",
+            "id": "DDRXTRM-LOVE8892"
+        },
+        {
+            "title": "LOVE THIS FEELIN'",
+            "artist": "Chang ma",
+            "id": "DDRXTRM-LOVE4780"
+        },
+        {
+            "title": "LOVIN' YOU (ROB SEARLE CLUB MIX)",
+            "artist": "VINYL BABY",
+            "id": "DDRXTRM-LOVI4840"
+        },
+        {
+            "title": "LUV TO ME (AMD MIX)",
+            "artist": "DJ KAZU feat. tiger YAMATO",
+            "id": "DDRXTRM-LUVT6732"
+        },
+        {
+            "title": "LUV TO ME (disco mix)",
+            "artist": "tiger YAMATO",
+            "id": "DDRXTRM-LUVT8745"
+        },
+        {
+            "title": "魔法の扉(スペース🪐マコのテーマ)",
+            "romanizedTitle": "Mahou no tobira (SPACE MACO no theme) | MAGIC DOOR (Theme of SPACE MACO)",
+            "artist": "a.s.a.",
+            "id": "DDRXTRM-MAHO0226"
+        },
+        {
+            "title": "MAKE IT BETTER",
+            "artist": "mitsu-o!",
+            "id": "DDRXTRM-MAKE9617"
+        },
+        {
+            "title": "祭 JAPAN",
+            "romanizedTitle": "MATSURI JAPAN",
+            "artist": "RE-VENGE",
+            "id": "DDRXTRM-MATS5455"
+        },
+        {
+            "title": "祭 JAPAN (from NONSTOP MEGAMIX)",
+            "romanizedTitle": "MATSURI JAPAN (from NONSTOP MEGAMIX)",
+            "artist": "RE-VENGE",
+            "id": "DDRXTRM-MATS0557"
+        },
+        {
+            "title": "MAX 300",
+            "artist": "Ω",
+            "id": "DDRXTRM-MAX39659"
+        },
+        {
+            "title": "MAXIMUM OVERDRIVE (KC Club Mix)",
+            "artist": "2 UNLIMITED",
+            "id": "DDRXTRM-MAXI4845"
+        },
+        {
+            "title": "MAXX UNLIMITED",
+            "artist": "Z",
+            "id": "DDRXTRM-MAXX7942"
+        },
+        {
+            "title": "MEMORIES",
+            "artist": "NAOKI feat. PAULA TERRY",
+            "id": "DDRXTRM-MEMO3788"
+        },
+        {
+            "title": "Midnite Blaze",
+            "artist": "U1 Jewel Style",
+            "id": "DDRXTRM-MIDN0467"
+        },
+        {
+            "title": "三毛猫ロック",
+            "romanizedTitle": "Mikeneko rock | CALICO CAT ROCK",
+            "artist": "亜熱帯マジ-SKA爆弾",
+            "romanizedArtist": "ANETTAI MAJI-SKA BAKUDAN",
+            "id": "DDRXTRM-MIKE6507"
+        },
+        {
+            "title": "MIRACLE",
+            "artist": "ST.JENNARO",
+            "id": "DDRXTRM-MIRA9120"
+        },
+        {
+            "title": "Miracle Moon ~L.E.D.LIGHT STYLE MIX~",
+            "artist": "Togo Project feat.Sana",
+            "id": "DDRXTRM-MIRA1098"
+        },
+        {
+            "title": "Mobo★Moga",
+            "romanizedTitle": "MOBO MOGA",
+            "artist": "Orange Lounge",
+            "id": "DDRXTRM-MOBO5559"
+        },
+        {
+            "title": "Mr.T. (take me higher)",
+            "artist": "Risky Men feat. Asuka M",
+            "id": "DDRXTRM-MRTT1448"
+        },
+        {
+            "title": "MY SUMMER LOVE",
+            "artist": "MITSU-O! with GEILA",
+            "id": "DDRXTRM-MYSU3299"
+        },
+        {
+            "title": "MY SUMMER LOVE (TOMMY'S SMILE MIX)",
+            "artist": "MITSU-O! with GEILA",
+            "id": "DDRXTRM-MYSU4918"
+        },
+        {
+            "title": "MY SWEET DARLIN'",
+            "artist": "WILDSIDE",
+            "id": "DDRXTRM-MYSW2070"
+        },
+        {
+            "title": "NORI NORI NORI",
+            "artist": "JUDY CRYSTAL",
+            "id": "DDRXTRM-NORI4781"
+        },
+        {
+            "title": "ON THE JAZZ",
+            "artist": "Jonny Dynamite!",
+            "id": "DDRXTRM-ONTH8783"
+        },
+        {
+            "title": "ORDINARY WORLD",
+            "artist": "AURORA featuring NAIMEE COLEMAN",
+            "id": "DDRXTRM-ORDI6317"
+        },
+        {
+            "title": "ORION.78 (AMeuro-MIX)",
+            "artist": "RE-VENGE",
+            "id": "DDRXTRM-ORIO8165"
+        },
+        {
+            "title": "ORION.78 (civilization mix)",
+            "artist": "2MB",
+            "id": "DDRXTRM-ORIO0751"
+        },
+        {
+            "title": "PARANOIA",
+            "artist": "180",
+            "id": "DDRXTRM-PARA5477"
+        },
+        {
+            "title": "PARANOIA ETERNAL",
+            "artist": "STM 200",
+            "id": "DDRXTRM-PARA7745"
+        },
+        {
+            "title": "PARANOIA EVOLUTION",
+            "artist": "190",
+            "id": "DDRXTRM-PARA0151"
+        },
+        {
+            "title": "PARANOIA KCET (clean mix)",
+            "artist": "2MB",
+            "id": "DDRXTRM-PARA5853"
+        },
+        {
+            "title": "PARANOIA MAX (DIRTY MIX)",
+            "artist": "190",
+            "id": "DDRXTRM-PARA7756"
+        },
+        {
+            "title": "PARANOIA Rebirth",
+            "artist": "190",
+            "id": "DDRXTRM-PARA1714"
+        },
+        {
+            "title": "PARANOIA survivor",
+            "artist": "270",
+            "id": "DDRXTRM-PARA7341"
+        },
+        {
+            "title": "PARANOIA survivor MAX",
+            "artist": "290",
+            "id": "DDRXTRM-PARA2090"
+        },
+        {
+            "title": "Pink Rose",
+            "artist": "Kiyommy + Seiya",
+            "id": "DDRXTRM-PINK8849"
+        },
+        {
+            "title": "PUT YOUR FAITH IN ME",
+            "artist": "UZI-LAY",
+            "id": "DDRXTRM-PUTY4285"
+        },
+        {
+            "title": "R3",
+            "artist": "tiger YAMATO",
+            "id": "DDRXTRM-R3XX6844"
+        },
+        {
+            "title": "rain of sorrow",
+            "artist": "NM feat. EBONY FAY",
+            "id": "DDRXTRM-RAIN1770"
+        },
+        {
+            "title": "Remember You",
+            "artist": "NM feat Julie",
+            "id": "DDRXTRM-REME3157"
+        },
+        {
+            "title": "RHYTHM AND POLICE (K.O.G G3 Mix)",
+            "artist": "CJ CREW feat. CHRISTIAN D",
+            "id": "DDRXTRM-RHYT7835"
+        },
+        {
+            "title": "SAINT GOES MARCHING (REMIX)",
+            "artist": "THE SAINT",
+            "id": "DDRXTRM-SAIN2029"
+        },
+        {
+            "title": "桜",
+            "romanizedTitle": "SAKURA",
+            "artist": "RevenG",
+            "id": "DDRXTRM-SAKU4909"
+        },
+        {
+            "title": "サナ・モレッテ・ネ・エンテ",
+            "romanizedTitle": "SANA MOLLETE NE ENTE",
+            "artist": "Togo Project feat. Sana",
+            "id": "DDRXTRM-SANA1299"
+        },
+        {
+            "title": "SENORITA (Speedy Mix)",
+            "artist": "JENNY ROM",
+            "id": "DDRXTRM-SENO4538"
+        },
+        {
+            "title": "Secret Rendez-vous",
+            "artist": "DIVAS",
+            "id": "DDRXTRM-SECR5591"
+        },
+        {
+            "title": "SEXY PLANET",
+            "artist": "Crystal Aliens",
+            "id": "DDRXTRM-SEXY6899"
+        },
+        {
+            "title": "SEXY PLANET (from NONSTOP MEGAMIX)",
+            "artist": "Crystal Aliens",
+            "id": "DDRXTRM-SEXY1470"
+        },
+        {
+            "title": "Share My Love",
+            "artist": "Julie Frost",
+            "id": "DDRXTRM-SHAR4386"
+        },
+        {
+            "title": "Silent Hill",
+            "artist": "THOMAS HOWARD",
+            "id": "DDRXTRM-SILE9360"
+        },
+        {
+            "title": "Silent Hill (3rd christmas mix)",
+            "artist": "THOMAS HOWARD",
+            "id": "DDRXTRM-SILE1592"
+        },
+        {
+            "title": "ska a go go",
+            "artist": "THE BALD HEADS",
+            "id": "DDRXTRM-SKAA6615"
+        },
+        {
+            "title": "SKY HIGH",
+            "artist": "DJ MIKO",
+            "id": "DDRXTRM-SKYH8411"
+        },
+        {
+            "title": "SO DEEP (PERFECT SPHERE REMIX)",
+            "artist": "SILVERTEAR",
+            "id": "DDRXTRM-SODE4639"
+        },
+        {
+            "title": "SO IN LOVE",
+            "artist": "Caramel.S",
+            "id": "DDRXTRM-SOIN4750"
+        },
+        {
+            "title": "SOMEWHERE OVER THE RAINBOW",
+            "artist": "COSMIC GATE",
+            "id": "DDRXTRM-SOME2263"
+        },
+        {
+            "title": "SP-TRIP MACHINE (JUNGLE MIX)",
+            "artist": "DE-SIRE",
+            "id": "DDRXTRM-SPTR9072"
+        },
+        {
+            "title": "SPEED OVER BEETHOVEN",
+            "artist": "ROSE",
+            "id": "DDRXTRM-SPEE6936"
+        },
+        {
+            "title": "Spin the disc",
+            "artist": "good-cool",
+            "id": "DDRXTRM-SPIN1760"
+        },
+        {
+            "title": "STAY (Organic house Version)",
+            "artist": "emi",
+            "id": "DDRXTRM-STAY9298"
+        },
+        {
+            "title": "STILL IN MY HEART",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-STIL6115"
+        },
+        {
+            "title": "STILL IN MY HEART (MOMO MIX)",
+            "artist": "NAOKI",
+            "id": "DDRXTRM-STIL6892"
+        },
+        {
+            "title": "stoic (EXTREME version)",
+            "artist": "TaQ",
+            "id": "DDRXTRM-STOI3780"
+        },
+        {
+            "title": "SUPER STAR",
+            "artist": "D.J.RICH feat. TAILBROS.",
+            "id": "DDRXTRM-SUPE7405"
+        },
+        {
+            "title": "SUPER STAR (from NONSTOP MEGAMIX)",
+            "artist": "D.J.RICH feat. TAILBROS.",
+            "id": "DDRXTRM-SUPE2450"
+        },
+        {
+            "title": "Sweet Sweet ♥ Magic",
+            "romanizedTitle": "Sweet Sweet Love Magic",
+            "artist": "jun",
+            "id": "DDRXTRM-SWEE6073"
+        },
+        {
+            "title": "sync (EXTREME version)",
+            "artist": "OutPhase",
+            "id": "DDRXTRM-SYNC5422"
+        },
+        {
+            "title": "SYNCHRONIZED LOVE (Red Monster Hyper Mix)",
+            "artist": "JOE RINOIE",
+            "id": "DDRXTRM-SYNC7626"
+        },
+        {
+            "title": "TEARS",
+            "artist": "NAOKI underground feat.EK",
+            "id": "DDRXTRM-TEAR5267"
+        },
+        {
+            "title": "TELEPHONE OPERATOR (Club MIX)",
+            "artist": "SHELLEY PETER",
+            "id": "DDRXTRM-TELE4544"
+        },
+        {
+            "title": "The Centre Of The Heart (STONEBRIDGE CLUBMIX)",
+            "artist": "Roxette",
+            "id": "DDRXTRM-THEC6049"
+        },
+        {
+            "title": "The Least 100sec",
+            "artist": "Hirofumi Sasaki",
+            "id": "DDRXTRM-THEL1753"
+        },
+        {
+            "title": "The legend of MAX",
+            "artist": "ZZ",
+            "id": "DDRXTRM-THEL5830"
+        },
+        {
+            "title": "THE REFLEX",
+            "artist": "DURAN DURAN",
+            "id": "DDRXTRM-THER7323"
+        },
+        {
+            "title": "THERE YOU'LL BE",
+            "artist": "DJ SPEEDO feat.ANGELICA",
+            "id": "DDRXTRM-THER5544"
+        },
+        {
+            "title": "think ya better D",
+            "artist": "sAmi",
+            "id": "DDRXTRM-THIN2509"
+        },
+        {
+            "title": "TRIP MACHINE",
+            "artist": "DE-SIRE",
+            "id": "DDRXTRM-TRIP6413"
+        },
+        {
+            "title": "TRIP MACHINE (luv mix)",
+            "artist": "2MB",
+            "id": "DDRXTRM-TRIP2542"
+        },
+        {
+            "title": "TRIP MACHINE CLIMAX",
+            "artist": "DE-SIRE",
+            "id": "DDRXTRM-TRIP0484"
+        },
+        {
+            "title": "TRIP MACHINE survivor",
+            "artist": "DE-SIRE",
+            "id": "DDRXTRM-TRIP7063"
+        },
+        {
+            "title": "true... (radio edit)",
+            "artist": "小坂りゆ",
+            "romanizedArtist": "RIYU KOSAKA",
+            "id": "DDRXTRM-TRUE0726"
+        },
+        {
+            "title": "true... (Trance Sunrise Mix)",
+            "artist": "小坂りゆ",
+            "romanizedArtist": "RIYU KOSAKA",
+            "id": "DDRXTRM-TRUE2086"
+        },
+        {
+            "title": "TSUGARU",
+            "artist": "RevenG vs DE-SIRE",
+            "id": "DDRXTRM-TSUG1661"
+        },
+        {
+            "title": "TSUGARU (APPLE MIX)",
+            "artist": "RevenG vs DE-SIRE",
+            "id": "DDRXTRM-TSUG6084"
+        },
+        {
+            "title": "TWILIGHT ZONE (R-C Extended Club Mix)",
+            "artist": "2 UNLIMITED",
+            "id": "DDRXTRM-TWIL7088"
+        },
+        {
+            "title": "Twin Bee -Generation X-",
+            "artist": "FinalOffset",
+            "id": "DDRXTRM-TWIN9836"
+        },
+        {
+            "title": "V (for EXTREME)",
+            "artist": "TAKA",
+            "id": "DDRXTRM-VFOR3929"
+        },
+        {
+            "title": "VANITY ANGEL",
+            "artist": "FIXX",
+            "id": "DDRXTRM-VANI5872"
+        },
+        {
+            "title": "WAKA LAKA",
+            "artist": "JENNY ROM vs ZIPPERS",
+            "id": "DDRXTRM-WAKA7196"
+        },
+        {
+            "title": "WE ARE THE CHAMPIONS (Factory Team Remix)",
+            "artist": "LIVE 2 LOVE",
+            "id": "DDRXTRM-WEAR7115"
+        },
+        {
+            "title": "WE WILL ROCK YOU",
+            "artist": "HOUSEBOYZ",
+            "id": "DDRXTRM-WEWI4377"
+        },
+        {
+            "title": "White Lovers",
+            "artist": "新谷さなえ",
+            "romanizedArtist": "Sana Shintani",
+            "id": "DDRXTRM-WHIT0805"
+        },
+        {
+            "title": "WILD RUSH",
+            "artist": "FACTOR-X",
+            "id": "DDRXTRM-WILD6805"
+        },
+        {
+            "title": "WILD RUSH (from NONSTOP MEGAMIX)",
+            "artist": "FACTOR-X",
+            "id": "DDRXTRM-WILD8141"
+        },
+        {
+            "title": "WITCH DOCTOR (GIANTS TOONS VERSION)",
+            "artist": "CARTOONS",
+            "id": "DDRXTRM-WITC9462"
+        },
+        {
+            "title": "WWW.BLONDE GIRL (MOMO MIX)",
+            "artist": "JENNY ROM",
+            "id": "DDRXTRM-WWWB4664"
+        },
+        {
+            "title": "xenon",
+            "artist": "Mr.T",
+            "id": "DDRXTRM-XENO3977"
+        },
+        {
+            "title": "夜空ノムコウ",
+            "romanizedTitle": "Yozora no mukou",
+            "artist": "EUROBEAT LOVERS",
+            "id": "DDRXTRM-YOZO5421"
+        }
+    ]
+}
