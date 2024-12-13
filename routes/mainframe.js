@@ -69,8 +69,15 @@ async function test() {
 
 // Load user data using Twitch ID
 // Register locally if user doesn't exist yet
-async function getUserData(twitch_id, twitch_display_name, is_premium = false) {
+async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_premium = false) {
     let user = null;
+
+    if( !twitch_id || !twitch_display_name) {
+        console.log(`getUserData(): Invalid user data. BYPASS`);
+        return user;
+    }
+
+    console.log(`getUserData(): TID: ${twitch_id}, TDN: ${twitch_display_name}, TA: ${twitch_avatar} IP: ${is_premium}`);
     const conn = await dbPool.getConnection();
 
     try {
@@ -80,11 +87,11 @@ async function getUserData(twitch_id, twitch_display_name, is_premium = false) {
             // User exists, update login
             console.log(`getUserData(): User ${twitch_id} exists.`)
             user = usrData[0];
-            const [updateUser] = await conn.execute("UPDATE tbl_users SET twitch_display_name = ?, last_login = CURRENT_TIMESTAMP WHERE id = ?",[user.twitch_display_name,user.id]);
+            const [updateUser] = await conn.execute("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ?, last_login = CURRENT_TIMESTAMP WHERE id = ?",[twitch_display_name,twitch_avatar,user.id]);
         } else {
             // User does not exist on local DB, create
             console.log(`getUserData(): User [${twitch_id},${twitch_display_name}] not locally registered.`)
-            user = await registerUser(twitch_id,twitch_display_name);
+            user = await registerUser(twitch_id,twitch_display_name,twitch_avatar);
         }
         await conn.release();
         
@@ -109,18 +116,19 @@ async function getUserData(twitch_id, twitch_display_name, is_premium = false) {
         throw e;
     } finally {
         conn.release();
+        console.log(`getUserData(): Return [${user.id}]`);
         return user;
     }
 }
 
 // Register user to local DB
-async function registerUser(twitch_id,twitch_displayname) {
+async function registerUser(twitch_id,twitch_display_name,twitch_avatar) {
     let user = null;
 
     try {
         const conn = await dbPool.getConnection();
         // register
-        const [addUser] = await conn.execute("INSERT INTO tbl_users(twitch_id, twitch_displayname) VALUES(?,?)", [twitch_id,twitch_displayname]);
+        const [addUser] = await conn.execute("INSERT INTO tbl_users(twitch_id, twitch_display_name, twitch_avatar) VALUES(?,?,?)", [twitch_id,twitch_display_name,twitch_avatar]);
         // get newly-inserted item
         const [newUser] = await conn.execute("SELECT * FROM tbl_users WHERE id = ?",[addUser.insertId])
         user = newUser[0];
@@ -134,7 +142,6 @@ async function registerUser(twitch_id,twitch_displayname) {
 
 // Get all cards issued to the user
 async function getUserCards(user_id, is_premium = false) {
-    console.log("getUserCards(): ");
     let user_cards = {
         cards: [],
         default: null
@@ -178,6 +185,7 @@ async function getUserCards(user_id, is_premium = false) {
         // Get active card
         const [queryActiveCard] = await conn.execute("SELECT * FROM tbl_cards c INNER JOIN tbl_user_cards uc ON c.id = uc.card_id WHERE uc.user_id = ? AND uc.is_default = 1",[user_id]);
         user_cards.default = queryActiveCard[0];
+        console.log("getUserCards(): " + queryCards.length);
 
         await conn.release();
     } catch(e) {
@@ -209,19 +217,43 @@ async function getLocalId(twitch_id) {
 // Check if user is Premium
 function isUserPremium(roles) {
     let output = false;
-    if(roles.includes('VIP') || roles.includes('Subscriber')) {
-        output = true;
+    if(roles) {
+        if(roles.includes('VIP') || roles.includes('Subscriber')) {
+            output = true;
+        }
     }
     return output;
 }
 
-// For EXP Ranking
-async function expRanking() {
+// For Rankings
+async function getRanking(rank_type,items_to_show) {
     let output = null;
+    let query = "";
+
+    items_to_show = items_to_show || 5;
+
+    switch(rank_type) {
+        case 'exp':
+            query = `SELECT id, twitch_display_name, twitch_avatar, exp, exp as 'value' FROM tbl_users WHERE id NOT IN (1,2) AND is_active = 1 ORDER BY exp DESC, last_login LIMIT ${items_to_show}`;
+            break;
+        case 'spender':
+            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'points_spend' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
+            break;
+        case 'redeems':
+            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'redeems_count' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
+            break;
+        case 'checkins':
+            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'checkin_count' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
+            break;
+        default:
+            break;
+    }
+
+    if(!query) { return null;} 
 
     try {
         const conn = await dbPool.getConnection();
-        const [rankData] = await conn.execute("SELECT * FROM tbl_users WHERE id NOT IN (1,5) AND is_active = 1 ORDER BY exp DESC, reg_date LIMIT 10");
+        const [rankData] = await conn.execute(query);
         output = rankData;
         
         // Append level data
@@ -234,7 +266,7 @@ async function expRanking() {
         await conn.release();
 
     } catch(e) {
-        console.error(`expRanking(): ERROR: ${e.message}`);
+        console.error(`getRanking(): ERROR: ${e.message}`);
     }
     return output;
 }
@@ -337,6 +369,98 @@ async function setActiveCard(user_id,card_id) {
     return output;
 }
 
+// Issue EXP to user
+async function setExp(user_id,is_premium,exp) {
+    console.log("setExp():");
+    let output = false;
+    let issued_exp = 0;
+
+    // Calculate EXP based on user level
+    if(is_premium) {
+        issued_exp = exp * exp_premium;
+    } else {
+        issued_exp = exp * exp_standard;
+    }
+
+    // Add global EXP multipliers
+    issued_exp = issued_exp * exp_global;
+    //console.log(`setExp(): U#${user_id} ->E+ ${issued_exp}`);
+
+    try {
+        const conn = await dbPool.getConnection();
+        const [setExpUser] = await conn.execute("UPDATE tbl_users SET exp = (exp + ?) WHERE id = ?",[issued_exp,user_id]);
+        await conn.release();
+        output = true;
+    } catch(e) {
+        output = false;
+        console.error(`setExp(): ERROR: ${e.message}`);
+        throw e;
+    }
+    return output;
+}
+
+// Stats Collection
+async function setStats(user_id,stat_name,value,increment) {
+    console.log("setStats():");
+    let output = false;
+    try {
+        const conn = await dbPool.getConnection();
+        let query = "";
+        if(increment) {
+            query = "INSERT INTO tbl_user_stats(user_id,stat_key,stat_value) VALUES(?,?,?) ON DUPLICATE KEY UPDATE stat_value = stat_value + ?";
+        } else {
+            query = "INSERT INTO tbl_user_stats(user_id,stat_key,stat_value) VALUES(?,?,?) ON DUPLICATE KEY UPDATE stat_value = ?";
+        }
+        const [setStatData] = await conn.execute(query,[user_id,stat_name,value,value]);
+        output = true;
+        await conn.release();
+    } catch(e) {
+        output = false;
+        console.error(`setStats(): ERROR: ${e.message}`);
+        throw e;
+    }
+    return output;
+}
+
+// Achievement checking/awarding
+async function checkAchievements(user_id,stat_name) {
+    console.log("checkAchievements():");
+    let output = null;
+
+    try {
+        const conn = await dbPool.getConnection();
+        const [checkQuery] = await conn.execute(
+            `SELECT a.id, a.name, a.tier
+            FROM tbl_achievements a
+            LEFT JOIN tbl_user_achievements ua 
+                ON a.id = ua.achievement_id AND ua.user_id = ?
+            WHERE a.stat_key = ?
+                AND a.threshold <= (
+                    SELECT stat_value 
+                    FROM tbl_user_stats 
+                    WHERE user_id = ? AND stat_key = ?
+                )
+            AND ua.achievement_id IS NULL`,
+            [user_id,stat_name,user_id,stat_name]);
+        
+        if(checkQuery.length > 0) {
+            // Award to user
+            for(let item of checkQuery) {
+                const [addAchievement] = await conn.execute(`INSERT INTO tbl_user_achievements(user_id,achievement_id) VALUES(?,?)`,[user_id,item.id]);
+            }
+
+            output = checkQuery;
+        }
+        await conn.release();
+    }
+    catch(e) {
+        output = null;
+        console.error(`setStats(): ERROR: ${e.message}`);
+        throw e;
+    }
+    return output;
+}
+
 // ENDPOINTS
 
 // Testing
@@ -358,10 +482,13 @@ router.post('/test', async (req, res) => {
 // Login/Registration via Hub Widget
 router.post('/login-widget', async (req,res)=> {
     console.log('ENDPOINT: /login-widget');
-    const { twitch_id, twitch_display_name } = req.body;
-    const user = await getUserData(twitch_id,twitch_display_name);
+    const { twitch_id, twitch_display_name, twitch_avatar } = req.body;
+    const user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
     res.status(200).json({
+        local_id: user.id,
+        avatar: user.twitch_avatar,
         user_card: user.card_default,
+        user_cards: user.cards,
         exp: user.exp,
         level: user.level,
         title: user.title,
@@ -369,10 +496,12 @@ router.post('/login-widget', async (req,res)=> {
     });
 });
 
-// Ranking-EXP
-router.post('/exp-rank', async (req, res) => {
-    console.log('ENDPOINT: /exp-rank');
-    const rankData = await expRanking();
+// Ranking
+router.post('/ranking', async (req, res) => {
+    console.log('ENDPOINT: /ranking');
+    const { rank_type, items_to_show } = req.body;
+
+    const rankData = await getRanking(rank_type, items_to_show);
     res.status(200).json(rankData);
 });
 
@@ -387,11 +516,15 @@ router.post('/gacha', async (req, res) => {
     };
 
     try {
-        const { twitch_id, twitch_display_name, twitch_roles } = req.body;
+        const { twitch_id, twitch_display_name, twitch_roles, twitch_avatar } = req.body;
         const is_premium = isUserPremium(twitch_roles);
-        let user = await getUserData(twitch_id,twitch_display_name,is_premium);
+        let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar,is_premium);
         let newCard = await doGachaPull(is_premium);
         let cardIssued = await addCardToUser(user.id, newCard.id);
+
+        // update stats
+        let stats_q = setStats(user.id,'card_gacha_pulls',1,true);
+
         output = {
             status: true,
             message: `You have pulled a ${newCard.is_premium ? "Premium" : ""} [${newCard.name}] Card!`,
@@ -423,29 +556,73 @@ router.post('/gacha', async (req, res) => {
 // Check-in
 router.post('/check-in', async (req, res) => {
     console.log('ENDPOINT: /check-in');
-    const { twitch_id, twitch_display_name, twitch_roles } = req.body;
+    const { twitch_id, twitch_display_name, twitch_avatar, twitch_roles, checkin_count } = req.body;
     const is_premium = isUserPremium(twitch_roles);
-    let user = await getUserData(twitch_id,twitch_display_name,is_premium);
+    let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar,is_premium);
+
+    // issue EXP
+    let exp_q = await setExp(user.id,is_premium,1);
+    // update stats
+    let stats_q = setStats(user.id,'checkin_count',checkin_count,false);
 
     res.status(200).json({
         twitch_id: user.twitch_id,
         local_id: user.id,
+        level: user.level,
         is_premium: is_premium,
         default_card_name: user.card_default.sysname
     });
 });
 
+// Change active card via theMainframe
+router.post('/change-card-site', async (req, res)=> {
+    console.log('ENDPOINT: /change-card-site');
+    const { user_id, card_id } = req.body;
+    let output = {
+        status: false,
+        message: "",
+    }
+
+    // find card in user's data
+    let user = await getUserCards(user_id);
+    let is_card_present = false;
+    let new_active_card = null;
+
+    for(let card of user.cards) {
+        if(card.card_id === card_id) {
+            is_card_present = true;
+            new_active_card = card;
+        }
+    }
+
+    if(is_card_present) {
+        if(setActiveCard(user_id,card_id)) {
+            output.status = true;
+            output.message = `You are now using your ${new_active_card.is_premium ? 'Premium ' : ''}${new_active_card.name} Card as your active card!`;
+            output.new_card = new_active_card.sysname;
+        } else {
+            output.message = `Sorry, something went wrong. Please inform the streamer right away.`;
+        }
+    } else {
+        output.status = false;
+        output.message = `I couldn't find this card in your Frequent Flyer membership. Please double-check and try again.`;
+    }
+
+    res.status(200).json(output);
+
+});
+
 // Change active card
 router.post('/change-card', async (req, res) => {
     console.log('ENDPOINT: /change-card');
-    const { twitch_id, twitch_display_name, new_card_name } = req.body;
+    const { twitch_id, twitch_display_name, twitch_avatar, new_card_name } = req.body;
     let output = {
         status: false,
         message: "",
     }
 
     try {
-        let user = await getUserData(twitch_id,twitch_display_name);
+        let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
         let is_card_present = false;
         let new_active_card = null;
 
@@ -489,12 +666,12 @@ router.post('/change-card', async (req, res) => {
 // Get cards keyword list
 router.post('/get-cards', async (req, res) => {
     console.log('ENDPOINT: /get-cards');
-    const { twitch_id, twitch_display_name } = req.body;
+    const { twitch_id, twitch_display_name, twitch_avatar } = req.body;
     let message = "";
     let status = false;
 
     try {
-        let user = await getUserData(twitch_id,twitch_display_name);
+        let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
         if (user) {
             if(user.cards.length > 1) {
                 let cards_list = [];
@@ -519,6 +696,66 @@ router.post('/get-cards', async (req, res) => {
             status: status,
             message: message
         });
+    }
+});
+
+// Issue EXP
+router.post('/exp', async (req,res) => {
+    console.log('ENDPOINT: /exp');
+    const { twitch_id, twitch_display_name, twitch_avatar, twitch_roles, exp } = req.body;
+    const is_premium = isUserPremium(twitch_roles);
+    let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar,is_premium);
+    let result = false;
+
+    if(user) {
+        result = await setExp(user.id,is_premium,exp);
+    }
+
+    if(result) {
+        res.status(200).json({ status: result, message: 'EXP updated.' });
+    } else {
+        res.status(200).json({ status: result, message: 'EXP error.' });
+    }
+});
+
+router.post('/stat-update', async (req,res) => {
+    console.log('ENDPOINT: /stat-update');
+    console.log(req.body);
+    const { twitch_id, twitch_display_name, twitch_avatar, stat_name, value, increment } = req.body;
+    let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
+    let result = false;
+    let has_achievement = false;
+    let message = "";
+    
+    // Update Stats
+    if(user) {
+        result = await setStats(user.id,stat_name,value,increment);
+    }
+
+    if(result) {
+        // Check and issue achievements
+        let achievements = await checkAchievements(user.id,stat_name);
+        
+
+        if(achievements) {
+            let ach_list = [];
+            for(let ach of achievements) {
+                ach_list.push(`${ach.name} ${ach.tier}`);
+            }
+            message = `Congrats! You have earned these achievements! ${ach_list.toString()}`;
+            has_achievement = true;
+        } else {
+            message = `Stat [${stat_name}] updated.`;
+        }
+        
+        res.status(200).json({ 
+            status: result, 
+            message: message,
+            has_achievement: has_achievement,
+            achievements: achievements
+         });
+    } else {
+        res.status(200).json({ status: result, message: 'Stat error.' });
     }
 });
 

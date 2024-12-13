@@ -14,7 +14,7 @@ setTimeout(function() {
             console.log("Server IP: " + ip);
         });
     });
-}, 5000);
+}, 3000);
 
 // Adding CORS
 app.use(cors({

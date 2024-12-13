@@ -10,6 +10,25 @@ let requestsOpen = false;   // not accepting requests by default
 let gameData = null;        // game DB
 
 // Functions
+// Status Relay to theMainFrame
+function statusRelay() {
+    console.log('Mainframe Relay >>>');
+    broadcast({ 
+        type: "MAINFRAME_RELAY",
+        srs: {
+            status: true,
+            message: "Mainframe relay",
+            id: gameData.game_id,
+            title: gameData.game_title,
+            year: gameData.game_year,
+            song_count: gameData.songs.length,
+            requests_open: requestsOpen,
+            queue_length: queue.length,
+            queue: queue
+        }
+    });
+}
+
 // Song Search
 function findSong(query) {
     console.log('Searching for "' + query.trim() + '"');
@@ -59,6 +78,58 @@ router.post('/status', (req, res) => {
         });
     }
     //res.status(200).json({ gameLibraryId: gameLibraryId, requestsOpen: requestsOpen, queueLength: queue.length, queue: queue });
+});
+
+// Endpoint for song requests from Mainframe
+router.post('/request-site', (req, res) => {
+    const { title, artist, user_name } = req.body;
+    let requestedSong = {
+        title: title,
+        artist: artist
+    }
+
+    // If the song is found
+    if(requestedSong) {
+        const isDuplicate = queue.some(song => 
+            song.title === requestedSong.title &&
+            song.artist === requestedSong.artist
+        )
+
+        const userSongCount = queue.filter(song => song.user === user_name).length;
+        //console.log(`userSongCount:`, userSongCount);
+
+        // Check if the song is already in queue
+        if(isDuplicate) {
+            res.status(200).json({
+                status: false,
+                message: `⚠️ This song is already in queue: [${requestedSong.title} / ${requestedSong.artist}]`
+            });
+            console.log(`This song is already in queue: [${requestedSong.title} / ${requestedSong.artist}]`);
+        }
+
+        // Check if user already has 3 songs in queue
+        else if(userSongCount >= 3) {
+            res.status(200).json({
+                status: false,
+                message: `⚠️ Only three (3) requests per user are allowed at a time, please wait and try again.`
+            });
+            console.log(`Only three (3) requests per user are allowed at a time, please wait and try again.`);
+        }
+
+        // Otherwise, proceed
+        else {
+            broadcast({ type: "ADD_SONG", song: { id: requestedSong.id, title: requestedSong.title, artist: requestedSong.artist, user: user_name } });
+            queue.push( { id: requestedSong.id, title: requestedSong.title, artist: requestedSong.artist, user: user_name } );
+            res.status(200).json({
+                status: true,
+                message: `✔️ Request has been added: [${requestedSong.title} / ${requestedSong.artist}]`
+            });
+            statusRelay();
+            console.log(`Request has been added: [${requestedSong.title} / ${requestedSong.artist}]`);        
+        }        
+    }
+    
+    return;    
 });
 
 // Endpoint for song requests
@@ -122,6 +193,7 @@ router.post('/request-song', (req, res) => {
                 status: true,
                 message: `✔️ Request has been added: [${requestedSong.title} / ${requestedSong.artist}]`
             });
+            statusRelay();
             console.log(`Request has been added: [${requestedSong.title} / ${requestedSong.artist}]`);        
         }        
     } 
@@ -143,6 +215,7 @@ router.post('/init-game', (req, res) => {
         gameData = require(`../data/${game_id}.json`);
         console.log("Game ID: " + gameData.game_id);
         console.log(`Game [${game_id} (${gameData.songs.length})] initialized. Requests are currently ${requestsOpen ? "ON" : "OFF"}.`);
+        statusRelay();
         res.status(200).json({
             status: true,
             message: `Game [${game_id} (${gameData.songs.length})] initialized.`,
@@ -177,6 +250,7 @@ router.post('/request-status', (req, res) => {
         }
         requestsOpen = true;
         broadcast({ type: 'REQUEST_MODE_ON' });
+        statusRelay();
         console.log("Requests are now open.");
         res.status(200).json({
             status: true,
@@ -186,6 +260,7 @@ router.post('/request-status', (req, res) => {
     } else {
         requestsOpen = false;
         broadcast({ type: 'REQUEST_MODE_OFF' });
+        statusRelay();
         console.log("Requests are now closed.");
         res.status(200).json({
             status: true,
@@ -228,9 +303,10 @@ router.post('/remove-song', (req, res) => {
         return;
     }
     
-    broadcast({ type: 'REMOVE_SONG' });
+    broadcast({ type: 'REMOVE_SONG' });    
     let currSong = queue[0];
     queue = queue.slice(1);
+    statusRelay();
     if(queue.length > 0) {
         res.status(200).json({
             status: true,
