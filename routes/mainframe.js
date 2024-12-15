@@ -67,6 +67,44 @@ async function test() {
     return rows;
 }
 
+// Load user data by local ID
+async function getUserDataById(user_id) {
+    let user = null;
+
+    if(!user_id) return null;
+
+    console.log(`getUserDataById(): ID: ${user_id}`);
+    const conn = await dbPool.getConnection();
+
+    try {        
+        const [userData] = await conn.execute("SELECT * FROM tbl_users WHERE id = ?", [user_id]);
+
+        if(userData.length > 0) {
+            user = userData[0];
+        }
+        conn.release();
+        
+        let playerData = getPlayerLevel(user.exp);
+
+        // Append player info to user data
+        user.level = playerData.level;
+        user.title = playerData.title;
+        user.levelProgress = parseInt(playerData.progressLevel.toFixed());
+
+        // Append user card data
+        let cardData = await getUserCards(user.id);
+        //user.isPremium = is_premium;
+        user.cards = cardData.cards;
+        user.card_default = cardData.default;
+
+    } catch(e) {
+        user = null;    
+        console.error(`getUserData(): ERROR: ${e.message}`);
+        throw e;
+    }
+    return user;
+}
+
 // Load user data using Twitch ID
 // Register locally if user doesn't exist yet
 async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_premium = false) {
@@ -177,7 +215,6 @@ async function getUserCards(user_id, is_premium = false) {
                     // Issue a Premium card and set it to user's default
                     const [queryUntoggleCards] = await conn.execute("UPDATE tbl_user_cards SET is_default = 0 WHERE user_id = ?",[user_id]);
                     const [queryIssueCard] = await conn.execute("INSERT INTO tbl_user_cards(user_id,card_id,is_default) VALUES(?,?,?)",[user_id,2,1]);
-
                 }
             }
         }
@@ -234,16 +271,16 @@ async function getRanking(rank_type,items_to_show) {
 
     switch(rank_type) {
         case 'exp':
-            query = `SELECT id, twitch_display_name, twitch_avatar, exp, exp as 'value' FROM tbl_users WHERE id NOT IN (1,2) AND is_active = 1 ORDER BY exp DESC, last_login LIMIT ${items_to_show}`;
+            query = `SELECT id, twitch_display_name, twitch_avatar, exp, exp as 'value' FROM tbl_users WHERE id NOT IN (111,2) AND is_active = 1 ORDER BY exp DESC, last_login LIMIT ${items_to_show}`;
             break;
         case 'spender':
-            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'points_spend' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
+            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'points_spend' and u.id NOT IN (111,2) order by stat_value desc LIMIT ${items_to_show}`;
             break;
         case 'redeems':
-            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'redeems_count' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
+            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'redeems_count' and u.id NOT IN (111,2) order by stat_value desc LIMIT ${items_to_show}`;
             break;
         case 'checkins':
-            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'checkin_count' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
+            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'checkin_count' and u.id NOT IN (111,2) order by stat_value desc LIMIT ${items_to_show}`;
             break;
         default:
             break;
@@ -523,7 +560,7 @@ router.post('/gacha', async (req, res) => {
         let cardIssued = await addCardToUser(user.id, newCard.id);
 
         // update stats
-        let stats_q = setStats(user.id,'card_gacha_pulls',1,true);
+        let stats_q = await setStats(user.id,'card_gacha_pulls',1,true);
 
         output = {
             status: true,
@@ -533,6 +570,7 @@ router.post('/gacha', async (req, res) => {
         }
 
         if(cardIssued) {
+            let stats_q = await setStats(user.id,'card_gacha_pulls_success',1,true);
             output.message += ` Congrats! Your new card will now show on your next sign-in!`;
             output.card_name = newCard.sysname;
         } else {
@@ -563,7 +601,7 @@ router.post('/check-in', async (req, res) => {
     // issue EXP
     let exp_q = await setExp(user.id,is_premium,1);
     // update stats
-    let stats_q = setStats(user.id,'checkin_count',checkin_count,false);
+    let stats_q = await setStats(user.id,'checkin_count',checkin_count,false);
 
     res.status(200).json({
         twitch_id: user.twitch_id,
@@ -572,6 +610,14 @@ router.post('/check-in', async (req, res) => {
         is_premium: is_premium,
         default_card_name: user.card_default.sysname
     });
+});
+
+// Retrieve user profile by ID
+router.post('/user-profile', async (req, res) => {
+    const { user_id } = req.body;
+    let user = await getUserDataById(user_id);
+
+    res.status(200).json(user);
 });
 
 // Change active card via theMainframe
@@ -718,6 +764,7 @@ router.post('/exp', async (req,res) => {
     }
 });
 
+// Update stats
 router.post('/stat-update', async (req,res) => {
     console.log('ENDPOINT: /stat-update');
     console.log(req.body);
