@@ -18,7 +18,7 @@ const dbPool = mysql.createPool({
 
 // MAINFRAME GLOBALS
 let exp_standard = 1.0;
-let exp_premium = 1.25;
+let exp_premium = 1.15;
 let exp_global = 1.0;
 
 // FUNCTIONS
@@ -96,6 +96,8 @@ async function getUserDataById(user_id) {
         //user.isPremium = is_premium;
         user.cards = cardData.cards;
         user.card_default = cardData.default;
+        user.stats = await getUserStats(user.id);
+        user.achievements = await getUserAchievements(user.id);
 
     } catch(e) {
         user = null;    
@@ -145,6 +147,10 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
         user.isPremium = is_premium;
         user.cards = cardData.cards;
         user.card_default = cardData.default;
+
+        // Append stats/achievements
+        user.stats = await getUserStats(user.id);
+        user.achievements = await getUserAchievements(user.id);
 
         //console.log(user);
 
@@ -255,7 +261,7 @@ async function getLocalId(twitch_id) {
 function isUserPremium(roles) {
     let output = false;
     if(roles) {
-        if(roles.includes('VIP') || roles.includes('Subscriber')) {
+        if(roles.includes('VIP') || roles.includes('Subscriber') || roles.includes('Moderator')) {
             output = true;
         }
     }
@@ -459,6 +465,45 @@ async function setStats(user_id,stat_name,value,increment) {
     return output;
 }
 
+// Get user stats
+async function getUserStats(user_id) {
+    console.log(`getUserStats(): U#${user_id}`);
+    let output = null;
+    try {
+        const conn = await dbPool.getConnection();
+        const [userStatQ] = await conn.execute("SELECT * FROM tbl_user_stats WHERE user_id = ?",[user_id]);
+
+        let stats = {};
+        userStatQ.forEach(row => {
+            stats[row.stat_key] = row.stat_value;
+        });
+        await conn.release();
+        output = stats;
+    } catch(e) {
+        output = false;
+        console.error(`getUserStats(): ERROR: ${e.message}`);
+        throw e;
+    }
+    return output;
+}
+
+async function getUserAchievements(user_id) {
+    console.log(`getUserAchievements(): U#${user_id}`);
+    let output = null;
+
+    try {
+        const conn = await dbPool.getConnection();
+        const [achievementList] = await conn.execute("SELECT a.name AS achievement_name, a.tier AS achievement_tier, ua.achieved_at FROM tbl_user_achievements ua JOIN tbl_achievements a ON ua.achievement_id = a.id WHERE ua.user_id = ? ORDER BY ua.achieved_at DESC, a.name, a.tier",[user_id]);
+        output = achievementList;
+        await conn.release();
+    } catch(e) {
+        output = false;
+        console.error(`getUserAchievements(): ERROR: ${e.message}`);
+        throw e;
+    }
+    return output;
+}
+
 // Achievement checking/awarding
 async function checkAchievements(user_id,stat_name) {
     console.log("checkAchievements():");
@@ -481,12 +526,14 @@ async function checkAchievements(user_id,stat_name) {
             [user_id,stat_name,user_id,stat_name]);
         
         if(checkQuery.length > 0) {
-            // Award to user
+            let achList = [];
+            // Award to user            
             for(let item of checkQuery) {
                 const [addAchievement] = await conn.execute(`INSERT INTO tbl_user_achievements(user_id,achievement_id) VALUES(?,?)`,[user_id,item.id]);
+                achList.push(item.name + ' ' + item.tier);
             }
 
-            output = checkQuery;
+            output = achList.join(", ");
         }
         await conn.release();
     }
@@ -521,6 +568,7 @@ router.post('/login-widget', async (req,res)=> {
     console.log('ENDPOINT: /login-widget');
     const { twitch_id, twitch_display_name, twitch_avatar } = req.body;
     const user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
+    //const stats = await getUserStats(user.id);
     res.status(200).json({
         local_id: user.id,
         avatar: user.twitch_avatar,
@@ -529,7 +577,9 @@ router.post('/login-widget', async (req,res)=> {
         exp: user.exp,
         level: user.level,
         title: user.title,
-        level_progress: user.levelProgress
+        level_progress: user.levelProgress,
+        stats: user.stats,
+        achievements: user.achievements
     });
 });
 
@@ -597,18 +647,27 @@ router.post('/check-in', async (req, res) => {
     const { twitch_id, twitch_display_name, twitch_avatar, twitch_roles, checkin_count } = req.body;
     const is_premium = isUserPremium(twitch_roles);
     let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar,is_premium);
+    let has_achievement = false;
+    let achievement = null;
 
     // issue EXP
     let exp_q = await setExp(user.id,is_premium,1);
     // update stats
     let stats_q = await setStats(user.id,'checkin_count',checkin_count,false);
+    // Check/award achievements
+    achievement = await checkAchievements(user.id,'checkin_count');
+    if(achievement) { 
+        has_achievement = true;
+    }
 
     res.status(200).json({
         twitch_id: user.twitch_id,
         local_id: user.id,
         level: user.level,
         is_premium: is_premium,
-        default_card_name: user.card_default.sysname
+        default_card_name: user.card_default.sysname,
+        has_achievement: has_achievement,
+        achievement: achievement
     });
 });
 
@@ -618,6 +677,13 @@ router.post('/user-profile', async (req, res) => {
     let user = await getUserDataById(user_id);
 
     res.status(200).json(user);
+});
+
+// Get user's stats by ID 
+router.post('/user-stats', async (req, res) => {
+    const { user_id } = req.body;
+    let user_stats_result = await getUserStats(user_id);    
+    res.status(200).json(user_stats_result);
 });
 
 // Change active card via theMainframe

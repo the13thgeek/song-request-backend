@@ -82,8 +82,9 @@ router.post('/status', (req, res) => {
 
 // Endpoint for song requests from Mainframe
 router.post('/request-site', (req, res) => {
-    const { title, artist, user_name } = req.body;
+    const { id, title, artist, user_name } = req.body;
     let requestedSong = {
+        id: id,
         title: title,
         artist: artist
     }
@@ -91,8 +92,7 @@ router.post('/request-site', (req, res) => {
     // If the song is found
     if(requestedSong) {
         const isDuplicate = queue.some(song => 
-            song.title === requestedSong.title &&
-            song.artist === requestedSong.artist
+            song.id === requestedSong.id
         )
 
         const userSongCount = queue.filter(song => song.user === user_name).length;
