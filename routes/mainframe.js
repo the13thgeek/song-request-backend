@@ -48,17 +48,17 @@ function getPlayerLevel(exp) {
 
 // For testing
 async function test() {
-    console.log('TEST activated.');
+    //console.log('TEST activated.');
     let rows = null;
     try {
         const conn = await dbPool.getConnection();
-        console.log('DB pool connected.');
+        //console.log('DB pool connected.');
 
         const [result] = await conn.execute("SELECT * FROM tbl_users WHERE is_active = 1");
         rows = result;
 
-        console.log('Output: ');
-        console.log(JSON.stringify(rows, null, 2));
+        //console.log('Output: ');
+        //console.log(JSON.stringify(rows, null, 2));
 
         await conn.release();
     } catch (e) {
@@ -73,7 +73,7 @@ async function getUserDataById(user_id) {
 
     if(!user_id) return null;
 
-    console.log(`getUserDataById(): ID: ${user_id}`);
+    //console.log(`getUserDataById(): ID: ${user_id}`);
     const conn = await dbPool.getConnection();
 
     try {        
@@ -117,11 +117,11 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
     let user = null;
 
     if( !twitch_id || !twitch_display_name) {
-        console.log(`getUserData(): Invalid user data. BYPASS`);
+        //console.log(`getUserData(): Invalid user data. BYPASS`);
         return user;
     }
 
-    console.log(`getUserData(): TID: ${twitch_id}, TDN: ${twitch_display_name}, TA: ${twitch_avatar} IP: ${is_premium}`);
+    //console.log(`getUserData(): TID: ${twitch_id}, TDN: ${twitch_display_name}, TA: ${twitch_avatar} IP: ${is_premium}`);
     const conn = await dbPool.getConnection();
 
     try {
@@ -129,12 +129,12 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
 
         if(usrData.length > 0) {
             // User exists, update login
-            console.log(`getUserData(): User ${twitch_id} exists.`)
+            //console.log(`getUserData(): User ${twitch_id} exists.`)
             user = usrData[0];
             const [updateUser] = await conn.execute("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ?, last_login = CURRENT_TIMESTAMP WHERE id = ?",[twitch_display_name,twitch_avatar,user.id]);
         } else {
             // User does not exist on local DB, create
-            console.log(`getUserData(): User [${twitch_id},${twitch_display_name}] not locally registered.`)
+            //console.log(`getUserData(): User [${twitch_id},${twitch_display_name}] not locally registered.`)
             user = await registerUser(twitch_id,twitch_display_name,twitch_avatar);
         }
         await conn.release();
@@ -156,7 +156,7 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
         user.stats = await getUserStats(user.id);
         user.achievements = await getUserAchievements(user.id);
 
-        //console.log(user);
+        ////console.log(user);
 
     } catch(e) {
         user = null;    
@@ -164,7 +164,7 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
         throw e;
     } finally {
         conn.release();
-        console.log(`getUserData(): Return [${user.id}]`);
+        //console.log(`getUserData(): Return [${user.id}]`);
         return user;
     }
 }
@@ -180,7 +180,7 @@ async function registerUser(twitch_id,twitch_display_name,twitch_avatar) {
         // get newly-inserted item
         const [newUser] = await conn.execute("SELECT * FROM tbl_users WHERE id = ?",[addUser.insertId])
         user = newUser[0];
-        console.log(`registerUser(): Twitch ID ${twitch_id} -> ${user.id}`);
+        //console.log(`registerUser(): Twitch ID ${twitch_id} -> ${user.id}`);
         await conn.release();
     } catch(e) {
         console.error(`registerUser(): ERROR: ${e.message}`);
@@ -200,7 +200,7 @@ async function getUserCards(user_id, is_premium = false) {
         const conn = await dbPool.getConnection();
         const [queryCards] = await conn.execute("SELECT * FROM tbl_cards c INNER JOIN tbl_user_cards uc ON c.id = uc.card_id WHERE uc.user_id = ?",[user_id]);
         user_cards.cards = queryCards;
-        //console.log(user_cards.cards);
+        ////console.log(user_cards.cards);
 
         // If cards are empty, issue their first one
         if(queryCards.length === 0) {
@@ -232,7 +232,7 @@ async function getUserCards(user_id, is_premium = false) {
         // Get active card
         const [queryActiveCard] = await conn.execute("SELECT * FROM tbl_cards c INNER JOIN tbl_user_cards uc ON c.id = uc.card_id WHERE uc.user_id = ? AND uc.is_default = 1",[user_id]);
         user_cards.default = queryActiveCard[0];
-        console.log("getUserCards(): " + queryCards.length);
+        //console.log("getUserCards(): " + queryCards.length);
 
         await conn.release();
     } catch(e) {
@@ -257,7 +257,7 @@ async function getLocalId(twitch_id) {
     } catch(e) {
         console.error(`getLocalId(): ERROR: ${e.message}`);
     }
-    console.log(`getLocalId(): ${twitch_id} -> ${output}`);
+    //console.log(`getLocalId(): ${twitch_id} -> ${output}`);
     return output;
 }
 
@@ -327,14 +327,14 @@ async function doGachaPull(is_premium) {
         let card_query = null;
         // Get all cards in active circulation
         if(is_premium) {
-            console.log(`doGachaPull(): Selecting Premium cards for pull.`);
+            //console.log(`doGachaPull(): Selecting Premium cards for pull.`);
             card_query = "SELECT * FROM tbl_cards WHERE spawn_rate IS NOT NULL AND is_active = 1";
         } else {
-            console.log(`doGachaPull(): Selecting Standard cards for pull.`);
+            //console.log(`doGachaPull(): Selecting Standard cards for pull.`);
             card_query = "SELECT * FROM tbl_cards WHERE spawn_rate IS NOT NULL AND is_premium = 0 AND is_active = 1";
         }
         const [activeCards] = await conn.execute(card_query);
-        console.log(`doGachaPull(): ${activeCards.length} card(s) available for pulls.`);
+        //console.log(`doGachaPull(): ${activeCards.length} card(s) available for pulls.`);
         
         if(activeCards.length < 1) {
             throw new Error("There are no cards available for this pull.");
@@ -362,7 +362,7 @@ function weightedRandom(cards) {
     for(const card of cards) {
         cumulativeRate += card.spawn_rate;
         if(random <= cumulativeRate) {
-            console.log(`doGachaPull(): Pull result -> ${card.sysname}`);
+            //console.log(`doGachaPull(): Pull result -> ${card.sysname}`);
             return card; // Draw this card
         }
     }
@@ -397,7 +397,7 @@ async function addCardToUser(user_id,card_id) {
 
 // Change user's active card
 async function setActiveCard(user_id,card_id) {
-    console.log(`setActiveCard(${user_id}->${card_id})`);
+    //console.log(`setActiveCard(${user_id}->${card_id})`);
     let output = false;
     const conn = await dbPool.getConnection();
 
@@ -418,7 +418,7 @@ async function setActiveCard(user_id,card_id) {
 
 // Issue EXP to user
 async function setExp(user_id,is_premium,exp) {
-    console.log("setExp():");
+    //console.log("setExp():");
     let output = false;
     let issued_exp = 0;
 
@@ -431,7 +431,7 @@ async function setExp(user_id,is_premium,exp) {
 
     // Add global EXP multipliers
     issued_exp = issued_exp * exp_global;
-    //console.log(`setExp(): U#${user_id} ->E+ ${issued_exp}`);
+    ////console.log(`setExp(): U#${user_id} ->E+ ${issued_exp}`);
 
     try {
         const conn = await dbPool.getConnection();
@@ -448,7 +448,7 @@ async function setExp(user_id,is_premium,exp) {
 
 // Stats Collection
 async function setStats(user_id,stat_name,value,increment) {
-    console.log(`setStats(): U#${user_id} SN:${stat_name}`);
+    //console.log(`setStats(): U#${user_id} SN:${stat_name}`);
     let output = false;
     try {
         const conn = await dbPool.getConnection();
@@ -471,7 +471,7 @@ async function setStats(user_id,stat_name,value,increment) {
 
 // Get user stats
 async function getUserStats(user_id) {
-    console.log(`getUserStats(): U#${user_id}`);
+    //console.log(`getUserStats(): U#${user_id}`);
     let output = null;
     try {
         const conn = await dbPool.getConnection();
@@ -492,7 +492,7 @@ async function getUserStats(user_id) {
 }
 
 async function getUserAchievements(user_id) {
-    console.log(`getUserAchievements(): U#${user_id}`);
+    //console.log(`getUserAchievements(): U#${user_id}`);
     let output = null;
 
     try {
@@ -510,7 +510,7 @@ async function getUserAchievements(user_id) {
 
 // Achievement checking/awarding
 async function checkAchievements(user_id,stat_name) {
-    console.log("checkAchievements():");
+    //console.log("checkAchievements():");
     let output = null;
 
     try {
@@ -553,14 +553,14 @@ async function checkAchievements(user_id,stat_name) {
 
 // Testing
 router.post('/test', async (req, res) => {
-    console.log('ENDPOINT: /test ');
+    //console.log('ENDPOINT: /test ');
     const data = await test();
     res.status(200).json(data);
 });
 
 // Login/Registration
 // router.post('/usrlogin', async (req, res) => {    
-//     console.log('ENDPOINT: /usrlogin');
+//     //console.log('ENDPOINT: /usrlogin');
 //     let twitch_id = req.query.twitch_id;
 //     let twitch_displayname = req.query.twitch_displayname;
 //     const user = await getUserData(twitch_id,twitch_displayname);
@@ -569,7 +569,7 @@ router.post('/test', async (req, res) => {
 
 // Login/Registration via Hub Widget
 router.post('/login-widget', async (req,res)=> {
-    console.log('ENDPOINT: /login-widget');
+    //console.log('ENDPOINT: /login-widget');
     const { twitch_id, twitch_display_name, twitch_avatar } = req.body;
     const user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
     //const stats = await getUserStats(user.id);
@@ -589,7 +589,7 @@ router.post('/login-widget', async (req,res)=> {
 
 // Ranking
 router.post('/ranking', async (req, res) => {
-    console.log('ENDPOINT: /ranking');
+    //console.log('ENDPOINT: /ranking');
     const { rank_type, items_to_show } = req.body;
 
     const rankData = await getRanking(rank_type, items_to_show);
@@ -598,7 +598,7 @@ router.post('/ranking', async (req, res) => {
 
 // Gacha pull
 router.post('/gacha', async (req, res) => {
-    console.log('ENDPOINT: /gacha');
+    //console.log('ENDPOINT: /gacha');
     let output = {
         status: false,
         message: "",
@@ -647,7 +647,7 @@ router.post('/gacha', async (req, res) => {
 
 // Check-in
 router.post('/check-in', async (req, res) => {
-    console.log('ENDPOINT: /check-in');
+    //console.log('ENDPOINT: /check-in');
     const { twitch_id, twitch_display_name, twitch_avatar, twitch_roles, checkin_count } = req.body;
     const is_premium = isUserPremium(twitch_roles);
     let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar,is_premium);
@@ -692,7 +692,7 @@ router.post('/user-stats', async (req, res) => {
 
 // Change active card via theMainframe
 router.post('/change-card-site', async (req, res)=> {
-    console.log('ENDPOINT: /change-card-site');
+    //console.log('ENDPOINT: /change-card-site');
     const { user_id, card_id } = req.body;
     let output = {
         status: false,
@@ -730,7 +730,7 @@ router.post('/change-card-site', async (req, res)=> {
 
 // Change active card
 router.post('/change-card', async (req, res) => {
-    console.log('ENDPOINT: /change-card');
+    //console.log('ENDPOINT: /change-card');
     const { twitch_id, twitch_display_name, twitch_avatar, new_card_name } = req.body;
     let output = {
         status: false,
@@ -742,16 +742,16 @@ router.post('/change-card', async (req, res) => {
         let is_card_present = false;
         let new_active_card = null;
 
-        //console.log(user.cards);
+        ////console.log(user.cards);
 
         // find card in user's data
         for(let card of user.cards) {
-            console.log(`Checking ${new_card_name} -> ${card.sysname}`);
+            //console.log(`Checking ${new_card_name} -> ${card.sysname}`);
             if (new_card_name === card.sysname) {
-                console.log(`Card found.`);
+                //console.log(`Card found.`);
                 is_card_present = true;
                 new_active_card = card;
-                console.log(new_active_card);
+                //console.log(new_active_card);
                 break;
             }
         }
@@ -781,7 +781,7 @@ router.post('/change-card', async (req, res) => {
 
 // Get cards keyword list
 router.post('/get-cards', async (req, res) => {
-    console.log('ENDPOINT: /get-cards');
+    //console.log('ENDPOINT: /get-cards');
     const { twitch_id, twitch_display_name, twitch_avatar } = req.body;
     let message = "";
     let status = false;
@@ -817,7 +817,7 @@ router.post('/get-cards', async (req, res) => {
 
 // // Issue EXP
 // router.post('/exp', async (req,res) => {
-//     console.log('ENDPOINT: /exp');
+//     //console.log('ENDPOINT: /exp');
 //     const { twitch_id, twitch_display_name, twitch_avatar, twitch_roles, exp } = req.body;
 //     const is_premium = isUserPremium(twitch_roles);
 //     let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar,is_premium);
@@ -838,8 +838,8 @@ router.post('/get-cards', async (req, res) => {
 // Merged /exp and /stat-update
 // Also returns achievements if any
 router.post('/send-action', async (req,res) => {
-    console.log(`ENDPOINT: /send-action`);
-    console.log(req.body);
+    //console.log(`ENDPOINT: /send-action`);
+    //console.log(req.body);
     const { twitch_id, twitch_display_name, twitch_roles, twitch_avatar, exp, stat_name, value, increment } = req.body;
     const is_premium = isUserPremium(twitch_roles);
     let output = {
@@ -854,7 +854,7 @@ router.post('/send-action', async (req,res) => {
         if(user) {
             if(exp) {
                 result_exp = await setExp(user.id,is_premium,exp);
-                console.log('EXP issued');
+                //console.log('EXP issued');
             }
             if(stat_name && stat_name.length > 0) {
                 let achList = [];
@@ -866,7 +866,7 @@ router.post('/send-action', async (req,res) => {
                     }
                 }
                 output.achievement = achList.join(", ");
-                console.log('STAT update');
+                //console.log('STAT update');
             }
             output.status = true;
         }
@@ -889,8 +889,8 @@ router.post('/send-action', async (req,res) => {
 
 // // Update stats
 // router.post('/stat-update', async (req,res) => {
-//     console.log('ENDPOINT: /stat-update');
-//     //console.log(req.body);
+//     //console.log('ENDPOINT: /stat-update');
+//     ////console.log(req.body);
 //     const { twitch_id, twitch_display_name, twitch_avatar, stat_name, value, increment } = req.body;
 //     let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
 //     let result = false;
