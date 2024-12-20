@@ -17,8 +17,18 @@ setTimeout(function() {
 }, 3000);
 
 // Adding CORS
+// app.use(cors({
+//     origin: 'http://localhost:5173'
+// }));
+const allowedOrigins = ['http://localhost:5173','https://mainframe.the13thgeek.com'];
 app.use(cors({
-    origin: 'http://localhost:5173'
+    origin: (origin,callback) => {
+        if(!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Unauthorized access.'));
+        }
+    }
 }));
 
 app.use(express.json());
@@ -47,6 +57,7 @@ const server = app.listen(port, () => console.log(`Server is running and listeni
 const moduleSrs = require('./routes/srs');
 const moduleTwitch = require('./routes/twitch');
 const moduleMainframe = require('./routes/mainframe');
+const { callbackify } = require("util");
 app.use('/srs', moduleSrs);
 app.use('/twitch', moduleTwitch);
 app.use('/mainframe', moduleMainframe);
