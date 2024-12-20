@@ -107,6 +107,10 @@ async function getUserDataById(user_id) {
     return user;
 }
 
+// Perform action
+// Update stats, issue EXP, check for achievements
+
+
 // Load user data using Twitch ID
 // Register locally if user doesn't exist yet
 async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_premium = false) {
@@ -277,16 +281,16 @@ async function getRanking(rank_type,items_to_show) {
 
     switch(rank_type) {
         case 'exp':
-            query = `SELECT id, twitch_display_name, twitch_avatar, exp, exp as 'value' FROM tbl_users WHERE id NOT IN (111,2) AND is_active = 1 ORDER BY exp DESC, last_login LIMIT ${items_to_show}`;
+            query = `SELECT id, twitch_display_name, twitch_avatar, exp, exp as 'value' FROM tbl_users WHERE id NOT IN (1,2) AND is_active = 1 ORDER BY exp DESC, last_login LIMIT ${items_to_show}`;
             break;
         case 'spender':
-            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'points_spend' and u.id NOT IN (111,2) order by stat_value desc LIMIT ${items_to_show}`;
+            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'points_spend' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
             break;
         case 'redeems':
-            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'redeems_count' and u.id NOT IN (111,2) order by stat_value desc LIMIT ${items_to_show}`;
+            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'redeems_count' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
             break;
         case 'checkins':
-            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'checkin_count' and u.id NOT IN (111,2) order by stat_value desc LIMIT ${items_to_show}`;
+            query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'checkin_count' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
             break;
         default:
             break;
@@ -444,7 +448,7 @@ async function setExp(user_id,is_premium,exp) {
 
 // Stats Collection
 async function setStats(user_id,stat_name,value,increment) {
-    console.log("setStats():");
+    console.log(`setStats(): U#${user_id} SN:${stat_name}`);
     let output = false;
     try {
         const conn = await dbPool.getConnection();
@@ -493,7 +497,7 @@ async function getUserAchievements(user_id) {
 
     try {
         const conn = await dbPool.getConnection();
-        const [achievementList] = await conn.execute("SELECT a.name AS achievement_name, a.tier AS achievement_tier, ua.achieved_at FROM tbl_user_achievements ua JOIN tbl_achievements a ON ua.achievement_id = a.id WHERE ua.user_id = ? ORDER BY ua.achieved_at DESC, a.name, a.tier",[user_id]);
+        const [achievementList] = await conn.execute("SELECT a.name AS achievement_name, a.tier AS achievement_tier, a.description AS `description`, ua.achieved_at FROM tbl_user_achievements ua JOIN tbl_achievements a ON ua.achievement_id = a.id WHERE ua.user_id = ? ORDER BY ua.achieved_at DESC, a.name, a.tier DESC",[user_id]);
         output = achievementList;
         await conn.release();
     } catch(e) {
@@ -764,7 +768,7 @@ router.post('/change-card', async (req, res) => {
             }
         } else {
             output.status = false;
-            output.message = `I couldn't find this card in your Frequent Flyer membership. Please double-check and try again.`;
+            output.message = `I couldn't find this card in your Frequent Flyer membership. Type !getcards and try again.`;
         }
         
     } catch(e) {
@@ -811,65 +815,117 @@ router.post('/get-cards', async (req, res) => {
     }
 });
 
-// Issue EXP
-router.post('/exp', async (req,res) => {
-    console.log('ENDPOINT: /exp');
-    const { twitch_id, twitch_display_name, twitch_avatar, twitch_roles, exp } = req.body;
-    const is_premium = isUserPremium(twitch_roles);
-    let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar,is_premium);
-    let result = false;
+// // Issue EXP
+// router.post('/exp', async (req,res) => {
+//     console.log('ENDPOINT: /exp');
+//     const { twitch_id, twitch_display_name, twitch_avatar, twitch_roles, exp } = req.body;
+//     const is_premium = isUserPremium(twitch_roles);
+//     let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar,is_premium);
+//     let result = false;
 
-    if(user) {
-        result = await setExp(user.id,is_premium,exp);
-    }
+//     if(user) {
+//         result = await setExp(user.id,is_premium,exp);
+//     }
 
-    if(result) {
-        res.status(200).json({ status: result, message: 'EXP updated.' });
-    } else {
-        res.status(200).json({ status: result, message: 'EXP error.' });
-    }
-});
+//     if(result) {
+//         res.status(200).json({ status: result, message: 'EXP updated.' });
+//     } else {
+//         res.status(200).json({ status: result, message: 'EXP error.' });
+//     }
+// });
 
-// Update stats
-router.post('/stat-update', async (req,res) => {
-    console.log('ENDPOINT: /stat-update');
+// Perform action
+// Merged /exp and /stat-update
+// Also returns achievements if any
+router.post('/send-action', async (req,res) => {
+    console.log(`ENDPOINT: /send-action`);
     console.log(req.body);
-    const { twitch_id, twitch_display_name, twitch_avatar, stat_name, value, increment } = req.body;
-    let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
-    let result = false;
-    let has_achievement = false;
-    let message = "";
-    
-    // Update Stats
-    if(user) {
-        result = await setStats(user.id,stat_name,value,increment);
-    }
+    const { twitch_id, twitch_display_name, twitch_roles, twitch_avatar, exp, stat_name, value, increment } = req.body;
+    const is_premium = isUserPremium(twitch_roles);
+    let output = {
+        status: false,
+        message: '',
+        has_achievement: false,
+        achievement: ''
+    };
 
-    if(result) {
-        // Check and issue achievements
-        let achievements = await checkAchievements(user.id,stat_name);
-        
-
-        if(achievements) {
-            let ach_list = [];
-            for(let ach of achievements) {
-                ach_list.push(`${ach.name} ${ach.tier}`);
+    try {
+        let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
+        if(user) {
+            if(exp) {
+                result_exp = await setExp(user.id,is_premium,exp);
+                console.log('EXP issued');
             }
-            message = `Congrats! You have earned these achievements! ${ach_list.toString()}`;
-            has_achievement = true;
-        } else {
-            message = `Stat [${stat_name}] updated.`;
+            if(stat_name && stat_name.length > 0) {
+                let achList = [];
+                for(let i = 0; i<stat_name.length; i++) {
+                    result_stats = await setStats(user.id,stat_name[i],value[i],increment[i]);
+                    let ach = await checkAchievements(user.id,stat_name[i]);
+                    if(ach) {
+                        achList.push(ach);
+                    }
+                }
+                output.achievement = achList.join(", ");
+                console.log('STAT update');
+            }
+            output.status = true;
         }
-        
-        res.status(200).json({ 
-            status: result, 
-            message: message,
-            has_achievement: has_achievement,
-            achievements: achievements
-         });
-    } else {
-        res.status(200).json({ status: result, message: 'Stat error.' });
+
+        if(output.achievement) {
+            output.message = `Congrats! You have earned these achievements: ${output.achievement}`;
+            output.has_achievement = true;            
+        } else {
+            output.message = `Stat [${stat_name}] updated.`;
+        }
+
+    } catch(e) {
+        console.error(`/send-action: ERROR: ${e.message}`);
+        output.message = `Sorry, I encountered a problem. Please inform the streamer right away.`;
+        output.status = false;
     }
+    
+    res.status(200).json(output);
 });
+
+// // Update stats
+// router.post('/stat-update', async (req,res) => {
+//     console.log('ENDPOINT: /stat-update');
+//     //console.log(req.body);
+//     const { twitch_id, twitch_display_name, twitch_avatar, stat_name, value, increment } = req.body;
+//     let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
+//     let result = false;
+//     let has_achievement = false;
+//     let message = "";
+    
+//     // Update Stats
+//     if(user) {
+//         result = await setStats(user.id,stat_name,value,increment);
+//     }
+
+//     if(result) {
+//         // Check and issue achievements
+//         let achievements = await checkAchievements(user.id,stat_name);
+        
+//         if(achievements) {
+//             let ach_list = [];
+//             for(let ach of achievements) {
+//                 ach_list.push(`${ach.name} ${ach.tier}`);
+//             }
+//             message = `Congrats! You have earned these achievements! ${ach_list.toString()}`;
+//             has_achievement = true;
+//         } else {
+//             message = `Stat [${stat_name}] updated.`;
+//         }
+        
+//         res.status(200).json({ 
+//             status: result, 
+//             message: message,
+//             has_achievement: has_achievement,
+//             achievements: achievements
+//          });
+//     } else {
+//         res.status(200).json({ status: result, message: 'Stat error.' });
+//     }
+// });
 
 module.exports = router;
