@@ -838,8 +838,8 @@ router.post('/get-cards', async (req, res) => {
 // Merged /exp and /stat-update
 // Also returns achievements if any
 router.post('/send-action', async (req,res) => {
-    //console.log(`ENDPOINT: /send-action`);
-    //console.log(req.body);
+    console.log(`ENDPOINT: /send-action`);
+    console.log(req.body);
     const { twitch_id, twitch_display_name, twitch_roles, twitch_avatar, exp, stat_name, value, increment } = req.body;
     const is_premium = isUserPremium(twitch_roles);
     let output = {
