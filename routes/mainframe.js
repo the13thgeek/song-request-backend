@@ -121,7 +121,7 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
         return user;
     }
 
-    //console.log(`getUserData(): TID: ${twitch_id}, TDN: ${twitch_display_name}, TA: ${twitch_avatar} IP: ${is_premium}`);
+    console.log(`getUserData(): TID: ${twitch_id}, TDN: ${twitch_display_name}, TA: ${twitch_avatar} IP: ${is_premium}`);
     const conn = await dbPool.getConnection();
 
     try {
@@ -647,7 +647,7 @@ router.post('/gacha', async (req, res) => {
 
 // Check-in
 router.post('/check-in', async (req, res) => {
-    //console.log('ENDPOINT: /check-in');
+    console.log('ENDPOINT: /check-in');
     const { twitch_id, twitch_display_name, twitch_avatar, twitch_roles, checkin_count } = req.body;
     const is_premium = isUserPremium(twitch_roles);
     let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar,is_premium);
