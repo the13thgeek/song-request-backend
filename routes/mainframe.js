@@ -1,4 +1,4 @@
-/* the13thgeek: GEEKHUB ROUTING */
+/* the13thgeek: MAINFRAME ROUTING */
 
 const express = require('express');
 const mysql = require('mysql2/promise');
@@ -131,7 +131,7 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
             // User exists, update login
             //console.log(`getUserData(): User ${twitch_id} exists.`)
             user = usrData[0];
-            const [updateUser] = await conn.execute("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ?, last_login = CURRENT_TIMESTAMP WHERE id = ?",[twitch_display_name,twitch_avatar,user.id]);
+            const [updateUser] = await conn.execute("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ? WHERE id = ?",[twitch_display_name,twitch_avatar,user.id]);
         } else {
             // User does not exist on local DB, create
             //console.log(`getUserData(): User [${twitch_id},${twitch_display_name}] not locally registered.`)
@@ -446,6 +446,27 @@ async function setExp(user_id,is_premium,exp) {
     return output;
 }
 
+// Update user timestamps (stream check-in/web login)
+async function updateUserTimestamp(user_id,field_name) {
+    // console.log(`updateUserTimestamp()`);
+    let output = false;
+    try {
+        const conn = await dbPool.getConnection();
+        if(field_name === "last_login") {
+            const [userTimestamp] = await conn.execute("UPDATE tbl_users set last_login = CURRENT_TIMESTAMP WHERE id = ?",[user_id]);
+            output = true;
+        } else if(field_name === "last_checkin") {
+            const [userTimestamp] = await conn.execute("UPDATE tbl_users set last_checkin = CURRENT_TIMESTAMP WHERE id = ?",[user_id]);
+            output = true;
+        }
+    } catch(e) {
+        output = false;
+        console.error(`updateUserTimestamp(): ERROR: ${e.message}`);
+        throw e;
+    }
+    return output;
+}
+
 // Stats Collection
 async function setStats(user_id,stat_name,value,increment) {
     //console.log(`setStats(): U#${user_id} SN:${stat_name}`);
@@ -492,12 +513,12 @@ async function getUserStats(user_id) {
 }
 
 async function getUserAchievements(user_id) {
-    //console.log(`getUserAchievements(): U#${user_id}`);
+    console.log(`getUserAchievements(): U#${user_id}`);
     let output = null;
 
     try {
         const conn = await dbPool.getConnection();
-        const [achievementList] = await conn.execute("SELECT a.name AS achievement_name, a.tier AS achievement_tier, a.description AS `description`, ua.achieved_at FROM tbl_user_achievements ua JOIN tbl_achievements a ON ua.achievement_id = a.id WHERE ua.user_id = ? ORDER BY ua.achieved_at DESC, a.name, a.tier DESC",[user_id]);
+        const [achievementList] = await conn.execute("SELECT a.name AS achievement_name, a.sysname AS sysname, MAX(a.tier) AS achievement_tier, a.description AS `description`, ua.achieved_at FROM tbl_user_achievements ua JOIN tbl_achievements a ON ua.achievement_id = a.id WHERE ua.user_id = ? GROUP BY a.sysname ORDER BY ua.achieved_at DESC, a.name, a.tier DESC",[user_id]);
         output = achievementList;
         await conn.release();
     } catch(e) {
@@ -572,6 +593,7 @@ router.post('/login-widget', async (req,res)=> {
     //console.log('ENDPOINT: /login-widget');
     const { twitch_id, twitch_display_name, twitch_avatar } = req.body;
     const user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
+    let tstamp_q = await updateUserTimestamp(user.id,'last_login');
     //const stats = await getUserStats(user.id);
     res.status(200).json({
         local_id: user.id,
@@ -658,6 +680,7 @@ router.post('/check-in', async (req, res) => {
     let exp_q = await setExp(user.id,is_premium,1);
     // update stats
     let stats_q = await setStats(user.id,'checkin_count',checkin_count,false);
+    let tstamp_q = await updateUserTimestamp(user.id,'last_checkin');
     // Check/award achievements
     achievement = await checkAchievements(user.id,'checkin_count');
     if(achievement) { 
@@ -670,6 +693,7 @@ router.post('/check-in', async (req, res) => {
         level: user.level,
         is_premium: is_premium,
         default_card_name: user.card_default.sysname,
+        default_card_title: (user.card_default.is_premium ? "Premium " : "") + user.card_default.name,
         has_achievement: has_achievement,
         achievement: achievement
     });
