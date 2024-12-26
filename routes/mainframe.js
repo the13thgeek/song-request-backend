@@ -281,13 +281,16 @@ async function getRanking(rank_type,items_to_show) {
 
     switch(rank_type) {
         case 'exp':
-            query = `SELECT id, twitch_display_name, twitch_avatar, exp, exp as 'value' FROM tbl_users WHERE id NOT IN (1,2) AND is_active = 1 ORDER BY exp DESC, last_login LIMIT ${items_to_show}`;
+            query = `SELECT id, twitch_display_name, twitch_avatar, exp, exp as 'value' FROM tbl_users WHERE id NOT IN (1,2) AND exp > 0 AND is_active = 1 ORDER BY exp DESC, last_login LIMIT ${items_to_show}`;
             break;
         case 'spender':
             query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'points_spend' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
             break;
         case 'redeems':
             query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'redeems_count' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
+            break;
+        case 'checkins_last':
+            query = `select id, twitch_display_name, twitch_avatar, exp, last_checkin AS 'value' FROM tbl_users WHERE id NOT IN (1,2) order by last_checkin desc LIMIT ${items_to_show}`;
             break;
         case 'checkins':
             query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'checkin_count' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
