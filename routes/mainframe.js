@@ -198,7 +198,7 @@ async function getUserCards(user_id, is_premium = false) {
     try {
         // Query all assigned cards
         const conn = await dbPool.getConnection();
-        const [queryCards] = await conn.execute("SELECT * FROM tbl_cards c INNER JOIN tbl_user_cards uc ON c.id = uc.card_id WHERE uc.user_id = ? ORDER BY c.is_premium DESC, c.name",[user_id]);
+        const [queryCards] = await conn.execute("SELECT * FROM tbl_cards c INNER JOIN tbl_user_cards uc ON c.id = uc.card_id WHERE uc.user_id = ? ORDER BY c.is_premium DESC, LEFT(c.catalog_no, 2), c.name",[user_id]);
         user_cards.cards = queryCards;
         ////console.log(user_cards.cards);
 
