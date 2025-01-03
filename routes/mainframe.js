@@ -343,10 +343,10 @@ async function doGachaPull(is_premium) {
         // Get all cards in active circulation
         if(is_premium) {
             //console.log(`doGachaPull(): Selecting Premium cards for pull.`);
-            card_query = "SELECT * FROM tbl_cards WHERE spawn_rate IS NOT NULL AND is_active = 1";
+            card_query = "SELECT * FROM tbl_cards WHERE spawn_rate IS NOT NULL AND is_pull = 1";
         } else {
             //console.log(`doGachaPull(): Selecting Standard cards for pull.`);
-            card_query = "SELECT * FROM tbl_cards WHERE spawn_rate IS NOT NULL AND is_premium = 0 AND is_active = 1";
+            card_query = "SELECT * FROM tbl_cards WHERE spawn_rate IS NOT NULL AND is_premium = 0 AND is_pull = 1";
         }
         const [activeCards] = await conn.execute(card_query);
         //console.log(`doGachaPull(): ${activeCards.length} card(s) available for pulls.`);
@@ -583,6 +583,38 @@ async function checkAchievements(user_id,stat_name) {
         throw e;
     }
     return output;
+}
+
+// Load catalog of card designs
+async function getCatalog() {
+    let output = null;
+
+    try {
+        const conn = await dbPool.getConnection();
+        const [cardCatalog] = await conn.execute(
+            `SELECT *,
+            DATE_FORMAT(created, '%b %Y') as 'release'
+            FROM tbl_cards
+            WHERE id > 0
+            ORDER BY
+            CASE 
+                WHEN LEFT(catalog_no, 2) IN ('SP','GX','EX') THEN 1
+                WHEN LEFT(catalog_no, 2) IN ('RG', 'RP') THEN 2
+                ELSE 3
+            END,
+            is_premium DESC,
+            catalog_no,
+            name;`
+        );
+        output = cardCatalog;
+        await conn.release();
+    } catch(e) {
+        output = null;
+        console.error(`getCatalog(): ERROR: ${e.message}`);
+        throw e;
+    }
+    return output; 
+
 }
 
 // ENDPOINTS
@@ -833,7 +865,7 @@ router.post('/get-cards', async (req, res) => {
                 for(let card of user.cards) {
                     cards_list.push(card.sysname);
                 }
-                message += `You have (${user.cards.length}) cards: [${cards_list.toString()}]. To change your active card, type !setcard <keyword> in chat!`;
+                message += `You have (${user.cards.length}) cards: [${cards_list.toString().replace(",",", ")}]. To change your active card, type !setcard <keyword> in chat!`;
             } else if(user.cards.length === 1) {
                 message += `You have the [${user.cards[0].sysname}] Card. To collect more cards, try your luck at the Mystery Card Pull redeem!`;
             } else {
@@ -852,6 +884,27 @@ router.post('/get-cards', async (req, res) => {
             message: message
         });
     }
+});
+
+// Get catalog of cards
+router.post('/catalog', async (req, res) => {
+    //console.log(`ENDPOINT: /catalog`);
+    let message = "";
+    let status = false;
+    let catalog = null;
+
+    try {
+        catalog = await getCatalog();
+        if(catalog) {
+            message = "OK";
+            status = true;  
+        }
+    } catch(e) {
+        console.error(`/catalog: ERROR: ${e.message}`);
+        message = `Sorry, I encountered a problem. Please inform the streamer right away.`;
+        status = false;
+    }
+    res.status(200).json({ status: status, message: message, catalog: catalog });
 });
 
 // // Issue EXP
