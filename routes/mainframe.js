@@ -131,7 +131,7 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
             // User exists, update login
             //console.log(`getUserData(): User ${twitch_id} exists.`)
             user = usrData[0];
-            const [updateUser] = await conn.execute("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ? WHERE id = ?",[twitch_display_name,twitch_avatar,user.id]);
+            const [updateUser] = await conn.execute("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ?, last_activity = CURRENT_TIMESTAMP() WHERE id = ?",[twitch_display_name,twitch_avatar,user.id]);
         } else {
             // User does not exist on local DB, create
             //console.log(`getUserData(): User [${twitch_id},${twitch_display_name}] not locally registered.`)
@@ -293,7 +293,11 @@ async function getRanking(rank_type,items_to_show) {
 
     switch(rank_type) {
         case 'exp':
-            query = `SELECT id, twitch_display_name, twitch_avatar, exp, exp as 'value' FROM tbl_users WHERE id NOT IN (1,2) AND exp > 0 AND is_active = 1 ORDER BY exp DESC, last_login LIMIT ${items_to_show}`;
+            query = `SELECT u.id, u.twitch_display_name, u.twitch_avatar, u.exp, u.exp as 'value', c.sysname, c.name AS active_card
+                FROM tbl_users u
+                JOIN  tbl_user_cards uc ON u.id = uc.user_id
+                JOIN tbl_cards c ON uc.card_id = c.id
+                WHERE u.id NOT IN (1,2) AND uc.is_default = 1 ORDER BY u.exp DESC LIMIT ${items_to_show}`;
             break;
         case 'spender':
             query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'points_spend' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
