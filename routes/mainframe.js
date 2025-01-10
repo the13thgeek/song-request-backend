@@ -297,7 +297,8 @@ async function getRanking(rank_type,items_to_show) {
                 FROM tbl_users u
                 JOIN  tbl_user_cards uc ON u.id = uc.user_id
                 JOIN tbl_cards c ON uc.card_id = c.id
-                WHERE u.id NOT IN (1,2) AND uc.is_default = 1 ORDER BY u.exp DESC LIMIT ${items_to_show}`;
+                WHERE u.id NOT IN (1,2) AND uc.is_default = 1 AND (u.last_activity >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH))
+                ORDER BY u.exp DESC LIMIT ${items_to_show}`;
             break;
         case 'spender':
             query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'points_spend' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
@@ -310,6 +311,12 @@ async function getRanking(rank_type,items_to_show) {
             break;
         case 'checkins':
             query = `select u.id AS 'id',u.twitch_display_name AS 'twitch_display_name', u.twitch_avatar as 'twitch_avatar', u.exp as 'exp', s.stat_value AS 'value' from tbl_users u join tbl_user_stats s where u.id = s.user_id and s.stat_key = 'checkin_count' and u.id NOT IN (1,2) order by stat_value desc LIMIT ${items_to_show}`;
+            break;
+        case 'achievements':
+            query = `SELECT u.id, u.twitch_avatar, u.twitch_display_name, u.exp, a.name as 'ach_name', a.tier, a.sysname as 'ach_sysname', ua.achieved_at 
+                FROM tbl_user_achievements ua, tbl_users u, tbl_achievements a
+                WHERE ua.user_id = u.id AND ua.achievement_id = a.id AND u.id NOT IN (1,2)
+                ORDER BY ua.achieved_at DESC LIMIT ${items_to_show}`;
             break;
         default:
             break;
@@ -599,7 +606,7 @@ async function getCatalog() {
             `SELECT *,
             DATE_FORMAT(created, '%b %Y') as 'release'
             FROM tbl_cards
-            WHERE id > 0
+            WHERE id > 0 AND is_active = 1
             ORDER BY
             CASE 
                 WHEN LEFT(catalog_no, 2) IN ('SP','GX','EX') THEN 1
