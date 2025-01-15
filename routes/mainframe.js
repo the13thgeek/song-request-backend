@@ -105,6 +105,8 @@ async function getUserDataById(user_id) {
         user = null;    
         console.error(`getUserData(): ERROR: ${e.message}`);
         throw e;
+    } finally {
+        conn.release();
     }
     return user;
 }
@@ -258,9 +260,9 @@ async function getUserCards(user_id, is_premium = false) {
 // Get local user ID by Twitch ID
 async function getLocalId(twitch_id) {
     let output = null;
+    const conn = await dbPool.getConnection();
 
     try {
-        const conn = await dbPool.getConnection();
         const [result] = await conn.execute("SELECT id FROM tbl_users WHERE twitch_id = ?",[twitch_id]);
 
         if(rows.length > 0) {
@@ -479,7 +481,6 @@ async function setExp(user_id,is_premium,exp) {
     ////console.log(`setExp(): U#${user_id} ->E+ ${issued_exp}`);
     const conn = await dbPool.getConnection();
     try {
-        
         const [setExpUser] = await conn.execute("UPDATE tbl_users SET exp = (exp + ?) WHERE id = ?",[issued_exp,user_id]);
         conn.release();
         output = true;
@@ -487,6 +488,8 @@ async function setExp(user_id,is_premium,exp) {
         output = false;
         console.error(`setExp(): ERROR: ${e.message}`);
         throw e;
+    } finally {
+        conn.release();
     }
     return output;
 }
