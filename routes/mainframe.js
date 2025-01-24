@@ -13,6 +13,8 @@ const dbPool = mysql.createPool({
     database: process.env.GEEKHUB_DB_NAME,
     waitForConnections: true,
     connectionLimit: 20,
+    maxIdle: 5,
+    idleTimeout: 60000,
     keepAliveInitialDelay: 3000,
     enableKeepAlive: true,
     queueLimit: 0
