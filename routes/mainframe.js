@@ -13,10 +13,10 @@ const dbPool = mysql.createPool({
     database: process.env.GEEKHUB_DB_NAME,
     waitForConnections: true,
     connectionLimit: 20,
-    keepAliveInitialDelay: 3000,
+    keepAliveInitialDelay: 6000,
     enableKeepAlive: true,
     maxIdle: 1,
-    idleTimeout: 5 * 60 * 1000,
+    idleTimeout: 10 * 60 * 1000,
     queueLimit: 10
 });
 // dbPool.on('connection', (connection) => {
