@@ -6,16 +6,24 @@ const router = express.Router();
 require('dotenv').config();
 
 // Shared DB connection pool
-const dbPool = mysql.createPool({
+const dbPool = await mysql.createPool({
     host: process.env.GEEKHUB_DB_ENDPOINT,
     user: process.env.GEEKHUB_DB_USER,
     password: process.env.GEEKHUB_DB_PASS,
     database: process.env.GEEKHUB_DB_NAME,
     waitForConnections: true,
     connectionLimit: 20,
-    keepAliveInitialDelay: 10000,
+    keepAliveInitialDelay: 3000,
     enableKeepAlive: true,
+    maxIdle: 0,
+    idleTimeout: 5 * 60 * 1000,
     queueLimit: 0
+});
+dbPool.on('connection', (connection) => {
+    connection.on("error", (err) => {
+        console.log('Pool Error: ', err.message);
+        connection.destroy();
+    });
 });
 
 // MAINFRAME GLOBALS
