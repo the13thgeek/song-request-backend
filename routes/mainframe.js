@@ -6,7 +6,7 @@ const router = express.Router();
 require('dotenv').config();
 
 // Shared DB connection pool
-const dbPool = await mysql.createPool({
+const dbPool = mysql.createPool({
     host: process.env.GEEKHUB_DB_ENDPOINT,
     user: process.env.GEEKHUB_DB_USER,
     password: process.env.GEEKHUB_DB_PASS,
