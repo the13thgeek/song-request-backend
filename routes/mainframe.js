@@ -1,7 +1,7 @@
 /* the13thgeek: MAINFRAME ROUTING */
 
 const express = require('express');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const router = express.Router();
 require('dotenv').config();
 
@@ -13,18 +13,10 @@ const dbPool = mysql.createPool({
     database: process.env.GEEKHUB_DB_NAME,
     waitForConnections: true,
     connectionLimit: 20,
-    maxIdle: 5,
-    idleTimeout: 60000,
-    keepAliveInitialDelay: 3000,
+    keepAliveInitialDelay: 10000,
     enableKeepAlive: true,
     queueLimit: 0
-}).promise();
-// dbPool.on('connection', (connection) => {
-//     connection.on("error", (err) => {
-//         console.log('Pool Error: ', err.message);
-//         connection.destroy();
-//     });
-// });
+});
 
 // MAINFRAME GLOBALS
 let exp_standard = 1.0;
