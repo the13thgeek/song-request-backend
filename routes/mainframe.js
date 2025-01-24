@@ -17,7 +17,7 @@ const dbPool = mysql.createPool({
     enableKeepAlive: true,
     maxIdle: 0,
     idleTimeout: 5 * 60 * 1000,
-    queueLimit: 0
+    queueLimit: 10
 });
 // dbPool.on('connection', (connection) => {
 //     connection.on("error", (err) => {
