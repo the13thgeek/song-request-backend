@@ -19,12 +19,12 @@ const dbPool = mysql.createPool({
     idleTimeout: 5 * 60 * 1000,
     queueLimit: 0
 });
-dbPool.on('connection', (connection) => {
-    connection.on("error", (err) => {
-        console.log('Pool Error: ', err.message);
-        connection.destroy();
-    });
-});
+// dbPool.on('connection', (connection) => {
+//     connection.on("error", (err) => {
+//         console.log('Pool Error: ', err.message);
+//         connection.destroy();
+//     });
+// });
 
 // MAINFRAME GLOBALS
 let exp_standard = 1.0;
