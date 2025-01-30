@@ -20,7 +20,7 @@ setTimeout(function() {
 // app.use(cors({
 //     origin: 'http://localhost:5173'
 // }));
-const allowedOrigins = ['http://localhost:5173','https://mainframe.the13thgeek.com'];
+const allowedOrigins = ['http://localhost:5173','https://mainframe.the13thgeek.com','https://the13thgeek.github.io'];
 app.use(cors({
     origin: (origin,callback) => {
         if(!origin || allowedOrigins.includes(origin)) {
