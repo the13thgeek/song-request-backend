@@ -25,6 +25,29 @@ let exp_global = 1.0;
 
 // FUNCTIONS
 
+// DB Helper Function
+async function execQuery(query, params = []) {
+    let conn;
+    try {
+        conn = await dbPool.getConnection();
+
+        try {
+            await conn.ping();
+        } catch(pingError) {
+            console.warn(`Stale connection, reconnecting...`);
+            conn.release();
+            conn = await dbPool.getConnection();
+        }
+        const [result] = await conn.execute(query, params);
+        return result;
+    } catch(e) {
+        console.error(`exeQuery(): ERROR: ${e.message}`);
+        return null;
+    } finally {
+        if(conn) conn.release();
+    }
+}
+
 // Get Player Level, Title and Progression
 function getPlayerLevel(exp) {
     let playerLevels = require(`../data/levels.json`);
@@ -52,22 +75,18 @@ function getPlayerLevel(exp) {
 async function test() {
     //console.log('TEST activated.');
     let rows = null;
-    const conn = await dbPool.getConnection();
     try {      
         //console.log('DB pool connected.');
-
-        const [result] = await conn.execute("SELECT * FROM tbl_users WHERE is_active = 1 ORDER BY last_login DESC, last_activity DESC LIMIT 5");
-        rows = result;
-
+        rows = await execQuery(
+            "SELECT * FROM tbl_users WHERE is_active = 1 ORDER BY last_login DESC, last_activity DESC LIMIT 5",
+        );
         //console.log('Output: ');
         //console.log(JSON.stringify(rows, null, 2));
 
         //await conn.release();
     } catch (e) {
         console.error(`test(): ERROR: ${e.message}`);
-    } finally {
-        conn.release();
-    }
+    } 
     return rows;
 }
 
