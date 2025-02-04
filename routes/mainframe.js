@@ -41,7 +41,9 @@ async function execQuery(query, params = []) {
         const [result] = await conn.execute(query, params);
         return result;
     } catch(e) {
-        console.error(`exeQuery(): ERROR: ${e.message}`);
+        console.error(`execQuery(): ERROR: ${e.message}`);
+        console.error(`query: ${query}`);
+        console.error(`params: ${params}`);
         return null;
     } finally {
         if(conn) conn.release();
@@ -76,14 +78,9 @@ async function test() {
     //console.log('TEST activated.');
     let rows = null;
     try {      
-        //console.log('DB pool connected.');
         rows = await execQuery(
             "SELECT * FROM tbl_users WHERE is_active = 1 ORDER BY last_login DESC, last_activity DESC LIMIT 5",
         );
-        //console.log('Output: ');
-        //console.log(JSON.stringify(rows, null, 2));
-
-        //await conn.release();
     } catch (e) {
         console.error(`test(): ERROR: ${e.message}`);
     } 
@@ -96,16 +93,9 @@ async function getUserDataById(user_id) {
 
     if(!user_id) return null;
 
-    //console.log(`getUserDataById(): ID: ${user_id}`);
-    const conn = await dbPool.getConnection();
-
     try {        
-        const [userData] = await conn.execute("SELECT * FROM tbl_users WHERE id = ?", [user_id]);
-
-        if(userData.length > 0) {
-            user = userData[0];
-        }
-        conn.release();
+        let usrData = await execQuery("SELECT * FROM tbl_users WHERE id = ?", [user_id]);
+        user = usrData[0];
         
         let playerData = getPlayerLevel(user.exp);
 
@@ -126,9 +116,7 @@ async function getUserDataById(user_id) {
         user = null;    
         console.error(`getUserData(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
-    }
+    } 
     return user;
 }
 
@@ -143,23 +131,20 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
     }
 
     console.log(`getUserData(): TID: ${twitch_id}, TDN: ${twitch_display_name}, TA: ${twitch_avatar} IP: ${is_premium}`);
-    const conn = await dbPool.getConnection();
 
     try {
-        const [usrData] = await conn.execute("SELECT * FROM tbl_users WHERE twitch_id = ?", [twitch_id]);
+        const usrData = await execQuery("SELECT * FROM tbl_users WHERE twitch_id = ?", [twitch_id]);
 
         if(usrData.length > 0) {
             // User exists, update login
             //console.log(`getUserData(): User ${twitch_id} exists.`)
             user = usrData[0];
-            const [updateUser] = await conn.execute("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ?, last_activity = CURRENT_TIMESTAMP() WHERE id = ?",[twitch_display_name,twitch_avatar,user.id]);
+            const updateUser = await execQuery("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ?, last_activity = CURRENT_TIMESTAMP() WHERE id = ?",[twitch_display_name,twitch_avatar,user.id]);
         } else {
             // User does not exist on local DB, create
             //console.log(`getUserData(): User [${twitch_id},${twitch_display_name}] not locally registered.`)
             user = await registerUser(twitch_id,twitch_display_name,twitch_avatar);
-        }
-        conn.release();
-        
+        }        
         let playerData = getPlayerLevel(user.exp);
 
         // Append player info to user data
@@ -183,45 +168,38 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
         user = null;    
         console.error(`getUserData(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
-        //console.log(`getUserData(): Return [${user.id}]`);
-        return user;
-    }
+    } 
+    return user;
 }
 
 // Register user to local DB
 async function registerUser(twitch_id,twitch_display_name,twitch_avatar) {
     let user = null;
-    const conn = await dbPool.getConnection();
 
     try {    
         // register
-        const [addUser] = await conn.execute("INSERT INTO tbl_users(twitch_id, twitch_display_name, twitch_avatar) VALUES(?,?,?)", [twitch_id,twitch_display_name,twitch_avatar]);
+        const addUser = await execQuery("INSERT INTO tbl_users(twitch_id, twitch_display_name, twitch_avatar) VALUES(?,?,?)", [twitch_id,twitch_display_name,twitch_avatar]);
         // get newly-inserted item
-        const [newUser] = await conn.execute("SELECT * FROM tbl_users WHERE id = ?",[addUser.insertId])
+        const newUser = await execQuery("SELECT * FROM tbl_users WHERE id = ?",[addUser.insertId])
         user = newUser[0];
         //console.log(`registerUser(): Twitch ID ${twitch_id} -> ${user.id}`);
-        conn.release();
     } catch(e) {
         console.error(`registerUser(): ERROR: ${e.message}`);
-    } finally {
-        conn.release();
     }
     return user;
 }
 
 // Get all cards issued to the user
 async function getUserCards(user_id, is_premium = false) {
+    //console.log(`getUserCards(${user_id},${is_premium})`);
     let user_cards = {
         cards: [],
         default: null
     };
-    const conn = await dbPool.getConnection();
 
     try {
         // Query all assigned cards
-        const [queryCards] = await conn.execute(`SELECT c.*, uc.user_id, uc.is_default, uc.card_id
+        const queryCards = await execQuery(`SELECT c.*, uc.user_id, uc.is_default, uc.card_id
             FROM tbl_cards c
             INNER JOIN tbl_user_cards uc ON c.id = uc.card_id
             WHERE uc.user_id = ?
@@ -241,12 +219,12 @@ async function getUserCards(user_id, is_premium = false) {
         if(queryCards.length === 0) {
             // Issue a Premium Card (via Twitch)
             if(is_premium) {
-                const [queryIssueCard] = await conn.execute("INSERT INTO tbl_user_cards(user_id,card_id,is_default) VALUES(?,?,?)",[user_id,2,1]);
+                const [queryIssueCard] = await execQuery("INSERT INTO tbl_user_cards(user_id,card_id,is_default) VALUES(?,?,?)",[user_id,2,1]);
             } else {
-                const [queryIssueCard] = await conn.execute("INSERT INTO tbl_user_cards(user_id,card_id,is_default) VALUES(?,?,?)",[user_id,1,1]);
+                const [queryIssueCard] = await execQuery("INSERT INTO tbl_user_cards(user_id,card_id,is_default) VALUES(?,?,?)",[user_id,1,1]);
             }
             // Re-query
-            const [queryCards] = await conn.execute("SELECT * FROM tbl_cards c INNER JOIN tbl_user_cards uc ON c.id = uc.card_id WHERE uc.user_id = ?",[user_id]);
+            const queryCards = await execQuery("SELECT * FROM tbl_cards c INNER JOIN tbl_user_cards uc ON c.id = uc.card_id WHERE uc.user_id = ?",[user_id]);
             user_cards.cards = queryCards;
         } else {
             // This is for users checking in from Twitch Chat.
@@ -255,40 +233,37 @@ async function getUserCards(user_id, is_premium = false) {
             // This is for validation
             if(is_premium) {
                 // Check if user already has a Premium card issued previously.
-                const [queryPremium] = await conn.execute("SELECT * FROM tbl_user_cards WHERE user_id = ? and card_id = ?",[user_id,2]);
+                const queryPremium = await execQuery("SELECT * FROM tbl_user_cards WHERE user_id = ? and card_id = ?",[user_id,2]);
                 if(queryPremium.length === 0) {
                     // Issue a Premium card and set it to user's default
-                    const [queryUntoggleCards] = await conn.execute("UPDATE tbl_user_cards SET is_default = 0 WHERE user_id = ?",[user_id]);
-                    const [queryIssueCard] = await conn.execute("INSERT INTO tbl_user_cards(user_id,card_id,is_default) VALUES(?,?,?)",[user_id,2,1]);
+                    const queryUntoggleCards = await execQuery("UPDATE tbl_user_cards SET is_default = 0 WHERE user_id = ?",[user_id]);
+                    const queryIssueCard = await execQuery("INSERT INTO tbl_user_cards(user_id,card_id,is_default) VALUES(?,?,?)",[user_id,2,1]);
                 }
             }
         }
 
         // Get active card
-        const [queryActiveCard] = await conn.execute("SELECT * FROM tbl_cards c INNER JOIN tbl_user_cards uc ON c.id = uc.card_id WHERE uc.user_id = ? AND uc.is_default = 1",[user_id]);
+        const queryActiveCard = await execQuery("SELECT * FROM tbl_cards c INNER JOIN tbl_user_cards uc ON c.id = uc.card_id WHERE uc.user_id = ? AND uc.is_default = 1",[user_id]);
         user_cards.default = queryActiveCard[0];
         //console.log("getUserCards(): " + queryCards.length);
 
     } catch(e) {
         console.error(`getUserCards(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
-    }
+    } 
     return user_cards;
 }
 
 // Get local user ID by Twitch ID
 async function getLocalId(twitch_id) {
     let output = null;
-    const conn = await dbPool.getConnection();
 
     try {
-        const [result] = await conn.execute("SELECT id FROM tbl_users WHERE twitch_id = ?",[twitch_id]);
+        const result = await execQuery("SELECT id FROM tbl_users WHERE twitch_id = ?",[twitch_id]);
 
-        if(rows.length > 0) {
+        if(result.length > 0) {
             // user is registered
-            output = rows[0].id;
+            output = result[0].id;
         }
     } catch(e) {
         console.error(`getLocalId(): ERROR: ${e.message}`);
@@ -301,7 +276,7 @@ async function getLocalId(twitch_id) {
 function isUserPremium(roles) {
     let output = false;
     if(roles) {
-        if(roles.includes('VIP') || roles.includes('Subscriber') || roles.includes('Moderator')) {
+        if(roles.includes('VIP') || roles.includes('Subscriber') || roles.includes('Artist') || roles.includes('Moderator')) {
             output = true;
         }
     }
@@ -347,10 +322,9 @@ async function getRanking(rank_type,items_to_show) {
     }
 
     if(!query) { return null;} 
-    const conn = await dbPool.getConnection();
 
     try {
-        const [rankData] = await conn.execute(query);
+        const rankData = await execQuery(query);
         output = rankData;
         
         // Append level data
@@ -362,8 +336,6 @@ async function getRanking(rank_type,items_to_show) {
         }
     } catch(e) {
         console.error(`getRanking(): ERROR: ${e.message}`);
-    } finally {
-        conn.release();
     }
     return output;
 }
@@ -371,17 +343,14 @@ async function getRanking(rank_type,items_to_show) {
 // For list of available cards
 async function getAvailableCards() {
     let output = null;
-    const conn = await dbPool.getConnection();
     try {
-        const [cardList] = await conn.execute("SELECT id, name, catalog_no, sysname, is_premium, is_event, is_rare, is_new FROM tbl_cards WHERE id > 0 AND is_pull = 1 AND is_active = 1 ORDER BY is_premium DESC, is_new DESC, catalog_no");
+        const cardList = await execQuery("SELECT id, name, catalog_no, sysname, is_premium, is_event, is_rare, is_new FROM tbl_cards WHERE id > 0 AND is_pull = 1 AND is_active = 1 ORDER BY is_premium DESC, is_new DESC, catalog_no");
         if(cardList.length > 0) {
             output = cardList;
         }
     } catch(e) {
         console.error(`getAvailableCards(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
     }
     return output;
 }
@@ -389,7 +358,6 @@ async function getAvailableCards() {
 // For card gacha pulls
 async function doGachaPull(is_premium) {
     let selectedCard = null;
-    const conn = await dbPool.getConnection();
 
     try {
         let card_query = null;
@@ -401,7 +369,7 @@ async function doGachaPull(is_premium) {
             //console.log(`doGachaPull(): Selecting Standard cards for pull.`);
             card_query = "SELECT * FROM tbl_cards WHERE spawn_rate IS NOT NULL AND is_premium = 0 AND is_pull = 1";
         }
-        const [activeCards] = await conn.execute(card_query);
+        const activeCards = await execQuery(card_query);
         //console.log(`doGachaPull(): ${activeCards.length} card(s) available for pulls.`);
         
         if(activeCards.length < 1) {
@@ -414,8 +382,6 @@ async function doGachaPull(is_premium) {
     } catch(e) {
         console.error(`doGachaPull(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
     }
     return selectedCard;
 }
@@ -441,24 +407,21 @@ function weightedRandom(cards) {
 // Assign card to user
 async function addCardToUser(user_id,card_id) {
     let output = false;
-    const conn = await dbPool.getConnection();
     try {
         // Check if user already owns card
-        const [existingCard] = await conn.execute("SELECT COUNT(*) as count FROM tbl_user_cards WHERE user_id = ? AND card_id = ?",[user_id,card_id]);
+        const existingCard = await execQuery("SELECT COUNT(*) as count FROM tbl_user_cards WHERE user_id = ? AND card_id = ?",[user_id,card_id]);
         const count = existingCard[0].count;
         if(count === 0 && card_id > 0)  { // Do not issue Card #0 (Try Again)
             // untoggle is_default to current user's cards
-            const [untoggle] = await conn.execute("UPDATE tbl_user_cards SET is_default = 0 WHERE user_id = ?",[user_id,])
+            const untoggle = await execQuery("UPDATE tbl_user_cards SET is_default = 0 WHERE user_id = ?",[user_id])
             // add card to user
-            const [issueCard] = await conn.execute("INSERT INTO tbl_user_cards(user_id,card_id,is_default) values(?,?,?)",[user_id,card_id,1]);
+            const issueCard = await execQuery("INSERT INTO tbl_user_cards(user_id,card_id,is_default) values(?,?,?)",[user_id,card_id,1]);
             output = true;
         }
 
     } catch(e) {
         console.error(`addCardToUser(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
     }
     return output;
 }
@@ -467,19 +430,16 @@ async function addCardToUser(user_id,card_id) {
 async function setActiveCard(user_id,card_id) {
     //console.log(`setActiveCard(${user_id}->${card_id})`);
     let output = false;
-    const conn = await dbPool.getConnection();
 
     try {
         // untoggle is_default to current user's cards
-        const [untoggle] = await conn.execute("UPDATE tbl_user_cards SET is_default = 0 WHERE user_id = ?",[user_id,])
+        const untoggle = await execQuery("UPDATE tbl_user_cards SET is_default = 0 WHERE user_id = ?",[user_id,])
         // set default card to specified card_id
-        const [issueCard] = await conn.execute("UPDATE tbl_user_cards SET is_default = 1 WHERE user_id = ? AND card_id = ?",[user_id,card_id]);
+        const issueCard = await execQuery("UPDATE tbl_user_cards SET is_default = 1 WHERE user_id = ? AND card_id = ?",[user_id,card_id]);
         output = true;
     } catch(e) {
         console.error(`setActiveCard(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
     }
     return output;
 }
@@ -500,17 +460,13 @@ async function setExp(user_id,is_premium,exp) {
     // Add global EXP multipliers
     issued_exp = issued_exp * exp_global;
     ////console.log(`setExp(): U#${user_id} ->E+ ${issued_exp}`);
-    const conn = await dbPool.getConnection();
     try {
-        const [setExpUser] = await conn.execute("UPDATE tbl_users SET exp = (exp + ?) WHERE id = ?",[issued_exp,user_id]);
-        conn.release();
+        const setExpUser = await execQuery("UPDATE tbl_users SET exp = (exp + ?) WHERE id = ?",[issued_exp,user_id]);
         output = true;
     } catch(e) {
         output = false;
         console.error(`setExp(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
     }
     return output;
 }
@@ -519,22 +475,18 @@ async function setExp(user_id,is_premium,exp) {
 async function updateUserTimestamp(user_id,field_name) {
     // console.log(`updateUserTimestamp()`);
     let output = false;
-    const conn = await dbPool.getConnection();
-    try {
-        
+    try {        
         if(field_name === "last_login") {
-            const [userTimestamp] = await conn.execute("UPDATE tbl_users set last_login = CURRENT_TIMESTAMP WHERE id = ?",[user_id]);
+            const userTimestamp = await execQuery("UPDATE tbl_users set last_login = CURRENT_TIMESTAMP WHERE id = ?",[user_id]);
             output = true;
         } else if(field_name === "last_checkin") {
-            const [userTimestamp] = await conn.execute("UPDATE tbl_users set last_checkin = CURRENT_TIMESTAMP WHERE id = ?",[user_id]);
+            const userTimestamp = await execQuery("UPDATE tbl_users set last_checkin = CURRENT_TIMESTAMP WHERE id = ?",[user_id]);
             output = true;
         }
     } catch(e) {
         output = false;
         console.error(`updateUserTimestamp(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
     }
     return output;
 }
@@ -543,7 +495,6 @@ async function updateUserTimestamp(user_id,field_name) {
 async function setStats(user_id,stat_name,value,increment) {
     //console.log(`setStats(): U#${user_id} SN:${stat_name}`);
     let output = false;
-    const conn = await dbPool.getConnection();
     try {
         let query = "";
         if(increment) {
@@ -551,14 +502,12 @@ async function setStats(user_id,stat_name,value,increment) {
         } else {
             query = "INSERT INTO tbl_user_stats(user_id,stat_key,stat_value) VALUES(?,?,?) ON DUPLICATE KEY UPDATE stat_value = ?";
         }
-        const [setStatData] = await conn.execute(query,[user_id,stat_name,value,value]);
+        const setStatData = await execQuery(query,[user_id,stat_name,value,value]);
         output = true;
     } catch(e) {
         output = false;
         console.error(`setStats(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
     }
     return output;
 }
@@ -567,10 +516,9 @@ async function setStats(user_id,stat_name,value,increment) {
 async function getUserStats(user_id) {
     //console.log(`getUserStats(): U#${user_id}`);
     let output = null;
-    const conn = await dbPool.getConnection();
 
     try {    
-        const [userStatQ] = await conn.execute("SELECT * FROM tbl_user_stats WHERE user_id = ?",[user_id]);
+        const userStatQ = await execQuery("SELECT * FROM tbl_user_stats WHERE user_id = ?",[user_id]);
 
         let stats = {};
         userStatQ.forEach(row => {
@@ -581,8 +529,6 @@ async function getUserStats(user_id) {
         output = false;
         console.error(`getUserStats(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
     }
     return output;
 }
@@ -590,17 +536,14 @@ async function getUserStats(user_id) {
 async function getUserAchievements(user_id) {
     console.log(`getUserAchievements(): U#${user_id}`);
     let output = null;
-    const conn = await dbPool.getConnection();
-
+    
     try {
-        const [achievementList] = await conn.execute("SELECT a.name AS achievement_name, a.sysname AS sysname, MAX(a.tier) AS achievement_tier, a.description AS `description`, ua.achieved_at FROM tbl_user_achievements ua JOIN tbl_achievements a ON ua.achievement_id = a.id WHERE ua.user_id = ? GROUP BY a.sysname ORDER BY ua.achieved_at DESC, a.name, a.tier DESC",[user_id]);
+        const achievementList = await execQuery("SELECT a.name AS achievement_name, a.sysname AS sysname, MAX(a.tier) AS achievement_tier, a.description AS `description`, ua.achieved_at FROM tbl_user_achievements ua JOIN tbl_achievements a ON ua.achievement_id = a.id WHERE ua.user_id = ? GROUP BY a.sysname ORDER BY ua.achieved_at DESC, a.name, a.tier DESC",[user_id]);
         output = achievementList;
     } catch(e) {
         output = false;
         console.error(`getUserAchievements(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
     }
     return output;
 }
@@ -609,10 +552,9 @@ async function getUserAchievements(user_id) {
 async function checkAchievements(user_id,stat_name) {
     //console.log("checkAchievements():");
     let output = null;
-    const conn = await dbPool.getConnection();
 
     try {
-        const [checkQuery] = await conn.execute(
+        const checkQuery = await execQuery(
             `SELECT a.id, a.name, a.tier
             FROM tbl_achievements a
             LEFT JOIN tbl_user_achievements ua 
@@ -630,7 +572,7 @@ async function checkAchievements(user_id,stat_name) {
             let achList = [];
             // Award to user            
             for(let item of checkQuery) {
-                const [addAchievement] = await conn.execute(`INSERT INTO tbl_user_achievements(user_id,achievement_id) VALUES(?,?)`,[user_id,item.id]);
+                const addAchievement = await execQuery(`INSERT INTO tbl_user_achievements(user_id,achievement_id) VALUES(?,?)`,[user_id,item.id]);
                 achList.push(item.name + ' ' + item.tier);
             }
 
@@ -640,8 +582,6 @@ async function checkAchievements(user_id,stat_name) {
         output = null;
         console.error(`setStats(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
     }
     return output;
 }
@@ -649,10 +589,9 @@ async function checkAchievements(user_id,stat_name) {
 // Load catalog of card designs
 async function getCatalog() {
     let output = null;
-    const conn = await dbPool.getConnection();
 
     try {
-        const [cardCatalog] = await conn.execute(
+        const cardCatalog = await execQuery(
             `SELECT *,
             DATE_FORMAT(created, '%b %Y') as 'release'
             FROM tbl_cards
@@ -672,8 +611,6 @@ async function getCatalog() {
         output = null;
         console.error(`getCatalog(): ERROR: ${e.message}`);
         throw e;
-    } finally {
-        conn.release();
     }
     return output; 
 
