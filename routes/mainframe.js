@@ -683,7 +683,8 @@ router.post('/gacha', async (req, res) => {
         let cardIssued = await addCardToUser(user.id, newCard.id);
 
         // update stats
-        let stats_q = await setStats(user.id,'card_gacha_pulls',1,true);
+        // moving this to client-side
+        // let stats_q = await setStats(user.id,'card_gacha_pulls',1,true);
 
         output = {
             status: true,
