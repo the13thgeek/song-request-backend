@@ -153,7 +153,12 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
         } else {
             // User does not exist on local DB, create
             //console.log(`getUserData(): User [${twitch_id},${twitch_display_name}] not locally registered.`)
-            user = await registerUser(twitch_id,twitch_display_name,twitch_avatar,0);
+            if(is_premium != null) {
+                user = await registerUser(twitch_id,twitch_display_name,twitch_avatar,ip_val);
+            } else {
+                user = await registerUser(twitch_id,twitch_display_name,twitch_avatar,0);
+            }
+            
         }        
         let playerData = getPlayerLevel(user.exp);
 
