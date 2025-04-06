@@ -122,9 +122,12 @@ async function getUserDataById(user_id) {
 
 // Load user data using Twitch ID
 // Register locally if user doesn't exist yet
-async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_premium = false) {
+async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_premium = null) {
     let user = null;
-    let ip_val = is_premium ? 1 : 0;
+    let ip_val = null;
+    if(is_premium != null) {
+        ip_val = is_premium ? 1 : 0;
+    }   
 
     if( !twitch_id || !twitch_display_name) {
         //console.log(`getUserData(): Invalid user data. BYPASS`);
@@ -140,11 +143,17 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
             // User exists, update login
             //console.log(`getUserData(): User ${twitch_id} exists.`)
             user = usrData[0];
-            const updateUser = await execQuery("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ?, is_premium = ?, last_activity = CURRENT_TIMESTAMP() WHERE id = ?",[twitch_display_name,twitch_avatar,ip_val,user.id]);
+            if(is_premium != null) {
+                const updateUser = await execQuery("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ?, is_premium = ?, last_activity = CURRENT_TIMESTAMP() WHERE id = ?",[twitch_display_name,twitch_avatar,ip_val,user.id]);
+            } else {
+                // ignore is_premium if param isn't provided
+                const updateUser = await execQuery("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ?, last_activity = CURRENT_TIMESTAMP() WHERE id = ?",[twitch_display_name,twitch_avatar,user.id]);
+            }
+            
         } else {
             // User does not exist on local DB, create
             //console.log(`getUserData(): User [${twitch_id},${twitch_display_name}] not locally registered.`)
-            user = await registerUser(twitch_id,twitch_display_name,twitch_avatar,ip_val);
+            user = await registerUser(twitch_id,twitch_display_name,twitch_avatar,0);
         }        
         let playerData = getPlayerLevel(user.exp);
 
