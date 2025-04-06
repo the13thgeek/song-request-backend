@@ -124,6 +124,7 @@ async function getUserDataById(user_id) {
 // Register locally if user doesn't exist yet
 async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_premium = false) {
     let user = null;
+    let ip_val = is_premium ? 1 : 0;
 
     if( !twitch_id || !twitch_display_name) {
         //console.log(`getUserData(): Invalid user data. BYPASS`);
@@ -139,11 +140,11 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
             // User exists, update login
             //console.log(`getUserData(): User ${twitch_id} exists.`)
             user = usrData[0];
-            const updateUser = await execQuery("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ?, last_activity = CURRENT_TIMESTAMP() WHERE id = ?",[twitch_display_name,twitch_avatar,user.id]);
+            const updateUser = await execQuery("UPDATE tbl_users SET twitch_display_name = ?, twitch_avatar = ?, is_premium = ?, last_activity = CURRENT_TIMESTAMP() WHERE id = ?",[twitch_display_name,twitch_avatar,ip_val,user.id]);
         } else {
             // User does not exist on local DB, create
             //console.log(`getUserData(): User [${twitch_id},${twitch_display_name}] not locally registered.`)
-            user = await registerUser(twitch_id,twitch_display_name,twitch_avatar);
+            user = await registerUser(twitch_id,twitch_display_name,twitch_avatar,ip_val);
         }        
         let playerData = getPlayerLevel(user.exp);
 
@@ -173,12 +174,12 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
 }
 
 // Register user to local DB
-async function registerUser(twitch_id,twitch_display_name,twitch_avatar) {
+async function registerUser(twitch_id,twitch_display_name,twitch_avatar,is_premium) {
     let user = null;
 
     try {    
         // register
-        const addUser = await execQuery("INSERT INTO tbl_users(twitch_id, twitch_display_name, twitch_avatar) VALUES(?,?,?)", [twitch_id,twitch_display_name,twitch_avatar]);
+        const addUser = await execQuery("INSERT INTO tbl_users(twitch_id, twitch_display_name, twitch_avatar, is_premium) VALUES(?,?,?,?)", [twitch_id,twitch_display_name,twitch_avatar,is_premium]);
         // get newly-inserted item
         const newUser = await execQuery("SELECT * FROM tbl_users WHERE id = ?",[addUser.insertId])
         user = newUser[0];
