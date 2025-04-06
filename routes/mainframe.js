@@ -155,7 +155,7 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
 
         // Append user card data
         let cardData = await getUserCards(user.id,is_premium);
-        user.isPremium = is_premium;
+        //user.isPremium = is_premium;
         user.cards = cardData.cards;
         user.card_default = cardData.default;
 
@@ -648,6 +648,7 @@ router.post('/login-widget', async (req,res)=> {
         user_card: user.card_default,
         user_cards: user.cards,
         exp: user.exp,
+        is_premium: user.is_premium,
         level: user.level,
         title: user.title,
         level_progress: user.levelProgress,
