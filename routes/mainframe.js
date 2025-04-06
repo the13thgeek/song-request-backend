@@ -293,7 +293,7 @@ async function getRanking(rank_type,items_to_show) {
 
     switch(rank_type) {
         case 'exp':
-            query = `SELECT u.id, u.twitch_display_name, u.twitch_avatar, u.exp, u.exp as 'value', c.sysname, c.name AS active_card
+            query = `SELECT u.id, u.twitch_display_name, u.twitch_avatar, u.exp, u.is_premium, u.exp as 'value', c.sysname, c.name AS active_card
                 FROM tbl_users u
                 JOIN  tbl_user_cards uc ON u.id = uc.user_id
                 JOIN tbl_cards c ON uc.card_id = c.id
