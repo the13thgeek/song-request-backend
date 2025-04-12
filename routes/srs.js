@@ -36,8 +36,8 @@ function findSong(query) {
         
     if(gameData && gameData.songs) {
         return gameData.songs.find(song => {
-            const title = song.title.toLowerCase();
-            const artist = song.artist.toLowerCase();
+            const title = song?.title.toLowerCase();
+            const artist = song?.artist.toLowerCase();
             const romanizedTitle = song?.romanizedTitle?.toLowerCase() || "";
             const romanizedArtist = song?.romanizedArtist?.toLowerCase() || "";
             
