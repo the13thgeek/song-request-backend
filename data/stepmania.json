@@ -681,7 +681,7 @@
         },
         {
           "title": "BRIGHT STREAM",
-          "artist": null,
+          "artist": "",
           "id": "BRIGHT-BSYY5511"
         },
         {
@@ -1486,7 +1486,7 @@
         },
         {
           "title": "コネクト",
-          "artist": null,
+          "artist": "",
           "romanizedTitle": "Connect",
           "id": "CONNEC-YYYY1152"
         },
@@ -3320,7 +3320,7 @@
         },
         {
           "title": "ヘビーローテーション",
-          "artist": null,
+          "artist": "",
           "romanizedTitle": "Heavy Rotation",
           "id": "HEAVYR-YYYY6248"
         },
@@ -3728,7 +3728,7 @@
         },
         {
           "title": "一途",
-          "artist": null,
+          "artist": "",
           "romanizedTitle": "Ichizu",
           "id": "ICHIZU-YYYY6325"
         },
@@ -3888,7 +3888,7 @@
         },
         {
           "title": "ジョジョ～その血の運命～",
-          "artist": null,
+          "artist": "",
           "romanizedTitle": "JoJo ~Sono Chi no Sadame~",
           "id": "JOJOSO-YYYY2006"
         },
@@ -4976,7 +4976,7 @@
         },
         {
           "title": "マジLOVE1000%",
-          "artist": null,
+          "artist": "",
           "romanizedTitle": "Maji LOVE 1000%",
           "id": "MAJILO-LOYY5030"
         },
@@ -5193,7 +5193,7 @@
         },
         {
           "title": "ミックスナッツ",
-          "artist": null,
+          "artist": "",
           "romanizedTitle": "Mixed nuts",
           "id": "MIXEDN-YYYY9501"
         },
@@ -6798,7 +6798,7 @@
         },
         {
           "title": "SOUVENIR",
-          "artist": null,
+          "artist": "",
           "id": "SOUVEN-SOUV3446"
         },
         {
@@ -8408,7 +8408,7 @@
         },
         {
           "title": "つけまつける",
-          "artist": null,
+          "artist": "",
           "romanizedTitle": "Tsukematsukeru",
           "id": "TSUKEM-YYYY5363"
         },
