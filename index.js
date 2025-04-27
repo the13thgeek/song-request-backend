@@ -1,7 +1,7 @@
 const express = require("express");
 const wSocket = require("ws");
 const http = require("http");
-const { setWss } = require('./utils');
+const { setWss, log } = require('./utils');
 const cors = require('cors');
 const path = require("path");
 const app = express();
@@ -9,7 +9,7 @@ const port = 8080;
 require('dotenv').config();
 
 setTimeout(function() {
-    console.log(`[the13thgeek] theCloud System v${process.env.GEEK_NODE_VER}`);
+    log(`[the13thgeek] theCloud System v${process.env.GEEK_NODE_VER}`);
     http.get({'host': 'api.ipify.org', 'port': 80, 'path': '/'}, function(resp) {
         resp.on('data', function(ip) {
             console.log("Server IP: " + ip);
