@@ -8,7 +8,7 @@ const { log, hashFile } = require('../utils');
 //const fetch = require("node-fetch");
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const workdir = path.join(__dirname, "../public/twitch-live");
-const twitch_username = 'leeniehunnie';
+const twitch_username = 'the13thgeek';
 
 let thumbnailUpdater = null;
 let live_status = false;
