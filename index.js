@@ -3,6 +3,7 @@ const wSocket = require("ws");
 const http = require("http");
 const { setWss } = require('./utils');
 const cors = require('cors');
+const path = require("path");
 const app = express();
 const port = 8080;
 require('dotenv').config();
@@ -37,6 +38,11 @@ app.use(express.json());
 const API_KEY = process.env.GEEK_API_KEY || "XX13XX";
 
 app.use((req, res, next) => {
+    // Allow public access to thumbnails
+    if (req.path.startsWith('/twitch-live/')) {
+        return next(); // Skip API key check
+    }
+
     const clientApiKey = req.headers['x-api-key'];
     if(clientApiKey !== API_KEY) {
         return res.status(403).json({
@@ -46,6 +52,9 @@ app.use((req, res, next) => {
     }
     next();
 })
+
+// Adding public folder for thumbnails
+app.use(express.static(path.join(__dirname, 'public')));
 
 // HTTP->Websocket
 const wss = new wSocket.Server({ noServer: true});
