@@ -23,6 +23,13 @@ let exp_standard = 1.0;
 let exp_premium = 1.15;
 let exp_global = 1.0;
 
+// TOURNAMENT TEAMS
+const TEAM_NAMES = {
+    1: 'Afterburner',
+    2: 'Concorde',
+    3: 'Stratos'
+}
+
 // FUNCTIONS
 
 // DB Helper Function
@@ -112,6 +119,14 @@ async function getUserDataById(user_id) {
         user.stats = await getUserStats(user.id);
         user.achievements = await getUserAchievements(user.id);
 
+        // Append team info
+        const [userTeam] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ? LIMIT 1`,[user.id]);        
+        if(userTeam) {
+            user.team = TEAM_NAMES[userTeam.team_number];
+        } else {
+            user.team = null;
+        }
+
     } catch(e) {
         user = null;    
         console.error(`getUserData(): ERROR: ${e.message}`);
@@ -177,6 +192,15 @@ async function getUserData(twitch_id, twitch_display_name, twitch_avatar, is_pre
         user.stats = await getUserStats(user.id);
         user.achievements = await getUserAchievements(user.id);
 
+
+        // Append team info
+        const [userTeam] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ? LIMIT 1`,[user.id]);        
+        if(userTeam) {
+            user.team = TEAM_NAMES[userTeam.team_number];
+        } else {
+            user.team = null;
+        }
+        
         ////console.log(user);
 
     } catch(e) {
@@ -343,11 +367,19 @@ async function getRanking(rank_type,items_to_show) {
         output = rankData;
         
         // Append level data
+        // Append team data
         for(let i = 0; i < output.length; i++) {
             let playerData = getPlayerLevel(output[i].exp);
             output[i].level = playerData.level;
             output[i].title = playerData.title;
             output[i].levelProgress = parseInt(playerData.progressLevel);
+
+            let [userTeam] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ? LIMIT 1`,[output[i].id]);        
+            if(userTeam) {
+                output[i].team = TEAM_NAMES[userTeam.team_number];
+            } else {
+                output[i].team = null;
+            }
         }
     } catch(e) {
         console.error(`getRanking(): ERROR: ${e.message}`);
@@ -601,6 +633,47 @@ async function checkAchievements(user_id,stat_name) {
     return output;
 }
 
+// Register a user to a team
+async function registerUserTeam(user_id) {
+    console.log(`registerUserTeam(): U#${user_id}`);
+    let output = null;
+    
+    try {
+        // Check if user is already registered
+        const checkReg = await execQuery('SELECT team_number FROM tbl_tourney WHERE user_id = ?',[user_id]);
+        if(checkReg.length > 0) {
+            const teamNum = checkReg[0].team_number;
+            output = `You're already registered! You're part of Team ${TEAM_NAMES[teamNum]}!`;
+        } else {
+            // Otherwise, check which team needs a member (for balancing)
+            const teamCounts = await execQuery(`SELECT t.team_number, COUNT(m.user_id) AS count
+            FROM (
+                SELECT 1 AS team_number
+                UNION ALL
+                SELECT 2
+                UNION ALL
+                SELECT 3
+            ) AS t
+            LEFT JOIN tbl_tourney m ON t.team_number = m.team_number
+            GROUP BY t.team_number`);
+            // Find minimum count
+            const minCount = Math.min(...teamCounts.map(team => team.count))
+            // Get teams with minimum count members
+            const hiringTeams = teamCounts.filter(team => team.count === minCount).map(team => team.team_number);
+            const nextTeam = hiringTeams[Math.floor(Math.random() * hiringTeams.length)];
+            // Register
+            const regUserDb = await execQuery("INSERT INTO tbl_tourney(user_id,team_number) VALUES (?,?)",[user_id, nextTeam]);
+            output = `You have been registered for Team ${TEAM_NAMES[nextTeam]}!`;
+        }
+
+    } catch(e) {
+        output = false;
+        console.error(`getUserAchievements(): ERROR: ${e.message}`);
+        throw e;
+    }
+    return output;
+}
+
 // Load catalog of card designs
 async function getCatalog() {
     let output = null;
@@ -667,7 +740,8 @@ router.post('/login-widget', async (req,res)=> {
         title: user.title,
         level_progress: user.levelProgress,
         stats: user.stats,
-        achievements: user.achievements
+        achievements: user.achievements,
+        team: user.team
     });
 });
 
@@ -1012,6 +1086,27 @@ router.post('/send-action', async (req,res) => {
         output.status = false;
     }
     
+    res.status(200).json(output);
+});
+
+// Register for a team
+router.post('/team-register', async (req, res) => {
+    console.log(`ENDPOINT: /team-register`);
+    const { twitch_id, twitch_display_name, twitch_roles, twitch_avatar } = req.body;
+    const is_premium = isUserPremium(twitch_roles);
+    let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar,is_premium);
+    let output = {
+        status: false,
+        message: null
+    }
+    try {
+        output.message = await registerUserTeam(user.id);
+        output.status = true;
+    } catch(e) {
+        console.error(`/team-register: ERROR: ${e.message}`);
+        output.message = `Sorry, I encountered a problem. Please inform the streamer right away.`;
+        output.status = false;
+    }
     res.status(200).json(output);
 });
 
