@@ -1017,6 +1017,13 @@ router.post('/catalog', async (req, res) => {
     res.status(200).json({ status: status, message: message, catalog: catalog });
 });
 
+// Open third-party endpoint
+router.get('/supersonic', async (req,res) => {
+    const { u, c } = req.query;
+
+    return res.send(`Hello ${u} watching from ${c}'s channel! 😁`);
+});
+
 // // Issue EXP
 // router.post('/exp', async (req,res) => {
 //     //console.log('ENDPOINT: /exp');
