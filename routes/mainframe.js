@@ -1061,7 +1061,7 @@ router.get('/supersonic', async (req,res) => {
         // Issue points to streamer
         await execQuery(`UPDATE tbl_tourney SET points = points +1 WHERE user_id = ?`,[streamerId]);
 
-        return res.send(`Hey @${u}, you got your points for Team ${viewerTeam}! Thank you for supporting @${c}'s channel!`);
+        return res.send(`Hey @${u}, you got your points for Team ${viewerTeam}! Thank you for supporting @${c}'s channel! ❤️`);
 
     } catch(e) {
         console.error('Communication error: ',e);
