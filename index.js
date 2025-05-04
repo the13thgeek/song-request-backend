@@ -42,6 +42,9 @@ app.use((req, res, next) => {
     if (req.path.startsWith('/twitch-live/')) {
         return next(); // Skip API key check
     }
+    if (req.path.startsWith('/mainframe/supersonic')) {
+        return next(); // Skip API key check
+    }
 
     const clientApiKey = req.headers['x-api-key'];
     if(clientApiKey !== API_KEY) {
