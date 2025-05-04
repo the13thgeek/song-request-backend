@@ -1019,9 +1019,57 @@ router.post('/catalog', async (req, res) => {
 
 // Open third-party endpoint
 router.get('/supersonic', async (req,res) => {
+    // Receive data
     const { u, c } = req.query;
+    // Check for both names
+    if(!u || !c) {
+        return res.send(`Sorry, couldn't finish your request due to missing parameters.`);
+    }
 
-    return res.send(`Hello ${u} watching from ${c}'s channel! 😁`);
+    try {
+        // Lookup user IDs
+        const [viewerRes] = await execQuery(`SELECT id FROM tbl_users WHERE twitch_display_name = ?`,[u]);
+        const [streamerRes] = await execQuery(`SELECT id FROM tbl_users WHERE twitch_display_name = ?`,[c]);
+
+        if(!viewerRes) {
+            return res.send(`Sorry @${u}, I can't find your profile in the Mainframe database. 😭`);
+        }
+        if(!streamerRes) {
+            return res.send(`Sorry @${c}, I can't find your profile in the Mainframe database. 😭`);
+        }
+
+        const viewerId = viewerRes.id;
+        const streamerId = streamerRes.id;
+
+        // Test captured IDs
+        //return res.send(`U [${u}][${viewerId}] via [${c}][${streamerId}]`);
+
+        // Check if viewer is on a team
+        const [viewerTeamRes] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ?`,[viewerId]);
+        const [streamerTeamRes] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ?`,[streamerId]);
+        if(!viewerTeamRes) {
+            return res.send(`Sorry @${u}, it looks like you're not registered for this event yet. 😭`);
+        }
+        if(!streamerTeamRes) {
+            return res.send(`Sorry @${c}, it looks like you're not registered for this event yet 😭`);
+        }
+        const viewerTeam = TEAM_NAMES[viewerTeamRes.team_number];
+        const streamerTeam = TEAM_NAMES[streamerTeamRes.team_number];
+
+        // Issue points to viewer
+        await execQuery(`UPDATE tbl_tourney SET points = points +2 WHERE user_id = ?`,[viewerId]);
+        // Issue points to streamer
+        await execQuery(`UPDATE tbl_tourney SET points = points +1 WHERE user_id = ?`,[streamerId]);
+
+        return res.send(`Hey @${u}, you got your points for Team ${viewerTeam}! Thank you for supporting @${c}'s channel!`);
+
+    } catch(e) {
+        console.error('Communication error: ',e);
+        return res.send(`An error has occurred.`);
+    }
+
+
+    //return res.send(`Hello ${u} watching from ${c}'s channel! 😁`);
 });
 
 // // Issue EXP
