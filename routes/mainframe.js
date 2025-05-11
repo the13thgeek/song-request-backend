@@ -788,21 +788,19 @@ async function setTourneyScore(user_name, points) {
         
         // Check if user is on a team
         const [userTeamRes] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ?`,[user_id]);
-       
+        
         if(!userTeamRes) {
             output.status = false;
             output.message = ` @${user_name}, it looks like you're not registered for this event yet. 😭`;
+        } else {
+            output.team_number = TEAM_NAMES[userTeamRes.team_number];
         }
         
-        const userTeam = TEAM_NAMES[userTeamRes.team_number];
-
-      
         // Issue points to user's team
         await execQuery(`UPDATE tbl_tourney SET points = points + ? WHERE user_id = ?`,[user_id, points]);
         output.status = true;
         output.message = `Hey @${user_name}, you got [+${points}] points for your faction ${userTeam}!`;
         output.points = points;
-        output.team_number = userTeamRes.team_number;
 
         return output;
 
