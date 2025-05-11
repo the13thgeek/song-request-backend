@@ -559,6 +559,20 @@ async function setStats(user_id,stat_name,value,increment) {
     return output;
 }
 
+// Update sub months for badge
+async function setSubMonths(user_id, sub_months) {
+    let output = false;
+    try {
+        const setSubData = await execQuery("UPDATE tbl_users SET sub_months = ? WHERE id = ?",[sub_months,user_id]);
+        output = true;
+    } catch(e) {
+        output = false;
+        console.error(`setSubMonths(): ERROR: ${e.message}`);
+        throw e;
+    }
+    return output;
+}
+
 // Get user stats
 async function getUserStats(user_id) {
     //console.log(`getUserStats(): U#${user_id}`);
@@ -643,7 +657,7 @@ async function registerUserTeam(user_id) {
         const checkReg = await execQuery('SELECT team_number FROM tbl_tourney WHERE user_id = ?',[user_id]);
         if(checkReg.length > 0) {
             const teamNum = checkReg[0].team_number;
-            output = `You're already registered for this event! You're part of Team ${TEAM_NAMES[teamNum]}!`;
+            output = `You're already registered for this event! You're part of the ${TEAM_NAMES[teamNum]} Faction!`;
         } else {
             // Otherwise, check which team needs a member (for balancing)
             const teamCounts = await execQuery(`SELECT t.team_number, COUNT(m.user_id) AS count
@@ -663,7 +677,22 @@ async function registerUserTeam(user_id) {
             const nextTeam = hiringTeams[Math.floor(Math.random() * hiringTeams.length)];
             // Register
             const regUserDb = await execQuery("INSERT INTO tbl_tourney(user_id,team_number) VALUES (?,?)",[user_id, nextTeam]);
-            output = `You are now part of Team ${TEAM_NAMES[nextTeam]}! Your new team card has been added to your profile.`;
+            // Issue card
+            switch(nextTeam) {
+                case 1:
+                    // Afterburner
+                    addCardToUser(user_id, 25);
+                    break;
+                case 2:
+                    // Concorde
+                    addCardToUser(user_id, 26);
+                    break;
+                case 3:
+                    // Stratos
+                    addCardToUser(user_id, 27);
+                    break;
+            }
+            output = `You have been recruited for the ${TEAM_NAMES[nextTeam]} Faction! Your new card has been added to your profile.`;
         }
 
     } catch(e) {
@@ -1063,6 +1092,7 @@ router.get('/supersonic', async (req,res) => {
         // Check if viewer is on a team
         const [viewerTeamRes] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ?`,[viewerId]);
         const [streamerTeamRes] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ?`,[streamerId]);
+       
         if(!viewerTeamRes) {
             return res.send(`Sorry @${u}, it looks like you're not registered for this event yet. 😭`);
         }
@@ -1072,12 +1102,18 @@ router.get('/supersonic', async (req,res) => {
         const viewerTeam = TEAM_NAMES[viewerTeamRes.team_number];
         const streamerTeam = TEAM_NAMES[streamerTeamRes.team_number];
 
-        // Issue points to viewer
-        await execQuery(`UPDATE tbl_tourney SET points = points +2 WHERE user_id = ?`,[viewerId]);
-        // Issue points to streamer
-        await execQuery(`UPDATE tbl_tourney SET points = points +1 WHERE user_id = ?`,[streamerId]);
-
-        return res.send(`Hey @${u}, you got your points for Team ${viewerTeam}! Thank you for supporting @${c}'s (Team ${streamerTeam}) channel! ❤️`);
+        // Check if both values are equal
+        if(viewerId !== streamerId) {
+            // Issue points to viewer
+            await execQuery(`UPDATE tbl_tourney SET points = points +2 WHERE user_id = ?`,[viewerId]);
+            // Issue points to streamer
+            await execQuery(`UPDATE tbl_tourney SET points = points +1 WHERE user_id = ?`,[streamerId]);
+            return res.send(`Hey @${u}, you got your points for your faction ${viewerTeam}! Thank you for supporting @${c}'s (Team ${streamerTeam}) channel! ❤️`);
+        } else {
+            // Issue points to streamer
+            await execQuery(`UPDATE tbl_tourney SET points = points +1 WHERE user_id = ?`,[streamerId]);    
+            return res.send(`Hey @${c}, you got your points for your faction ${streamerTeam}!`);            
+        }
 
     } catch(e) {
         console.error('Communication error: ',e);
@@ -1150,7 +1186,10 @@ router.post('/send-action', async (req,res) => {
                 result_exp = await setExp(user.id,is_premium,exp);
                 //console.log('EXP issued');
             }
-            if(stat_name && stat_name.length > 0) {
+            if(stat_name[0] === "sub_months") {
+                result_sub = await setSubMonths(user.id,value[0]);
+            }
+            else if(stat_name && stat_name.length > 0) {
                 let achList = [];
                 for(let i = 0; i<stat_name.length; i++) {
                     result_stats = await setStats(user.id,stat_name[i],value[i],increment[i]);
