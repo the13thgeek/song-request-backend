@@ -1217,7 +1217,7 @@ router.post('/tourney-score', async (req, res) => {
     try {
         let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
         if (user) {
-            output = await setTourneyScore(user.id, points);
+            output = await setTourneyScore(user.twitch_display_name, points);
         }
 
     } catch(e) {
