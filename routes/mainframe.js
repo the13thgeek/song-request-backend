@@ -792,6 +792,7 @@ async function setTourneyScore(user_name, points) {
         if(!userTeamRes) {
             output.status = false;
             output.message = ` @${user_name}, it looks like you're not registered for this event yet. 😭`;
+            return output;
         } else {
             output.team_number = TEAM_NAMES[userTeamRes.team_number];
         }
