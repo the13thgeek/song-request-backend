@@ -643,7 +643,7 @@ async function registerUserTeam(user_id) {
         const checkReg = await execQuery('SELECT team_number FROM tbl_tourney WHERE user_id = ?',[user_id]);
         if(checkReg.length > 0) {
             const teamNum = checkReg[0].team_number;
-            output = `You're already registered! You're part of Team ${TEAM_NAMES[teamNum]}!`;
+            output = `You're already registered for this event! You're part of Team ${TEAM_NAMES[teamNum]}!`;
         } else {
             // Otherwise, check which team needs a member (for balancing)
             const teamCounts = await execQuery(`SELECT t.team_number, COUNT(m.user_id) AS count
@@ -663,7 +663,7 @@ async function registerUserTeam(user_id) {
             const nextTeam = hiringTeams[Math.floor(Math.random() * hiringTeams.length)];
             // Register
             const regUserDb = await execQuery("INSERT INTO tbl_tourney(user_id,team_number) VALUES (?,?)",[user_id, nextTeam]);
-            output = `You have been registered for Team ${TEAM_NAMES[nextTeam]}!`;
+            output = `You are now part of Team ${TEAM_NAMES[nextTeam]}! Your new team card has been added to your profile.`;
         }
 
     } catch(e) {
@@ -701,7 +701,26 @@ async function getCatalog() {
         throw e;
     }
     return output; 
+}
 
+async function getTourneyScores() {
+    let output = null;
+
+    try {
+        const tScores = await execQuery(
+            `SELECT t.team_number, COALESCE(SUM(m.points), 0) AS total_points, u.id AS mvp_user_id, u.twitch_display_name AS mvp_display_name, m.points AS mvp_points
+            FROM (SELECT 1 AS team_number UNION ALL SELECT 2 UNION ALL SELECT 3) t
+            LEFT JOIN tbl_tourney m ON m.team_number = t.team_number
+            LEFT JOIN tbl_users u ON u.id = (SELECT user_id FROM tbl_tourney WHERE team_number = t.team_number ORDER BY points DESC LIMIT 1)
+            GROUP BY t.team_number, u.id, u.twitch_display_name, m.points`
+        );
+        output = tScores;
+    } catch(e) {
+        output = null;
+        console.error(`getCatalog(): ERROR: ${e.message}`);
+        throw e;
+    }
+    return output;
 }
 
 // ENDPOINTS
@@ -1041,9 +1060,6 @@ router.get('/supersonic', async (req,res) => {
         const viewerId = viewerRes.id;
         const streamerId = streamerRes.id;
 
-        // Test captured IDs
-        //return res.send(`U [${u}][${viewerId}] via [${c}][${streamerId}]`);
-
         // Check if viewer is on a team
         const [viewerTeamRes] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ?`,[viewerId]);
         const [streamerTeamRes] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ?`,[streamerId]);
@@ -1061,7 +1077,7 @@ router.get('/supersonic', async (req,res) => {
         // Issue points to streamer
         await execQuery(`UPDATE tbl_tourney SET points = points +1 WHERE user_id = ?`,[streamerId]);
 
-        return res.send(`Hey @${u}, you got your points for Team ${viewerTeam}! Thank you for supporting @${c}'s channel! ❤️`);
+        return res.send(`Hey @${u}, you got your points for Team ${viewerTeam}! Thank you for supporting @${c}'s (Team ${streamerTeam}) channel! ❤️`);
 
     } catch(e) {
         console.error('Communication error: ',e);
@@ -1071,6 +1087,27 @@ router.get('/supersonic', async (req,res) => {
 
     //return res.send(`Hello ${u} watching from ${c}'s channel! 😁`);
 });
+
+// Retrieve Tourney Scoreboard
+router.post('/showdown-scores', async (req, res) => {
+    let message = "";
+    let status = false;
+    let scoreboard = null;
+
+    try {
+        scoreboard = await getTourneyScores();
+        if(scoreboard) {
+            message = "OK";
+            status = true;  
+        }
+    } catch(e) {
+        console.error(`/catalog: ERROR: ${e.message}`);
+        message = `Sorry, I encountered a problem. Please inform the streamer right away.`;
+        status = false;
+    }
+    res.status(200).json({ status: status, message: message, scoreboard: scoreboard });
+});
+
 
 // // Issue EXP
 // router.post('/exp', async (req,res) => {
