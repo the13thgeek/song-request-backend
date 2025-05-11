@@ -742,6 +742,7 @@ async function getCatalog() {
     return output; 
 }
 
+// Tournament scoreboard
 async function getTourneyScores() {
     let output = null;
 
@@ -760,6 +761,51 @@ async function getTourneyScores() {
         throw e;
     }
     return output;
+}
+
+// Tournament scoring
+async function setTourneyScore(user_name, points) {
+    let output = {
+        status: false,
+        message: ""
+    };
+
+   try {
+        // Lookup user ID
+        const [userRes] = await execQuery(`SELECT id FROM tbl_users WHERE twitch_display_name = ?`,[user_name]);
+
+        if(!userRes) {
+            output.status = false;
+            output.message = `Sorry @${user_name}, I can't find your profile in the Mainframe database. 😭`;
+            return output;
+        }
+        
+        const user_id = userRes.id;
+        
+        // Check if user is on a team
+        const [userTeamRes] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ?`,[user_id]);
+       
+        if(!userTeamRes) {
+            output.status = false;
+            output.message = ` @${user_name}, it looks like you're not registered for this event yet. 😭`;
+        }
+        
+        const userTeam = TEAM_NAMES[userTeamRes.team_number];
+
+      
+        // Issue points to user's team
+        await execQuery(`UPDATE tbl_tourney SET points = points + ? WHERE user_id = ?`,[user_id, points]);
+        output.status = true;
+        output.message = `Hey @${user_name}, you got [+${points}] points for your faction ${userTeam}!`;
+
+        return output;
+
+    } catch(e) {
+        console.error('Communication error: ',e);
+        output.status = false;
+        output.message = e;
+        return output;
+    }
 }
 
 // ENDPOINTS
@@ -882,6 +928,12 @@ router.post('/check-in', async (req, res) => {
     if(achievement) { 
         has_achievement = true;
     }
+    let output_msg = null;
+    // Issue points (disabled for now)
+    let tourney_q = await setTourneyScore(twitch_display_name,1);
+    if(tourney_q.status) {
+        output_msg = tourney_q.message;
+    }
 
     res.status(200).json({
         twitch_id: user.twitch_id,
@@ -891,7 +943,8 @@ router.post('/check-in', async (req, res) => {
         default_card_name: user.card_default.sysname,
         default_card_title: (user.card_default.is_premium ? "Premium " : "") + user.card_default.name,
         has_achievement: has_achievement,
-        achievement: achievement
+        achievement: achievement,
+        output_msg: output_msg
     });
 });
 
