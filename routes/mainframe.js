@@ -769,7 +769,9 @@ async function setTourneyScore(user_name, points) {
     console.log(`setTourneyScore()`);
     let output = {
         status: false,
-        message: ""
+        message: "",
+        team_number: null,
+        points: 0
     };
 
    try {
@@ -799,6 +801,8 @@ async function setTourneyScore(user_name, points) {
         await execQuery(`UPDATE tbl_tourney SET points = points + ? WHERE user_id = ?`,[user_id, points]);
         output.status = true;
         output.message = `Hey @${user_name}, you got [+${points}] points for your faction ${userTeam}!`;
+        output.points = points;
+        output.team_number = userTeamRes.team_number;
 
         return output;
 
@@ -930,12 +934,6 @@ router.post('/check-in', async (req, res) => {
     if(achievement) { 
         has_achievement = true;
     }
-    let output_msg = null;
-    // Issue points (disabled for now)
-    let tourney_q = await setTourneyScore(twitch_display_name,1);
-    if(tourney_q.status) {
-        output_msg = tourney_q.message;
-    }
 
     res.status(200).json({
         twitch_id: user.twitch_id,
@@ -945,8 +943,7 @@ router.post('/check-in', async (req, res) => {
         default_card_name: user.card_default.sysname,
         default_card_title: (user.card_default.is_premium ? "Premium " : "") + user.card_default.name,
         has_achievement: has_achievement,
-        achievement: achievement,
-        output_msg: output_msg
+        achievement: achievement
     });
 });
 
@@ -1210,6 +1207,27 @@ router.post('/showdown-scores', async (req, res) => {
     res.status(200).json({ status: status, message: message, scoreboard: scoreboard });
 });
 
+// Set Tourney score
+router.post('/tourney-score', async (req, res) => {
+    console.log('ENDPOINT: /tourney-score');
+
+    const { twitch_id, twitch_display_name, twitch_avatar, points } = req.body;
+    let output = null;
+
+    try {
+        let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
+        if (user) {
+            output = await setTourneyScore(user.id, points);
+        }
+
+    } catch(e) {
+        console.error(`/tourney-score: ERROR: ${e.message}`);
+        message = `Sorry, I encountered a problem. Please inform the streamer right away.`;
+    } finally {
+        res.status(200).json(output);
+    }
+
+});
 
 // // Issue EXP
 // router.post('/exp', async (req,res) => {
