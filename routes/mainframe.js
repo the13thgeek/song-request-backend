@@ -688,15 +688,15 @@ async function registerUserTeam(user_id) {
             switch(nextTeam) {
                 case 1:
                     // Afterburner
-                    //addCardToUser(user_id, 25);
+                    addCardToUser(user_id, 25);
                     break;
                 case 2:
                     // Concorde
-                    //addCardToUser(user_id, 26);
+                    addCardToUser(user_id, 26);
                     break;
                 case 3:
                     // Stratos
-                    //addCardToUser(user_id, 27);
+                    addCardToUser(user_id, 27);
                     break;
             }
             console.log(`User registered for the ${TEAM_NAMES[nextTeam]} Faction.`);
