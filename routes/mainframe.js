@@ -561,6 +561,7 @@ async function setStats(user_id,stat_name,value,increment) {
 
 // Update sub months for badge
 async function setSubMonths(user_id, sub_months) {
+    console.log(`setSubMonths()`);
     let output = false;
     try {
         const setSubData = await execQuery("UPDATE tbl_users SET sub_months = ? WHERE id = ?",[sub_months,user_id]);
@@ -765,6 +766,7 @@ async function getTourneyScores() {
 
 // Tournament scoring
 async function setTourneyScore(user_name, points) {
+    console.log(`setTourneyScore()`);
     let output = {
         status: false,
         message: ""
