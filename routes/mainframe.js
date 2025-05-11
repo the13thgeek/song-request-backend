@@ -650,14 +650,21 @@ async function checkAchievements(user_id,stat_name) {
 // Register a user to a team
 async function registerUserTeam(user_id) {
     console.log(`registerUserTeam(): U#${user_id}`);
-    let output = null;
+    let output = {
+        status: false,
+        team_number: null,
+        message: ""
+    };
     
     try {
         // Check if user is already registered
         const checkReg = await execQuery('SELECT team_number FROM tbl_tourney WHERE user_id = ?',[user_id]);
         if(checkReg.length > 0) {
+            console.log('User already registered.');
             const teamNum = checkReg[0].team_number;
-            output = `You're already registered for this event! You're part of the ${TEAM_NAMES[teamNum]} Faction!`;
+            output.status = false;
+            output.team_number = teamNum;
+            output.message = `You're already registered for this event! You're part of the ${TEAM_NAMES[teamNum]} Faction!`;
         } else {
             // Otherwise, check which team needs a member (for balancing)
             const teamCounts = await execQuery(`SELECT t.team_number, COUNT(m.user_id) AS count
@@ -681,18 +688,21 @@ async function registerUserTeam(user_id) {
             switch(nextTeam) {
                 case 1:
                     // Afterburner
-                    addCardToUser(user_id, 25);
+                    //addCardToUser(user_id, 25);
                     break;
                 case 2:
                     // Concorde
-                    addCardToUser(user_id, 26);
+                    //addCardToUser(user_id, 26);
                     break;
                 case 3:
                     // Stratos
-                    addCardToUser(user_id, 27);
+                    //addCardToUser(user_id, 27);
                     break;
             }
-            output = `You have been recruited for the ${TEAM_NAMES[nextTeam]} Faction! Your new card has been added to your profile.`;
+            console.log(`User registered for the ${TEAM_NAMES[nextTeam]} Faction.`);
+            output.status = true;
+            output.team_number = nextTeam;
+            output.message = `You have been recruited for the ${TEAM_NAMES[nextTeam]} Faction! Your new card has been added to your profile.`;
         }
 
     } catch(e) {
@@ -1227,13 +1237,9 @@ router.post('/team-register', async (req, res) => {
     const { twitch_id, twitch_display_name, twitch_roles, twitch_avatar } = req.body;
     const is_premium = isUserPremium(twitch_roles);
     let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar,is_premium);
-    let output = {
-        status: false,
-        message: null
-    }
+    let output = {};
     try {
-        output.message = await registerUserTeam(user.id);
-        output.status = true;
+        output = await registerUserTeam(user.id);
     } catch(e) {
         console.error(`/team-register: ERROR: ${e.message}`);
         output.message = `Sorry, I encountered a problem. Please inform the streamer right away.`;
