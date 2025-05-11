@@ -794,13 +794,13 @@ async function setTourneyScore(user_name, points) {
             output.message = ` @${user_name}, it looks like you're not registered for this event yet. 😭`;
             return output;
         } else {
-            output.team_number = TEAM_NAMES[userTeamRes.team_number];
+            output.team_number = userTeamRes.team_number;
         }
         
         // Issue points to user's team
         await execQuery(`UPDATE tbl_tourney SET points = points + ? WHERE user_id = ?`,[user_id, points]);
         output.status = true;
-        output.message = `Hey @${user_name}, you got [+${points}] points for your faction ${userTeam}!`;
+        output.message = `Hey @${user_name}, you got [+${points}] points for your faction ${TEAM_NAMES[userTeamRes.team_number]}!`;
         output.points = points;
 
         return output;
