@@ -748,17 +748,43 @@ async function getTourneyScores() {
     let output = null;
 
     try {
-        const tScores = await execQuery(
-            `SELECT t.team_number, COALESCE(SUM(m.points), 0) AS total_points, u.id AS mvp_user_id, u.twitch_display_name AS mvp_display_name, m.points AS mvp_points
-            FROM (SELECT 1 AS team_number UNION ALL SELECT 2 UNION ALL SELECT 3) t
-            LEFT JOIN tbl_tourney m ON m.team_number = t.team_number
-            LEFT JOIN tbl_users u ON u.id = (SELECT user_id FROM tbl_tourney WHERE team_number = t.team_number ORDER BY points DESC LIMIT 1)
-            GROUP BY t.team_number, u.id, u.twitch_display_name, m.points`
-        );
-        output = tScores;
+        const teamTotals = await execQuery(`
+            SELECT 
+                team_number,
+                SUM(points) AS total_points
+            FROM tbl_tourney
+            GROUP BY team_number
+            ORDER BY team_number
+        `);
+        const mvps = await execQuery(`
+            SELECT 
+                t1.team_number,
+                u.twitch_display_name AS mvp,
+                t1.points AS mvp_points
+            FROM tbl_tourney t1
+            JOIN tbl_users u ON t1.user_id = u.id
+            WHERE t1.points = (
+                SELECT MAX(t2.points)
+                FROM tbl_tourney t2
+                WHERE t2.team_number = t1.team_number
+            )
+            GROUP BY t1.team_number
+            ORDER BY t1.team_number
+        `);
+        const results = teamTotals.map(team => {
+            const mvpInfo = mvps.find(m => m.team_number === team.team_number);
+            return {
+                team_number: team.team_number,
+                total_points: team.total_points || 0,
+                mvp: mvpInfo ? mvpInfo.mvp : null,
+                mvp_points: mvpInfo ? mvpInfo.mvp_points : null
+            };
+        });
+
+        output = results;
     } catch(e) {
         output = null;
-        console.error(`getCatalog(): ERROR: ${e.message}`);
+        console.error(`getTourneyScores(): ERROR: ${e.message}`);
         throw e;
     }
     return output;
@@ -766,7 +792,7 @@ async function getTourneyScores() {
 
 // Tournament scoring
 async function setTourneyScore(user_name, points) {
-    console.log(`setTourneyScore()`);
+    console.log(`setTourneyScore(${user_name},${points})`);
     let output = {
         status: false,
         message: "",
@@ -791,14 +817,15 @@ async function setTourneyScore(user_name, points) {
         
         if(!userTeamRes) {
             output.status = false;
-            output.message = ` @${user_name}, it looks like you're not registered for this event yet. 😭`;
+            output.message = ` @${user_name}, it looks like you're not registered for this event yet. Type !tourney in chat to join a faction!`;
             return output;
         } else {
             output.team_number = userTeamRes.team_number;
         }
         
         // Issue points to user's team
-        await execQuery(`UPDATE tbl_tourney SET points = points + ? WHERE user_id = ?`,[user_id, points]);
+        console.log(`User ID: ${user_id}`);
+        await execQuery(`UPDATE tbl_tourney SET points = points + ? WHERE user_id = ?`,[points, user_id]);
         output.status = true;
         output.message = `Hey @${user_name}, you got [+${points}] points for your faction ${TEAM_NAMES[userTeamRes.team_number]}!`;
         output.points = points;
