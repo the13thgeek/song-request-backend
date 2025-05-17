@@ -763,13 +763,19 @@ async function getTourneyScores() {
                 t1.points AS mvp_points
             FROM tbl_tourney t1
             JOIN tbl_users u ON t1.user_id = u.id
-            WHERE t1.points = (
-                SELECT MAX(t2.points)
+            WHERE (t1.user_id, t1.team_number) IN (
+                SELECT t2.user_id, t2.team_number
                 FROM tbl_tourney t2
-                WHERE t2.team_number = t1.team_number
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM tbl_tourney t3
+                    WHERE t3.team_number = t2.team_number
+                    AND (
+                        t3.points > t2.points OR
+                        (t3.points = t2.points AND t3.last_update > t2.last_update)
+                    )
+                )
             )
-            GROUP BY t1.team_number
-            ORDER BY t1.team_number
+            ORDER BY t1.team_number;
         `);
         const results = teamTotals.map(team => {
             const mvpInfo = mvps.find(m => m.team_number === team.team_number);
@@ -825,7 +831,7 @@ async function setTourneyScore(user_name, points) {
         
         // Issue points to user's team
         console.log(`User ID: ${user_id}`);
-        await execQuery(`UPDATE tbl_tourney SET points = points + ? WHERE user_id = ?`,[points, user_id]);
+        await execQuery(`UPDATE tbl_tourney SET points = points + ?, last_update = CURRENT_TIMESTAMP WHERE user_id = ?`,[points, user_id]);
         output.status = true;
         output.message = `Hey @${user_name}, you got [+${points}] points for your faction ${TEAM_NAMES[userTeamRes.team_number]}!`;
         output.points = points;
