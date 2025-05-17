@@ -797,8 +797,8 @@ async function getTourneyScores() {
 }
 
 // Tournament scoring
-async function setTourneyScore(user_name, points) {
-    console.log(`setTourneyScore(${user_name},${points})`);
+async function setTourneyScore(user_name, points, details) {
+    console.log(`setTourneyScore(${user_name},${points},${details})`);
     let output = {
         status: false,
         message: "",
@@ -832,6 +832,7 @@ async function setTourneyScore(user_name, points) {
         // Issue points to user's team
         console.log(`User ID: ${user_id}`);
         await execQuery(`UPDATE tbl_tourney SET points = points + ?, last_update = CURRENT_TIMESTAMP WHERE user_id = ?`,[points, user_id]);
+        scoreLog(user_name, points, details);
         output.status = true;
         output.message = `Hey @${user_name}, you got [+${points}] points for your faction ${TEAM_NAMES[userTeamRes.team_number]}!`;
         output.points = points;
@@ -844,6 +845,12 @@ async function setTourneyScore(user_name, points) {
         output.message = e;
         return output;
     }
+}
+
+// Score logging
+async function scoreLog(source, points, details) {
+    console.log('scoreLog()');
+    const qScore = await execQuery("INSERT INTO tbl_tourney_log(source,points,details) values(?,?,?)",[source,points,details]);
 }
 
 // ENDPOINTS
@@ -1201,12 +1208,15 @@ router.get('/supersonic', async (req,res) => {
         if(viewerId !== streamerId) {
             // Issue points to viewer
             await execQuery(`UPDATE tbl_tourney SET points = points +2 WHERE user_id = ?`,[viewerId]);
+            scoreLog(u, 2, `@${u} watching @${c} points`);
             // Issue points to streamer
             await execQuery(`UPDATE tbl_tourney SET points = points +1 WHERE user_id = ?`,[streamerId]);
+            scoreLog(c, 1, `@${c} incentive points`);
             return res.send(`Hey @${u}, you got your points for your faction ${viewerTeam}! Thank you for supporting @${c}'s (Team ${streamerTeam}) channel! ❤️`);
         } else {
             // Issue points to streamer
             await execQuery(`UPDATE tbl_tourney SET points = points +1 WHERE user_id = ?`,[streamerId]);    
+            scoreLog(c, 1, `@${c} incentive points`);
             return res.send(`Hey @${c}, you got your points for your faction ${streamerTeam}!`);            
         }
 
@@ -1243,13 +1253,13 @@ router.post('/showdown-scores', async (req, res) => {
 router.post('/tourney-score', async (req, res) => {
     console.log('ENDPOINT: /tourney-score');
 
-    const { twitch_id, twitch_display_name, twitch_avatar, points } = req.body;
+    const { twitch_id, twitch_display_name, twitch_avatar, points, details } = req.body;
     let output = null;
 
     try {
         let user = await getUserData(twitch_id,twitch_display_name,twitch_avatar);
         if (user) {
-            output = await setTourneyScore(user.twitch_display_name, points);
+            output = await setTourneyScore(user.twitch_display_name, points, details);
         }
 
     } catch(e) {
