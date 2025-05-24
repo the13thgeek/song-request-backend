@@ -1220,6 +1220,7 @@ router.get('/supersonic', async (req,res) => {
             return res.send(`Hey @${c}, you got your points for your faction ${streamerTeam}!`);            
         }
 
+
     } catch(e) {
         console.error('Communication error: ',e);
         return res.send(`An error has occurred.`);
