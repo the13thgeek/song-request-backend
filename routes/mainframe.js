@@ -1233,6 +1233,7 @@ router.get('/supersonic', async (req,res) => {
         // Check if cooldown is active
         const cooldown = await checkCooldown(u);
         if(cooldown.cooldownActive) {
+            scoreLog(u, 0, `@${u} ATTEMPT: Please wait ${cooldown.waitFor} minutes.`,0);
             return res.send(`Hey @${u}, please wait ${cooldown.waitFor} more minute(s) to get more points!`);
         }
         
