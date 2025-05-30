@@ -832,7 +832,7 @@ async function setTourneyScore(user_name, points, details) {
         // Issue points to user's team
         console.log(`User ID: ${user_id}`);
         await execQuery(`UPDATE tbl_tourney SET points = points + ?, last_update = CURRENT_TIMESTAMP WHERE user_id = ?`,[points, user_id]);
-        scoreLog(user_name, points, details);
+        scoreLog(user_name, points, details, 0);
         output.status = true;
         output.message = `Hey @${user_name}, you got [+${points}] points for your faction ${TEAM_NAMES[userTeamRes.team_number]}!`;
         output.points = points;
@@ -848,9 +848,35 @@ async function setTourneyScore(user_name, points, details) {
 }
 
 // Score logging
-async function scoreLog(source, points, details) {
+async function scoreLog(source, points, details, has_cooldown = 1) {
     console.log('scoreLog()');
-    const qScore = await execQuery("INSERT INTO tbl_tourney_log(source,points,details) values(?,?,?)",[source,points,details]);
+    const qScore = await execQuery("INSERT INTO tbl_tourney_log(source,points,details,has_cooldown) values(?,?,?,?)",[source,points,details,has_cooldown]);
+}
+
+// Cooldown checking
+async function checkCooldown(username) {
+    const [cdown] = await execQuery(`SELECT transaction_time FROM tbl_tourney_log
+        WHERE source = ? AND has_cooldown = 1
+        ORDER BY transaction_time DESC
+        LIMIT 1`,[username]);
+    if(!cdown) {
+        return { cooldownActive: false };
+    }
+    const lastTime = new Date(cdown.transaction_time);
+    const now = new Date();
+    const cooldownMs = 60 * 60 * 1000;
+    const timeDiff = now - lastTime;
+
+    if(timeDiff > cooldownMs) {
+        return { cooldownActive: false };
+    } else {
+        const remainingMs = cooldownMs - timeDiff;
+        const remainingMinutes = Math.ceil(remainingMs / (60*1000));
+        return {
+            cooldownActive: true,
+            waitFor: remainingMinutes
+        }
+    }
 }
 
 // ENDPOINTS
@@ -1204,6 +1230,12 @@ router.get('/supersonic', async (req,res) => {
         const viewerTeam = TEAM_NAMES[viewerTeamRes.team_number];
         const streamerTeam = TEAM_NAMES[streamerTeamRes.team_number];
 
+        // Check if cooldown is active
+        const cooldown = await checkCooldown(u);
+        if(cooldown.cooldownActive) {
+            return res.send(`Hey @${u}, please wait ${cooldown.waitFor} more minute(s) to get more points!`);
+        }
+        
         // Check if both values are equal
         if(viewerId !== streamerId) {
             // Issue points to viewer
@@ -1211,7 +1243,7 @@ router.get('/supersonic', async (req,res) => {
             scoreLog(u, 2, `@${u} watching @${c} points`);
             // Issue points to streamer
             await execQuery(`UPDATE tbl_tourney SET points = points +1 WHERE user_id = ?`,[streamerId]);
-            scoreLog(c, 1, `@${c} incentive points`);
+            scoreLog(c, 1, `@${c} incentive points`, 0);
             return res.send(`Hey @${u}, you got your points for your faction ${viewerTeam}! Thank you for supporting @${c}'s (Team ${streamerTeam}) channel! ❤️`);
         } else {
             // Issue points to streamer
