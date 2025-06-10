@@ -3,6 +3,7 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
 const router = express.Router();
+const { broadcast } = require('../utils');
 require('dotenv').config();
 
 // Shared DB connection pool
@@ -837,6 +838,11 @@ async function setTourneyScore(user_name, points, details) {
         output.message = `Hey @${user_name}, you got [+${points}] points for your faction ${TEAM_NAMES[userTeamRes.team_number]}!`;
         output.points = points;
 
+        // Broadcast to real-time scoreboard
+        broadcast({ 
+            type: "SCORE_UPDATE"
+        });
+
         return output;
 
     } catch(e) {
@@ -1266,11 +1272,19 @@ router.get('/supersonic', async (req,res) => {
             // Issue points to streamer
             await execQuery(`UPDATE tbl_tourney SET points = points +1 WHERE user_id = ?`,[streamerId]);
             scoreLog(c, 1, `@${c} incentive points`, 0);
+            // Broadcast to real-time scoreboard
+            broadcast({ 
+                type: "SCORE_UPDATE"
+            });
             return res.send(`Hey @${u}, you got your points for your faction ${viewerTeam}! Thank you for supporting @${c}'s (Team ${streamerTeam}) channel! ❤️`);
         } else {
             // Issue points to streamer
             await execQuery(`UPDATE tbl_tourney SET points = points +1 WHERE user_id = ?`,[streamerId]);    
             scoreLog(c, 1, `@${c} incentive points`);
+            // Broadcast to real-time scoreboard
+            broadcast({ 
+                type: "SCORE_UPDATE"
+            });
             return res.send(`Hey @${c}, you got your points for your faction ${streamerTeam}!`);            
         }
 
