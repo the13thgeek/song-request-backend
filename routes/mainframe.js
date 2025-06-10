@@ -856,7 +856,7 @@ async function scoreLog(source, points, details, has_cooldown = 1) {
 // Cooldown checking
 async function checkCooldown(username) {
     console.log('checkCooldown() -> '+username);
-    const [cdown] = await execQuery(`SELECT transaction_time FROM tbl_tourney_log
+    const [cdown] = await execQuery(`SELECT TIMESTAMPDIFF(MINUTE, transaction_time, NOW()) AS minutes_passed FROM tbl_tourney_log
         WHERE source = ? AND has_cooldown = 1
         ORDER BY transaction_time DESC
         LIMIT 1`,[username]);
@@ -864,6 +864,22 @@ async function checkCooldown(username) {
         console.log('No cooldowns detected.')
         return { cooldownActive: false };
     }
+
+    const minsPassed = cdown.minutes_passed;
+    console.log(`${username}: ${minutes_passed} since last redemption.`);
+    if(minsPassed > 60) {
+        console.log('Cooldown has expired, will proceed.')
+        return { cooldownActive: false };
+    } else {
+        const remainingMinutes = 60 - minsPassed;
+        console.log('Cooldown in effect: ' + remainingMinutes + " minutes");
+        return {
+            cooldownActive: true,
+            waitFor: remainingMinutes
+        }
+    }
+
+    /*
     const lastTime = new Date(cdown.transaction_time);
     const now = new Date();
     const cooldownMs = 60 * 60 * 1000;
@@ -881,6 +897,7 @@ async function checkCooldown(username) {
             waitFor: remainingMinutes
         }
     }
+    */
 }
 
 // ENDPOINTS
