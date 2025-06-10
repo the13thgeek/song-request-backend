@@ -866,7 +866,7 @@ async function checkCooldown(username) {
     }
 
     const minsPassed = cdown.minutes_passed;
-    console.log(`${username}: ${minsPassed} since last redemption.`);
+    console.log(`${username}: ${minsPassed} minutes since last redemption.`);
     if(minsPassed > 60) {
         console.log('Cooldown has expired, will proceed.')
         return { cooldownActive: false };
