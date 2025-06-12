@@ -660,13 +660,14 @@ async function registerUserTeam(user_id) {
     
     try {
         // Check if user is already registered
-        const checkReg = await execQuery('SELECT team_number FROM tbl_tourney WHERE user_id = ?',[user_id]);
+        const checkReg = await execQuery('SELECT team_number, points FROM tbl_tourney WHERE user_id = ?',[user_id]);
         if(checkReg.length > 0) {
             console.log('User already registered.');
             const teamNum = checkReg[0].team_number;
+            const points = checkReg[0].points;
             output.status = false;
             output.team_number = teamNum;
-            output.message = `You're already registered for this event! You're part of the ${TEAM_NAMES[teamNum]} Faction!`;
+            output.message = `Hello there, member of the ${TEAM_NAMES[teamNum]} Faction! You currently have ${points} points.`;
         } else {
             // Otherwise, check which team needs a member (for balancing)
             const teamCounts = await execQuery(`SELECT t.team_number, COUNT(m.user_id) AS count
@@ -1276,7 +1277,7 @@ router.get('/supersonic', async (req,res) => {
             broadcast({ 
                 type: "SCORE_UPDATE"
             });
-            return res.send(`Hey @${u}, you got your points for your faction ${viewerTeam}! Thank you for supporting @${c}'s (Team ${streamerTeam}) channel! ❤️`);
+            return res.send(`Hey @${u}, you got your points for your faction ${viewerTeam}! Thank you for supporting @${c}'s [${streamerTeam}] channel! ❤️`);
         } else {
             // Issue points to streamer
             await execQuery(`UPDATE tbl_tourney SET points = points +1 WHERE user_id = ?`,[streamerId]);    
