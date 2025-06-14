@@ -667,7 +667,7 @@ async function registerUserTeam(user_id) {
             const points = checkReg[0].points;
             output.status = false;
             output.team_number = teamNum;
-            output.message = `Hello there, member of the ${TEAM_NAMES[teamNum]} Faction! You currently have ${points} points.`;
+            output.message = `You are a member of the ${TEAM_NAMES[teamNum]} Faction! You have contributed ${points} points.`;
         } else {
             // Otherwise, check which team needs a member (for balancing)
             const teamCounts = await execQuery(`SELECT t.team_number, COUNT(m.user_id) AS count
