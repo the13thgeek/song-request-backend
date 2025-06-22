@@ -31,6 +31,13 @@ const TEAM_NAMES = {
     3: 'Stratos'
 }
 
+// TOURNAMENT EFFECTS
+let activeFX = {
+    blockedTeams: new Map() // Blocked Teams
+}
+// Temporary effect for testing
+// activeFX.blockedTeams.set(2,'Decoy Whack Penalty');
+
 // FUNCTIONS
 
 // DB Helper Function
@@ -789,11 +796,58 @@ async function getTourneyScores() {
             };
         });
 
-        output = results;
+        const activeEffects = {
+            blocked_teams: [...(activeFX.blockedTeams || new Map()).entries()] // [ [team, reason], ... ]
+            // shell_shields: [...(activeFX.shellShield || new Set())],           // [teamNumber, ...]
+            // sky_jammer: activeFX.skyJammer || null,
+            // point_multiplier: Object.entries(activeFX.pointMultiplier || {}).filter(([_, exp]) => exp > Date.now()),
+            // point_magnet: Object.entries(activeFX.pointMagnet || {}).filter(([_, exp]) => exp > Date.now())
+        };
+
+        output = {
+            scores: results,
+            effects: activeEffects
+        }
+
     } catch(e) {
         output = null;
         console.error(`getTourneyScores(): ERROR: ${e.message}`);
         throw e;
+    }
+    return output;
+}
+
+// Tournament User's Faction
+async function getUserFaction(user_name) {
+    console.log(`getUserFaction() -> ${user_name}`);
+    let output = {
+        result: false,
+        user_id: null,
+        user_name: user_name,
+        team_number: null,
+        team_name: null,
+        message: null
+    };
+
+    // Lookup user ID (local)
+    const [userRes] = await execQuery(`SELECT id FROM tbl_users WHERE twitch_display_name = ?`,[user_name]);
+    if(!userRes) {
+        output.result = false;
+        output.message = `Sorry @${user_name}, I can't find your profile in the Mainframe database. 😭`;
+        return output;
+    }
+    output.user_id = userRes.id;
+
+    // Check if user is on a team
+    const [userTeamRes] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ?`,[output.user_id]);
+    if(!userTeamRes) {
+        output.result = false;
+        output.message = `@${user_name}, it looks like you're not registered for this event yet. 😭`;
+        return output;
+    } else {
+        output.result = true;
+        output.team_number = userTeamRes.team_number;
+        output.team_name = TEAM_NAMES[output.team_number];
     }
     return output;
 }
@@ -809,36 +863,61 @@ async function setTourneyScore(user_name, points, details) {
     };
 
    try {
-        // Lookup user ID
-        const [userRes] = await execQuery(`SELECT id FROM tbl_users WHERE twitch_display_name = ?`,[user_name]);
+        // // Lookup user ID
+        // const [userRes] = await execQuery(`SELECT id FROM tbl_users WHERE twitch_display_name = ?`,[user_name]);
 
-        if(!userRes) {
+        // if(!userRes) {
+        //     output.status = false;
+        //     output.message = `Sorry @${user_name}, I can't find your profile in the Mainframe database. 😭`;
+        //     return output;
+        // }
+        
+        // const user_id = userRes.id;
+        
+        // // Check if user is on a team
+        // const [userTeamRes] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ?`,[user_id]);
+        
+        // if(!userTeamRes) {
+        //     output.status = false;
+        //     output.message = `@${user_name}, it looks like you're not registered for this event yet. Type !tourney in chat to join a faction!`;
+        //     return output;
+        // } else {
+        //     output.team_number = userTeamRes.team_number;
+        // }
+
+        // Look up Tourney info
+        let user_team = await getUserFaction(user_name);
+        if(!user_team.result) {
             output.status = false;
-            output.message = `Sorry @${user_name}, I can't find your profile in the Mainframe database. 😭`;
-            return output;
+            output.message = `@${user_name}, it looks like you're not registered for this event yet.`;
         }
-        
-        const user_id = userRes.id;
-        
-        // Check if user is on a team
-        const [userTeamRes] = await execQuery(`SELECT team_number FROM tbl_tourney WHERE user_id = ?`,[user_id]);
-        
-        if(!userTeamRes) {
+
+        // Check for Effects
+        // Check if blocked
+        if (activeFX.blockedTeams.has(user_team.team_number)) {
+            let details = activeFX.blockedTeams.get(user_team.team_number);
+            console.log(`Faction ${user_team.team_name} is grounded and cannot score at this time: ${details}`);
+            activeFX.blockedTeams.delete(user_team.team_number); // Effect is one-time
+            
             output.status = false;
-            output.message = ` @${user_name}, it looks like you're not registered for this event yet. Type !tourney in chat to join a faction!`;
+            output.message = `Sorry @${user_name}, your faction ${user_team.team_name} is grounded and cannot score at this time: ${details}`;
+            scoreLog(user_name, 0, `@${user_name} ATTEMPT: Faction grounded`, 0);
+            broadcast({ 
+                type: "SCORE_UPDATE"
+            });
+            
             return output;
-        } else {
-            output.team_number = userTeamRes.team_number;
         }
         
         // Issue points to user's team
-        console.log(`User ID: ${user_id}`);
-        await execQuery(`UPDATE tbl_tourney SET points = points + ?, last_update = CURRENT_TIMESTAMP WHERE user_id = ?`,[points, user_id]);
+        console.log(`User ID: ${user_team.user_id}`);
+         await execQuery(`UPDATE tbl_tourney SET points = points + ?, last_update = CURRENT_TIMESTAMP WHERE user_id = ?`,[points, user_team.user_id]);
         scoreLog(user_name, points, details, 0);
         output.status = true;
-        output.message = `Hey @${user_name}, you got [+${points}] points for your faction ${TEAM_NAMES[userTeamRes.team_number]}!`;
+        output.team_number = user_team.team_number;
+        output.message = `Hey @${user_name}, you got [+${points}] points for your faction ${user_team.team_name}!`;
         output.points = points;
-
+        
         // Broadcast to real-time scoreboard
         broadcast({ 
             type: "SCORE_UPDATE"
@@ -863,7 +942,8 @@ async function scoreLog(source, points, details, has_cooldown = 1) {
 // Cooldown checking
 async function checkCooldown(username) {
     console.log('checkCooldown() -> '+username);
-    const [cdown] = await execQuery(`SELECT TIMESTAMPDIFF(MINUTE, transaction_time, NOW()) AS minutes_passed FROM tbl_tourney_log
+
+    const [cdown] = await execQuery(`SELECT TIMESTAMPDIFF(SECOND, transaction_time, NOW()) AS seconds_passed FROM tbl_tourney_log
         WHERE source = ? AND has_cooldown = 1
         ORDER BY transaction_time DESC
         LIMIT 1`,[username]);
@@ -872,39 +952,48 @@ async function checkCooldown(username) {
         return { cooldownActive: false };
     }
 
-    const minsPassed = cdown.minutes_passed;
-    console.log(`${username}: ${minsPassed} minutes since last redemption.`);
-    if(minsPassed > 60) {
+    const secondsPassed = cdown.seconds_passed;
+    console.log(`${username}: ${secondsPassed} minutes since last redemption.`);
+
+    const cooldownSeconds = 60 * 60;
+
+    if(secondsPassed > cooldownSeconds) {
         console.log('Cooldown has expired, will proceed.')
         return { cooldownActive: false };
     } else {
-        const remainingMinutes = 60 - minsPassed;
-        console.log('Cooldown in effect: ' + remainingMinutes + " minutes");
+        const remainingSeconds = cooldownSeconds - secondsPassed;
+        const remainingMinutes = Math.floor(remainingSeconds / 60);
+
+        let waitLabel;
+        if (remainingMinutes >= 1) {
+            waitLabel = `${remainingMinutes} minute${remainingMinutes !== 1 ? 's' : ''}`;
+        } else {
+            waitLabel = `${remainingSeconds} second${remainingSeconds !== 1 ? 's' : ''}`;
+        }
+        
+        console.log(`Cooldown in effect: wait ${waitLabel}`);
         return {
             cooldownActive: true,
-            waitFor: remainingMinutes
+            waitFor: waitLabel
         }
     }
+}
 
-    /*
-    const lastTime = new Date(cdown.transaction_time);
-    const now = new Date();
-    const cooldownMs = 60 * 60 * 1000;
-    const timeDiff = now - lastTime;
+// Tourney Effector
+async function activateEffect(team_number, effect_name, details = null) {
+    console.log("activateEffect()");
 
-    if(timeDiff > cooldownMs) {
-        console.log('Cooldown has expired, will proceed.')
-        return { cooldownActive: false };
-    } else {
-        const remainingMs = cooldownMs - timeDiff;
-        const remainingMinutes = Math.ceil(remainingMs / (60*1000));
-        console.log('Cooldown in effect: ' + remainingMinutes + " minutes");
-        return {
-            cooldownActive: true,
-            waitFor: remainingMinutes
-        }
+    switch(effect_name) {
+        case 'System Malfunction':
+            activeFX.blockedTeams.set(team_number,details);
+        break;
+        default:
+            console.warn('Unknown or invalid effectName: ',effect_name);
     }
-    */
+
+    broadcast({ 
+        type: "SCORE_UPDATE"
+    });
 }
 
 // ENDPOINTS
@@ -1261,8 +1350,8 @@ router.get('/supersonic', async (req,res) => {
         // Check if cooldown is active
         const cooldown = await checkCooldown(u);
         if(cooldown.cooldownActive) {
-            scoreLog(u, 0, `@${u} ATTEMPT: Please wait ${cooldown.waitFor} minutes.`,0);
-            return res.send(`Hey @${u}, please wait ${cooldown.waitFor} more minute(s) to get more points!`);
+            scoreLog(u, 0, `@${u} ATTEMPT: Please wait ${cooldown.waitFor}.`,0);
+            return res.send(`Hey @${u}, please wait ${cooldown.waitFor} to get more points!`);
         }
         
         // Check if both values are equal
@@ -1316,7 +1405,7 @@ router.post('/showdown-scores', async (req, res) => {
         message = `Sorry, I encountered a problem. Please inform the streamer right away.`;
         status = false;
     }
-    res.status(200).json({ status: status, message: message, scoreboard: scoreboard });
+    res.status(200).json({ status: status, message: message, scoreboard: scoreboard.scores, effects: scoreboard.effects });
 });
 
 // Set Tourney score
@@ -1339,6 +1428,42 @@ router.post('/tourney-score', async (req, res) => {
         res.status(200).json(output);
     }
 
+});
+
+// Set Tourney effect
+// router.post('/tourney-effect', async(req, res) => {
+//     console.log('ENDPOINT: /tourney-effect');
+
+//     const { twitch_id, twitch_display_name, twitch_avatar, effect } = req.body;
+//     let output = null;
+
+// });
+
+// Decoy Whack Penalty
+router.post('/tourney-penalty', async(req, res) => {
+    console.log('ENDPOINT: /tourney-penalty');
+
+    const { twitch_display_name, penalty_type } = req.body;
+    let output = {
+        status: false,
+        message: null
+    };
+    let user_team = await getUserFaction(twitch_display_name);
+
+    if(!user_team.result) {
+        output.status = false,
+        output.message = user_team.message;
+        res.status(200).json(output);
+    }
+
+    switch (penalty_type) {
+        case 'whack':
+            activateEffect(user_team.team_number,'System Malfunction','System Malfunction (Whack Penalty)');
+            output.status = true;
+            output.message = `Sorry @${twitch_display_name}, because you whacked a decoy, ${user_team.team_name} is grounded for the next turn!`;
+        break;
+    }
+    res.status(200).json(output);
 });
 
 // // Issue EXP
