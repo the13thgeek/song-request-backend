@@ -890,6 +890,7 @@ async function setTourneyScore(user_name, points, details) {
         if(!user_team.result) {
             output.status = false;
             output.message = `@${user_name}, it looks like you're not registered for this event yet.`;
+            return output;
         }
 
         // Check for Effects
