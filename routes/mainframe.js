@@ -43,6 +43,7 @@ let activeFX = {
 // DB Helper Function
 async function execQuery(query, params = []) {
     let conn;
+    let output = null;
     try {
         conn = await dbPool.getConnection();
 
@@ -54,14 +55,14 @@ async function execQuery(query, params = []) {
             conn = await dbPool.getConnection();
         }
         const [result] = await conn.execute(query, params);
-        return result;
+        output = result;
     } catch(e) {
         console.error(`execQuery(): ERROR: ${e.message}`);
         console.error(`query: ${query}`);
         console.error(`params: ${params}`);
-        return null;
     } finally {
         if(conn) conn.release();
+        return output;
     }
 }
 
