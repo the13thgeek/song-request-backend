@@ -16,7 +16,9 @@ const dbPool = mysql.createPool({
     connectionLimit: 30,
     keepAliveInitialDelay: 10000,
     enableKeepAlive: true,
-    queueLimit: 0
+    queueLimit: 0,
+    connectTimeout: 10000, // 10 seconds
+    acquireTimeout: 10000 // 10 seconds
 });
 
 // MAINFRAME GLOBALS
@@ -1109,6 +1111,13 @@ router.post('/check-in', async (req, res) => {
     let has_achievement = false;
     let achievement = null;
 
+    // Error-trap user
+    if(!user) {
+        res.status(200).json({
+            status: false
+        });
+    }
+
     // issue EXP
     let exp_q = await setExp(user.id,is_premium,1);
     // update stats
@@ -1121,6 +1130,7 @@ router.post('/check-in', async (req, res) => {
     }
 
     res.status(200).json({
+        status: true,
         twitch_id: user.twitch_id,
         local_id: user.id,
         level: user.level,
