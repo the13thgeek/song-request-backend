@@ -214,11 +214,11 @@ router.post('/init-game', (req, res) => {
     try {
         gameData = require(`../data/${game_id}.json`);
         console.log("Game ID: " + gameData.game_id);
-        console.log(`Game [${game_id} (${gameData.songs.length})] initialized. Requests are currently ${requestsOpen ? "ON" : "OFF"}.`);
+        console.log(`Game [${game_title} (${gameData.songs.length} songs)] initialized. Requests are currently ${requestsOpen ? "ON" : "OFF"}.`);
         statusRelay();
         res.status(200).json({
             status: true,
-            message: `Game [${game_id} (${gameData.songs.length})] initialized.`,
+            message: `Game [${game_title} (${gameData.songs.length} songs)] initialized.`,
             id: gameData.game_id,
             title: gameData.game_title,
             year: gameData.game_year,
