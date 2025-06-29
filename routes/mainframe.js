@@ -60,6 +60,7 @@ async function execQuery(query, params = []) {
         console.error(`execQuery(): ERROR: ${e.message}`);
         console.error(`query: ${query}`);
         console.error(`params: ${params}`);
+        output = null;
     } finally {
         if(conn) conn.release();
         return output;
