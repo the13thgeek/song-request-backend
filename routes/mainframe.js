@@ -16,7 +16,8 @@ const dbPool = mysql.createPool({
     connectionLimit: 30,
     keepAliveInitialDelay: 10000,
     enableKeepAlive: true,
-    queueLimit: 0
+    queueLimit: 0,
+    connectTimeout: 10000
 });
 
 // MAINFRAME GLOBALS
