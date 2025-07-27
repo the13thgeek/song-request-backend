@@ -1427,6 +1427,8 @@ router.post('/showdown-scores', async (req, res) => {
 router.post('/tourney-score', async (req, res) => {
     console.log('ENDPOINT: /tourney-score');
 
+    return res.send(`The Supersonic Showdown Event has wrapped up. Thank you for participating!`);
+
     const { twitch_id, twitch_display_name, twitch_avatar, points, details } = req.body;
     let output = null;
 
@@ -1457,6 +1459,8 @@ router.post('/tourney-score', async (req, res) => {
 // Decoy Whack Penalty
 router.post('/tourney-penalty', async(req, res) => {
     console.log('ENDPOINT: /tourney-penalty');
+
+    return res.send(`The Supersonic Showdown Event has wrapped up. Thank you for participating!`);
 
     const { twitch_display_name, penalty_type } = req.body;
     let output = {
