@@ -1324,6 +1324,9 @@ router.post('/catalog', async (req, res) => {
 
 // Open third-party endpoint
 router.get('/supersonic', async (req,res) => {
+
+    return res.send(`The Supersonic Showdown Event has wrapped up. Thank you for participating!`);
+
     // Receive data
     const { u, c } = req.query;
     // Check for both names
