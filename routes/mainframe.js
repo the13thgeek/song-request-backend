@@ -1301,6 +1301,7 @@ router.post('/get-available-cards', async (req, res) => {
     res.status(200).json({ status: status, message: message, list: list });
 });
 
+
 // Get catalog of cards
 router.post('/catalog', async (req, res) => {
     //console.log(`ENDPOINT: /catalog`);
