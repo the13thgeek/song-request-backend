@@ -113,7 +113,7 @@ async function fetchThumbnail() {
 
 // Update/shift thumbnails
 async function shiftFetchThumbnails() {
-    log('Checking stream status...');
+    log('Checking stream status....');
 
     try {
         const thumbnailUrl = await fetchThumbnail();
