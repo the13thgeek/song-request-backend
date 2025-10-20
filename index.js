@@ -24,7 +24,9 @@ app.use(requestLogger);
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'https://mainframe.the13thgeek.com',
-  'https://the13thgeek.github.io'
+  'https://the13thgeek.github.io',
+  'https://www.the13thgeek.com',
+  'https://the13thgeek.com',
 ];
 
 app.use(cors({
