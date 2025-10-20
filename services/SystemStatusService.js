@@ -65,17 +65,18 @@ class SystemStatusService {
       
       const responseTime = Date.now() - startTime;
 
-      // Get some basic stats
-      const [userCount] = await db.execute(
-        'SELECT COUNT(*) as count FROM tbl_users'
+      // Get some basic stats - using executeOne since we know it returns a single row
+      const userCountRow = await db.executeOne(
+        `SELECT COUNT(*) as count FROM tbl_users`
       );
+      const userCount = userCountRow.count;
 
       return {
         healthy: true,
         responseTime: `${responseTime}ms`,
         message: 'Database connected',
         stats: {
-          totalUsers: userCount[0].count
+          totalUsers: userCount
         }
       };
     } catch (error) {
@@ -162,23 +163,23 @@ class SystemStatusService {
     logger.service('SystemStatusService', 'getSystemStats');
 
     try {
-      // Database stats
-      const [userStats] = await db.execute(`
+      // Database stats - using executeOne since these queries return single rows
+      const userStats = await db.executeOne(`
         SELECT 
           COUNT(*) as total_users,
-          COUNT(CASE WHEN is_active = 1 THEN 1 END) as active_users,
+          COUNT(CASE WHEN last_activity >= DATE_SUB(NOW(), INTERVAL 2 WEEK) THEN 1 END) as active_users,
           COUNT(CASE WHEN is_premium = 1 THEN 1 END) as premium_users,
           SUM(exp) as total_exp
         FROM tbl_users
       `);
 
-      const [cardStats] = await db.execute(`
+      const cardStats = await db.executeOne(`
         SELECT 
           COUNT(*) as total_cards_issued
         FROM tbl_user_cards
       `);
 
-      const [recentActivity] = await db.execute(`
+      const recentActivity = await db.executeOne(`
         SELECT COUNT(*) as count
         FROM tbl_users
         WHERE last_activity >= DATE_SUB(NOW(), INTERVAL 7 DAY)
@@ -189,12 +190,12 @@ class SystemStatusService {
 
       return {
         database: {
-          totalUsers: userStats[0].total_users,
-          activeUsers: userStats[0].active_users,
-          premiumUsers: userStats[0].premium_users,
-          totalExp: userStats[0].total_exp,
-          cardsIssued: cardStats[0].total_cards_issued,
-          activeLastWeek: recentActivity[0].count
+          totalUsers: userStats.total_users,
+          activeUsers: userStats.active_users,
+          premiumUsers: userStats.premium_users,
+          totalExp: userStats.total_exp,
+          cardsIssued: cardStats.total_cards_issued,
+          activeLastWeek: recentActivity.count
         },
         system: {
           version: this.version,
