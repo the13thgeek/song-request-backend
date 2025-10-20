@@ -157,7 +157,7 @@ router.post('/change-card', asyncHandler(async (req, res) => {
   );
 
   if (user.card_default.sysname === new_card_name) {
-    return ResponseHandler.error(res, "You're already using this card", 400);
+    return ResponseHandler.error(res, "You're already using this card.", 400);
   }
 
   const userCard = user.cards.find(card => card.sysname === new_card_name);
