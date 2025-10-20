@@ -1,5 +1,6 @@
 node_modules
 .env
+.twitch-token.json
 public
 public/twitch-live/0min.jpg
 public/twitch-live/5min.jpg
