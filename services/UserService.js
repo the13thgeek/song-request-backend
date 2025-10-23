@@ -270,7 +270,7 @@ class UserService {
    * Update user timestamp
    */
   async updateTimestamp(userId, field) {
-    const validFields = ['last_login', 'last_checkin'];
+    const validFields = ['last_login', 'last_checkin', 'last_activity'];
     if (!validFields.includes(field)) {
       throw new Error(`Invalid timestamp field: ${field}`);
     }
@@ -292,6 +292,7 @@ class UserService {
       'UPDATE tbl_users SET exp = exp + ? WHERE id = ?',
       [exp, userId]
     );
+    await this.updateTimestamp(userId, 'last_activity');
   }
 
   /**
@@ -303,6 +304,7 @@ class UserService {
       : 'INSERT INTO tbl_user_stats(user_id, stat_key, stat_value) VALUES(?,?,?) ON DUPLICATE KEY UPDATE stat_value = ?';
 
     await db.execute(query, [userId, statName, value, value]);
+    await this.updateTimestamp(userId, 'last_activity');
   }
 
   /**

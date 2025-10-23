@@ -182,32 +182,23 @@ class SongRequestService {
       };
     }
 
-    // Add to queue
-    const request = {
-      id: song.id,
-      title: song.title,
-      artist: song.artist,
-      user: userName
-    };
-
-    this.queue.push(request);
-    WebSocketService.broadcast({ type: 'ADD_SONG', song: request });
-    this.statusRelay();
-
     // Award EXP if requested
     let userId = null;
+    let userAvatar = null;
+
     if (awardExp) {
       const UserService = require('./UserService');
       const db = require('../config/database');
       
       // Get user's local ID
       const user = await db.executeOne(
-        'SELECT id FROM tbl_users WHERE twitch_display_name = ?',
+        'SELECT id, twitch_avatar FROM tbl_users WHERE twitch_display_name = ?',
         [userName]
       );
 
       if (user) {
         userId = user.id;
+        userAvatar = user.twitch_avatar;
         // Award 1 EXP for song request
         await UserService.awardExp(user.id, isPremium, 2);
         
@@ -218,6 +209,21 @@ class SongRequestService {
         await UserService.checkAchievements(user.id, 'song_requests');
       }
     }
+
+    // Add to queue
+    const request = {
+      id: song.id,
+      title: song.title,
+      artist: song.artist,
+      user: userName,
+      avatar: userAvatar || null
+    };
+
+    this.queue.push(request);
+    WebSocketService.broadcast({ type: 'ADD_SONG', song: request });
+    this.statusRelay();
+
+    
 
     return { 
       success: true,
