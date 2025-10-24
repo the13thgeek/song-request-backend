@@ -41,10 +41,10 @@ app.use(cors({
 
 // API Key Authentication Middleware
 const PUBLIC_PATHS = [
-  '/twitch-live/',
+  '/twitch-live',
   '/mainframe/supersonic',
   '/health',
-  '/status/'
+  '/status'
 ];
 
 app.use((req, res, next) => {
@@ -55,6 +55,13 @@ app.use((req, res, next) => {
 
   const clientApiKey = req.headers['x-api-key'];
   if (clientApiKey !== API_KEY) {
+    logger.warn('403 - Unauthorized access attempt', {
+      path: req.path,
+      method: req.method,
+      origin: req.headers.origin,
+      userAgent: req.headers['user-agent'],
+      hasApiKey: !!clientApiKey
+    });
     return ResponseHandler.unauthorized(res);
   }
 
