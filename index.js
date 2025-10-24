@@ -56,10 +56,18 @@ app.use((req, res, next) => {
   const clientApiKey = req.headers['x-api-key'];
   if (clientApiKey !== API_KEY) {
     logger.warn('403 - Unauthorized access attempt', {
+      timestamp: new Date().toISOString(),
       path: req.path,
       method: req.method,
-      origin: req.headers.origin,
+      ip: req.ip,
+      remoteAddress: req.connection.remoteAddress || req.socket.remoteAddress,
+      xForwardedFor: req.headers['x-forwarded-for'],
+      xRealIp: req.headers['x-real-ip'],
       userAgent: req.headers['user-agent'],
+      referer: req.headers.referer,
+      origin: req.headers.origin,
+      host: req.headers.host,
+      allHeaders: JSON.stringify(req.headers),
       hasApiKey: !!clientApiKey
     });
     return ResponseHandler.unauthorized(res);
