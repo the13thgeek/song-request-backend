@@ -4,6 +4,14 @@ const logger = require('../utils/Logger');
  * Middleware to automatically log all HTTP requests
  */
 const requestLogger = (req, res, next) => {
+  // Skip logging for health check endpoints
+  const healthCheckPaths = ['/', '/health'];
+  const isHealthCheck = healthCheckPaths.includes(req.path) || req.path.startsWith('/status');
+  
+  if (isHealthCheck) {
+    return next();
+  }
+  
   const startTime = Date.now();
   
   // Log incoming request (only in debug mode)
