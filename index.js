@@ -54,11 +54,6 @@ app.use((req, res, next) => {
     return next();
   }
 
-  // Allow Fly.io health checks at root
-  if (req.path === '/' && req.headers['fly-request-id']) {
-    return next();
-  }
-
   const clientApiKey = req.headers['x-api-key'];
   if (clientApiKey !== API_KEY) {
     logger.warn('403 - Unauthorized access attempt', {
@@ -128,6 +123,15 @@ app.get('/health', (req, res) => {
     uptime: process.uptime(),
     version: process.env.GEEK_NODE_VER || '1.0.0'
   }, 'Server is running');
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  ResponseHandler.success(res, {
+    service: 'theCloud System',
+    version: process.env.GEEK_NODE_VER || '1.0.0',
+    status: 'operational'
+  }, 'API is running');
 });
 
 // 404 Handler
