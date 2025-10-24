@@ -41,6 +41,7 @@ app.use(cors({
 
 // API Key Authentication Middleware
 const PUBLIC_PATHS = [
+  '/',
   '/twitch-live',
   '/mainframe/supersonic',
   '/health',
@@ -50,6 +51,11 @@ const PUBLIC_PATHS = [
 app.use((req, res, next) => {
   // Allow public access to certain paths
   if (PUBLIC_PATHS.some(path => req.path.startsWith(path))) {
+    return next();
+  }
+
+  // Allow Fly.io health checks at root
+  if (req.path === '/' && req.headers['fly-request-id']) {
     return next();
   }
 
