@@ -205,21 +205,30 @@ router.post('/request-site', asyncHandler(async (req, res) => {
 */
 
 /**
- * POST /srs/remove-song
- * Remove played song from queue
+ * POST /srs/play-song
+ * Unified endpoint: Mark as playing OR remove and show next
  */
-router.post('/remove-song', asyncHandler(async (req, res) => {
-  const result = SongRequestService.removeSong();
+router.post('/play-song', asyncHandler(async (req, res) => {
+  const result = SongRequestService.playSong();
 
   // Handle error response
   if (!result.success) {
-    return ResponseHandler.error(res, '⚠️ Queue is already empty', 400);
+    return ResponseHandler.error(res, '⚠️ Queue is empty', 400);
   }
 
-  // Success response
+  // Handle NOW_PLAYING action
+  if (result.action === 'NOW_PLAYING') {
+    return ResponseHandler.success(
+      res, 
+      result, 
+      `Hey @${result.song.user}, your request is now playing: ▶️ [${result.song.title} / ${result.song.artist}]`
+    );
+  }
+
+  // Handle REMOVED action
   const message = result.next
-    ? `▶️ [${result.played.title}] played! Next ⏩ [${result.next.title}]`
-    : `▶️ [${result.played.title}] played. Queue is empty.`;
+    ? `▶️ [${result.played.title}] played! Next ⏩ [${result.next.title} / ${result.next.artist}] by @${result.next.user}.`
+    : `▶️ [${result.played.title}] played. Queue is now empty.`;
 
   return ResponseHandler.success(res, result, message);
 }));

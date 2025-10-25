@@ -216,7 +216,8 @@ class SongRequestService {
       title: song.title,
       artist: song.artist,
       user: userName,
-      avatar: userAvatar || null
+      avatar: userAvatar || null,
+      nowPlaying: false
     };
 
     this.queue.push(request);
@@ -234,9 +235,11 @@ class SongRequestService {
   }
 
   /**
-   * Remove played song from queue
+   * Play song or advance queue (unified method)
+   * First call: Mark song as now playing
+   * Second call: Remove played song and show next
    */
-  removeSong() {
+  playSong() {
     if (this.queue.length === 0) {
       return {
         success: false,
@@ -245,14 +248,35 @@ class SongRequestService {
       };
     }
 
+    const currentSong = this.queue[0];
+
+    // First call: Mark as now playing
+    if (!currentSong.nowPlaying) {
+      currentSong.nowPlaying = true;
+      WebSocketService.broadcast({ type: 'NOW_PLAYING' });
+      this.statusRelay();
+
+      return {
+        success: true,
+        action: 'NOW_PLAYING',
+        message: `Now playing: [${currentSong.title} / ${currentSong.artist}]`,
+        song: currentSong
+      };
+    }
+
+    // Second call: Remove and show next
     const playedSong = this.queue.shift();
     WebSocketService.broadcast({ type: 'REMOVE_SONG' });
     this.statusRelay();
 
     return {
       success: true,
+      action: 'REMOVED',
       played: playedSong,
-      next: this.queue[0] || null
+      next: this.queue[0] || null,
+      message: this.queue[0]
+        ? `[${playedSong.title}] played! Next: [${this.queue[0].title}]`
+        : `[${playedSong.title}] played. Queue is empty.`
     };
   }
 
